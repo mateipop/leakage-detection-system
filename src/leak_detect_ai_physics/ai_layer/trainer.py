@@ -38,24 +38,36 @@ def run_training() -> int:
 
     feature_counts: Counter[str] = Counter()
     record_count = 0
-    label_counts = Counter()
+    label_counts: Counter[int] = Counter()
+    missing_normalized = 0
     for record in _iter_training_records(args.dataset):
         record_count += 1
-        label_counts[record.get("label", 0)] += 1
+        label_counts[int(record.get("label", 0))] += 1
         normalized = record.get("normalized") or {}
-        feature_counts.update(normalized.keys())
+        if not normalized:
+            missing_normalized += 1
+        else:
+            feature_counts.update(normalized.keys())
 
     if record_count == 0:
         print(f"Training dataset is empty: {args.dataset}")
         return 1
 
     features = [name for name, _ in feature_counts.most_common()]
+    report = {
+        "records": record_count,
+        "label_counts": dict(label_counts),
+        "feature_count": len(features),
+        "top_features": features[:5],
+        "missing_normalized": missing_normalized,
+    }
     model = {
         "version": 1,
         "dataset": str(args.dataset),
         "record_count": record_count,
         "features": features,
         "label_counts": dict(label_counts),
+        "report": report,
     }
 
     args.output_model.parent.mkdir(parents=True, exist_ok=True)
@@ -63,6 +75,12 @@ def run_training() -> int:
         json.dump(model, handle, indent=2, sort_keys=True)
         handle.write("\n")
 
+    print(
+        "Training report: records={records}, labels={label_counts}, "
+        "features={feature_count}, missing_normalized={missing_normalized}".format(
+            **report
+        )
+    )
     print(f"Model saved to {args.output_model}")
     return 0
 
