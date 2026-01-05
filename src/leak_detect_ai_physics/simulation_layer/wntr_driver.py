@@ -1,3 +1,4 @@
+import argparse
 import json
 import logging
 import random
@@ -19,16 +20,38 @@ LEAK_DURATION_RANGE = (30 * 60, 4 * 3600)
 REALTIME_DELAY_SECONDS = 0.01
 
 
-def random_leak_window(rng, duration_seconds):
+def random_leak_window(
+    rng,
+    duration_seconds,
+    *,
+    start_min: int | None = None,
+    start_max: int | None = None,
+):
     latest_start = max(1, duration_seconds - LEAK_DURATION_RANGE[0])
-    start_time = rng.randint(1, latest_start)
+    start_low = 1 if start_min is None else max(1, start_min)
+    start_high = latest_start if start_max is None else min(start_max, latest_start)
+    if start_low > start_high:
+        start_low = start_high
+    start_time = rng.randint(start_low, start_high)
     max_duration = min(LEAK_DURATION_RANGE[1], duration_seconds - start_time)
-    duration = rng.randint(LEAK_DURATION_RANGE[0], max_duration)
+    if max_duration <= 0:
+        return start_time, start_time
+    if max_duration < LEAK_DURATION_RANGE[0]:
+        duration = rng.randint(1, max_duration)
+    else:
+        duration = rng.randint(LEAK_DURATION_RANGE[0], max_duration)
     end_time = start_time + duration
     return start_time, end_time
 
 
-def build_leak_plan(wn, duration_seconds, seed=42):
+def build_leak_plan(
+    wn,
+    duration_seconds,
+    seed=42,
+    *,
+    leak_start_min: int | None = None,
+    leak_start_max: int | None = None,
+):
     rng = random.Random(seed)
     plan = []
 
@@ -37,7 +60,12 @@ def build_leak_plan(wn, duration_seconds, seed=42):
         junction_leaks = rng.randint(1, min(MAX_JUNCTION_LEAKS, len(junctions)))
         leak_nodes = rng.sample(junctions, k=junction_leaks)
         for idx, node_id in enumerate(leak_nodes, start=1):
-            start_time, end_time = random_leak_window(rng, duration_seconds)
+            start_time, end_time = random_leak_window(
+                rng,
+                duration_seconds,
+                start_min=leak_start_min,
+                start_max=leak_start_max,
+            )
             area = rng.uniform(*LEAK_AREA_RANGE)
             node = wn.get_node(node_id)
             node.add_leak(wn, area=area, start_time=start_time, end_time=end_time)
@@ -74,7 +102,12 @@ def build_leak_plan(wn, duration_seconds, seed=42):
                 return_copy=False,
             )
 
-            start_time, end_time = random_leak_window(rng, duration_seconds)
+            start_time, end_time = random_leak_window(
+                rng,
+                duration_seconds,
+                start_min=leak_start_min,
+                start_max=leak_start_max,
+            )
             area = rng.uniform(*LEAK_AREA_RANGE)
             leak_node = wn.get_node(leak_node_id)
             leak_node.add_leak(
@@ -193,15 +226,29 @@ def build_link_payload(
     }
 
 
-def run_simulation():
+def run_simulation(
+    *,
+    duration_seconds: int,
+    timestep_seconds: int,
+    seed: int,
+    realtime_delay_seconds: float,
+    leak_start_min: int | None,
+    leak_start_max: int | None,
+):
     wn = wntr.network.WaterNetworkModel(config.NETWORK_NAME)
 
-    leak_plan = build_leak_plan(wn, SIM_DURATION_SECONDS)
+    leak_plan = build_leak_plan(
+        wn,
+        duration_seconds,
+        seed=seed,
+        leak_start_min=leak_start_min,
+        leak_start_max=leak_start_max,
+    )
 
-    wn.options.time.duration = SIM_DURATION_SECONDS
-    wn.options.time.hydraulic_timestep = SIM_TIMESTEP_SECONDS
-    wn.options.time.report_timestep = SIM_TIMESTEP_SECONDS
-    wn.options.time.pattern_timestep = SIM_TIMESTEP_SECONDS
+    wn.options.time.duration = duration_seconds
+    wn.options.time.hydraulic_timestep = timestep_seconds
+    wn.options.time.report_timestep = timestep_seconds
+    wn.options.time.pattern_timestep = timestep_seconds
 
     LOG.info("Running WNTR Hydraulic Engine...")
     sim = wntr.sim.EpanetSimulator(wn)
@@ -288,15 +335,69 @@ def run_simulation():
             link_count=len(link_ids),
         )
         LOG.info(message)
-        time.sleep(REALTIME_DELAY_SECONDS)
+        time.sleep(realtime_delay_seconds)
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Run WNTR simulation and publish telemetry."
+    )
+    parser.add_argument(
+        "--duration",
+        type=int,
+        default=SIM_DURATION_SECONDS,
+        help="Simulation duration in seconds.",
+    )
+    parser.add_argument(
+        "--timestep",
+        type=int,
+        default=SIM_TIMESTEP_SECONDS,
+        help="Simulation timestep in seconds.",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for leak placement.",
+    )
+    parser.add_argument(
+        "--realtime-delay",
+        type=float,
+        default=REALTIME_DELAY_SECONDS,
+        help="Delay between published timesteps.",
+    )
+    parser.add_argument(
+        "--leak-start-min",
+        type=int,
+        default=None,
+        help="Minimum leak start time in seconds.",
+    )
+    parser.add_argument(
+        "--leak-start-max",
+        type=int,
+        default=None,
+        help="Maximum leak start time in seconds.",
+    )
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+        help="Logging level.",
+    )
+    args = parser.parse_args()
+
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=getattr(logging, args.log_level),
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
     try:
-        run_simulation()
+        run_simulation(
+            duration_seconds=args.duration,
+            timestep_seconds=args.timestep,
+            seed=args.seed,
+            realtime_delay_seconds=args.realtime_delay,
+            leak_start_min=args.leak_start_min,
+            leak_start_max=args.leak_start_max,
+        )
     except Exception as e:
         LOG.exception("Simulation error: %s", e)
