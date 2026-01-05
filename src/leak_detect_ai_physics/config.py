@@ -14,5 +14,5 @@ LEAK_START_SECONDS = 4 * 3600
 LEAK_END_SECONDS = 10 * 3600
 
 TRAINING_DATA_PATH = Path(os.getenv("TRAINING_DATA_PATH", "data/training_data.jsonl"))
-ANOMALY_MODEL_PATH = Path("data/models/anomaly.joblib")
-PINPOINTER_MODEL_PATH = Path("data/models/pinpointer.joblib")
+ANOMALY_MODEL_PATH = Path("data/models/anomaly.pt")
+PINPOINTER_MODEL_PATH = Path("data/models/pinpointer.pt")

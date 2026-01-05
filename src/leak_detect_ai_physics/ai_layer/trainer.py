@@ -1,19 +1,42 @@
 import argparse
 import json
 import logging
-from collections import Counter
+from dataclasses import dataclass
 from pathlib import Path
 
-import joblib
-from sklearn.feature_extraction import DictVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
+import numpy as np
+import torch
+from torch import nn
+from torch.utils.data import DataLoader, TensorDataset
 
 from leak_detect_ai_physics import config
 
 LOG = logging.getLogger(__name__)
+
+
+@dataclass
+class ModelSpec:
+    input_dim: int
+    hidden_sizes: list[int]
+    output_dim: int
+
+
+class CnnClassifier(nn.Module):
+    def __init__(self, spec: ModelSpec):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv1d(spec.input_dim, 32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv1d(32, 64, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool1d(1),
+        )
+        self.fc = nn.Linear(64, spec.output_dim)
+
+    def forward(self, x):
+        x = x.transpose(1, 2)
+        x = self.conv(x).squeeze(-1)
+        return self.fc(x)
 
 
 def _iter_training_records(path: Path):
@@ -24,56 +47,223 @@ def _iter_training_records(path: Path):
                 yield json.loads(line)
 
 
-def _build_feature_rows(records: list[dict]) -> list[dict]:
-    rows = []
+def _collect_features(records: list[dict]) -> list[str]:
+    if records and records[0].get("feature_names"):
+        return list(records[0]["feature_names"])
+    feature_set = set()
     for record in records:
         normalized = record.get("normalized") or {}
-        rows.append({key: float(value) for key, value in normalized.items()})
-    return rows
+        feature_set.update(normalized.keys())
+    return sorted(feature_set)
 
 
-def _train_binary_classifier(x_rows: list[dict], y_labels: list[int]) -> Pipeline:
-    return Pipeline(
-        [
-            ("vectorizer", DictVectorizer(sparse=True)),
-            (
-                "classifier",
-                LogisticRegression(
-                    max_iter=500,
-                    class_weight="balanced",
-                ),
-            ),
-        ]
-    ).fit(x_rows, y_labels)
+def _build_feature_tensor(records: list[dict], features: list[str]) -> np.ndarray:
+    feature_count = len(features)
+    x = np.zeros(
+        (len(records), len(records[0]["features"]), feature_count),
+        dtype=np.float32,
+    )
+    for idx, record in enumerate(records):
+        window = record.get("features") or []
+        for tdx, step in enumerate(window):
+            for jdx, value in enumerate(step):
+                if jdx >= feature_count:
+                    break
+                x[idx, tdx, jdx] = float(value)
+    return x
 
 
-def _train_multiclass_classifier(x_rows: list[dict], y_labels: list[str]) -> Pipeline:
-    return Pipeline(
-        [
-            ("vectorizer", DictVectorizer(sparse=True)),
-            (
-                "classifier",
-                LogisticRegression(
-                    max_iter=500,
-                    class_weight="balanced",
-                ),
-            ),
-        ]
-    ).fit(x_rows, y_labels)
+def _split_indices(count: int, *, test_size: float, seed: int):
+    rng = np.random.default_rng(seed)
+    indices = rng.permutation(count)
+    split = int(count * (1.0 - test_size))
+    return indices[:split], indices[split:]
 
 
-def _report_binary_metrics(y_true, y_pred) -> dict:
+def _train_val_split(x, y, *, test_size: float, seed: int):
+    train_idx, val_idx = _split_indices(len(x), test_size=test_size, seed=seed)
+    return x[train_idx], x[val_idx], y[train_idx], y[val_idx]
+
+
+def _binary_focal_loss(logits, targets, *, alpha: float = 0.25, gamma: float = 2.0):
+    bce = nn.functional.binary_cross_entropy_with_logits(
+        logits, targets, reduction="none"
+    )
+    probs = torch.sigmoid(logits)
+    pt = torch.where(targets == 1, probs, 1 - probs)
+    weights = torch.where(targets == 1, alpha, 1 - alpha)
+    loss = weights * (1 - pt) ** gamma * bce
+    return loss.mean()
+
+
+def _binary_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
+    tp = int(((y_true == 1) & (y_pred == 1)).sum())
+    fp = int(((y_true == 0) & (y_pred == 1)).sum())
+    fn = int(((y_true == 1) & (y_pred == 0)).sum())
+    precision = tp / (tp + fp) if (tp + fp) else 0.0
+    recall = tp / (tp + fn) if (tp + fn) else 0.0
+    f1 = (
+        (2 * precision * recall / (precision + recall)) if (precision + recall) else 0.0
+    )
+    accuracy = float((y_true == y_pred).mean())
     return {
-        "accuracy": accuracy_score(y_true, y_pred),
-        "precision": precision_score(y_true, y_pred, zero_division=0),
-        "recall": recall_score(y_true, y_pred, zero_division=0),
-        "f1": f1_score(y_true, y_pred, zero_division=0),
+        "accuracy": accuracy,
+        "precision": precision,
+        "recall": recall,
+        "f1": f1,
+    }
+
+
+def _pinpointer_distance_report(
+    records: list[dict],
+    predictions: np.ndarray,
+    class_names: list[str],
+    node_coords: dict,
+) -> dict:
+    coord_map = node_coords or {}
+
+    distances = []
+    for record, predicted_idx in zip(records, predictions, strict=False):
+        actual_id = record.get("leak_node_id")
+        predicted_id = class_names[int(predicted_idx)]
+        actual_coords = coord_map.get(actual_id)
+        predicted_coords = coord_map.get(predicted_id)
+        if not actual_coords or not predicted_coords:
+            continue
+        dx = float(actual_coords.get("x", 0.0)) - float(predicted_coords.get("x", 0.0))
+        dy = float(actual_coords.get("y", 0.0)) - float(predicted_coords.get("y", 0.0))
+        distances.append((dx**2 + dy**2) ** 0.5)
+
+    if not distances:
+        return {}
+    distances.sort()
+    mean_dist = sum(distances) / len(distances)
+    median_dist = distances[len(distances) // 2]
+    return {
+        "mean_distance": mean_dist,
+        "median_distance": median_dist,
+        "samples": len(distances),
+    }
+
+
+def _save_model(path: Path, *, state_dict: dict, metadata: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    torch.save({"state_dict": state_dict, "metadata": metadata}, path)
+
+
+def _train_anomaly(
+    x_train,
+    y_train,
+    x_val,
+    y_val,
+    *,
+    epochs: int,
+    batch_size: int,
+    seed: int,
+) -> tuple[CnnClassifier, dict]:
+    torch.manual_seed(seed)
+    spec = ModelSpec(input_dim=x_train.shape[2], hidden_sizes=[], output_dim=1)
+    model = CnnClassifier(spec)
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+
+    train_dataset = TensorDataset(
+        torch.from_numpy(x_train),
+        torch.from_numpy(y_train.astype(np.float32)).unsqueeze(1),
+    )
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+
+    model.train()
+    for _ in range(epochs):
+        for xb, yb in train_loader:
+            optimizer.zero_grad()
+            logits = model(xb)
+            loss = _binary_focal_loss(logits, yb)
+            loss.backward()
+            optimizer.step()
+
+    model.eval()
+    with torch.no_grad():
+        val_logits = model(torch.from_numpy(x_val))
+        val_probs = torch.sigmoid(val_logits).squeeze(1).numpy()
+    val_preds = (val_probs >= 0.5).astype(int)
+    report = _binary_metrics(y_val, val_preds)
+    metadata = {"spec": spec.__dict__}
+    return model, {"metrics": report, "metadata": metadata}
+
+
+def _train_pinpointer(
+    records: list[dict],
+    features: list[str],
+    node_coords: dict,
+    *,
+    epochs: int,
+    batch_size: int,
+    seed: int,
+    test_size: float,
+) -> tuple[CnnClassifier | None, dict]:
+    pin_records = [record for record in records if record.get("leak_node_id")]
+    if not pin_records:
+        return None, {}
+
+    class_names = sorted({record["leak_node_id"] for record in pin_records})
+    class_map = {name: idx for idx, name in enumerate(class_names)}
+    pin_x = _build_feature_tensor(pin_records, features)
+    pin_y = np.array([class_map[record["leak_node_id"]] for record in pin_records])
+    train_idx, val_idx = _split_indices(
+        len(pin_records),
+        test_size=test_size,
+        seed=seed,
+    )
+    pin_x_train, pin_x_val = pin_x[train_idx], pin_x[val_idx]
+    pin_y_train, pin_y_val = pin_y[train_idx], pin_y[val_idx]
+    pin_val_records = [pin_records[idx] for idx in val_idx]
+
+    torch.manual_seed(seed)
+    spec = ModelSpec(
+        input_dim=pin_x.shape[2],
+        hidden_sizes=[],
+        output_dim=len(class_names),
+    )
+    model = CnnClassifier(spec)
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+    criterion = nn.CrossEntropyLoss()
+
+    train_dataset = TensorDataset(
+        torch.from_numpy(pin_x_train),
+        torch.from_numpy(pin_y_train.astype(np.int64)),
+    )
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+
+    model.train()
+    for _ in range(epochs):
+        for xb, yb in train_loader:
+            optimizer.zero_grad()
+            logits = model(xb)
+            loss = criterion(logits, yb)
+            loss.backward()
+            optimizer.step()
+
+    model.eval()
+    with torch.no_grad():
+        val_logits = model(torch.from_numpy(pin_x_val))
+        val_preds = val_logits.argmax(dim=1).numpy()
+    accuracy = float((val_preds == pin_y_val).mean())
+    distance_report = _pinpointer_distance_report(
+        pin_val_records,
+        val_preds,
+        class_names,
+        node_coords,
+    )
+    return model, {
+        "accuracy": accuracy,
+        "distance": distance_report,
+        "metadata": {"spec": spec.__dict__, "class_names": class_names},
     }
 
 
 def run_training() -> int:
     parser = argparse.ArgumentParser(
-        description="Train anomaly and pinpointer models from JSONL training data."
+        description="Train anomaly and pinpointer models with PyTorch."
     )
     parser.add_argument(
         "--dataset",
@@ -93,12 +283,10 @@ def run_training() -> int:
         default=config.PINPOINTER_MODEL_PATH,
         help="Path to write the pinpointer model.",
     )
-    parser.add_argument(
-        "--test-size",
-        type=float,
-        default=0.2,
-        help="Holdout fraction for metrics.",
-    )
+    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--batch-size", type=int, default=256)
+    parser.add_argument("--test-size", type=float, default=0.2)
+    parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
     if not args.dataset.exists():
@@ -110,70 +298,80 @@ def run_training() -> int:
         LOG.error("Training dataset is empty: %s", args.dataset)
         return 1
 
-    x_rows = _build_feature_rows(records)
-    y_labels = [int(record.get("label", 0)) for record in records]
-    unique_labels = sorted(set(y_labels))
-    if len(unique_labels) < 2:
-        LOG.error(
-            "Need at least 2 classes for anomaly training, got: %s",
-            unique_labels,
-        )
+    features = _collect_features(records)
+    x_all = _build_feature_tensor(records, features)
+    y_all = np.array(
+        [int(record.get("label", 0)) for record in records],
+        dtype=np.int64,
+    )
+
+    if len(set(y_all)) < 2:
+        LOG.error("Need at least 2 classes for anomaly training, got: %s", set(y_all))
         return 1
 
-    x_train, x_test, y_train, y_test = train_test_split(
-        x_rows,
-        y_labels,
-        test_size=args.test_size,
-        random_state=42,
-        stratify=y_labels,
+    x_train, x_val, y_train, y_val = _train_val_split(
+        x_all, y_all, test_size=args.test_size, seed=args.seed
     )
-    anomaly_model = _train_binary_classifier(x_train, y_train)
-    anomaly_preds = anomaly_model.predict(x_test)
-    anomaly_report = _report_binary_metrics(y_test, anomaly_preds)
+    anomaly_model, anomaly_report = _train_anomaly(
+        x_train,
+        y_train,
+        x_val,
+        y_val,
+        epochs=args.epochs,
+        batch_size=args.batch_size,
+        seed=args.seed,
+    )
+    _save_model(
+        args.anomaly_model,
+        state_dict=anomaly_model.state_dict(),
+        metadata={
+            "features": features,
+            "window_steps": x_all.shape[1],
+            **anomaly_report["metadata"],
+        },
+    )
 
-    pin_records = [
-        record
-        for record in records
-        if record.get("entity_type") == "node" and record.get("leak_active")
-    ]
-    pinpointer_report = {}
-    pinpointer_model = None
-    if pin_records:
-        pin_x = _build_feature_rows(pin_records)
-        pin_y = [record["entity_id"] for record in pin_records]
-        pin_x_train, pin_x_test, pin_y_train, pin_y_test = train_test_split(
-            pin_x,
-            pin_y,
-            test_size=args.test_size,
-            random_state=42,
-            stratify=pin_y if len(set(pin_y)) > 1 else None,
+    meta = {}
+    meta_path = args.dataset.with_suffix(".meta.json")
+    if meta_path.exists():
+        with meta_path.open("r", encoding="utf-8") as handle:
+            meta = json.load(handle)
+    node_coords = meta.get("node_coords", {})
+
+    pinpointer_model, pinpointer_report = _train_pinpointer(
+        records,
+        features,
+        node_coords,
+        epochs=args.epochs,
+        batch_size=args.batch_size,
+        seed=args.seed,
+        test_size=args.test_size,
+    )
+    if pinpointer_model:
+        _save_model(
+            args.pinpointer_model,
+            state_dict=pinpointer_model.state_dict(),
+            metadata={
+                "features": features,
+                "window_steps": x_all.shape[1],
+                **pinpointer_report["metadata"],
+            },
         )
-        pinpointer_model = _train_multiclass_classifier(pin_x_train, pin_y_train)
-        pin_preds = pinpointer_model.predict(pin_x_test)
-        pinpointer_report = {
-            "accuracy": accuracy_score(pin_y_test, pin_preds),
-        }
-
-    args.anomaly_model.parent.mkdir(parents=True, exist_ok=True)
-    joblib.dump(anomaly_model, args.anomaly_model)
-    if pinpointer_model:
-        args.pinpointer_model.parent.mkdir(parents=True, exist_ok=True)
-        joblib.dump(pinpointer_model, args.pinpointer_model)
-
-    label_counts = Counter(y_labels)
-    report = {
-        "records": len(records),
-        "label_counts": dict(label_counts),
-        "anomaly_metrics": anomaly_report,
-        "pinpointer_metrics": pinpointer_report,
-        "pinpointer_samples": len(pin_records),
-    }
-    LOG.info("Training report: %s", report)
-    LOG.info("Anomaly model saved to %s", args.anomaly_model)
-    if pinpointer_model:
         LOG.info("Pinpointer model saved to %s", args.pinpointer_model)
     else:
         LOG.info("Pinpointer model skipped (no leak-active node samples).")
+
+    report = {
+        "records": len(records),
+        "label_counts": {
+            "0": int((y_all == 0).sum()),
+            "1": int((y_all == 1).sum()),
+        },
+        "anomaly_metrics": anomaly_report["metrics"],
+        "pinpointer_metrics": pinpointer_report,
+    }
+    LOG.info("Training report: %s", report)
+    LOG.info("Anomaly model saved to %s", args.anomaly_model)
     return 0
 
 
