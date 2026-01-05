@@ -167,6 +167,7 @@ __marimo__/
 # Local artifacts
 temp.*
 dump.rdb
+data/
 data/training_data.jsonl
 data/models/
 

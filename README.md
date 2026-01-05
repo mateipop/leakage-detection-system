@@ -8,7 +8,7 @@ The system is stratified into three isolated layers as defined in the Technical 
 * **Simulation Layer**: WNTR Engine generates physics-based hydraulic states.
   It emits node + link telemetry plus leak metadata for pinpointer training.
 * **Data Layer**: Ingests raw telemetry, performs validation, and calculates Z-score normalization.
-* **AI Layer**: Interprets normalized features to detect leaks and issue control commands.
+* **AI Layer**: Interprets windowed features to detect leaks and pinpoint likely leak nodes.
 
 ## Prerequisites
 * Python 3.12+
@@ -30,10 +30,20 @@ Open three separate terminals in VS Code:
 4. **Start AI Inference**:
    `python3 -m leak_detect_ai_physics.ai_layer.inference`
 
-5. **Train Baseline Model**:
+5. **Train Models**:
    `python3 -m leak_detect_ai_physics.ai_layer.trainer`
 
-The AI entrypoints are stubs right now and document the intended flow.
+## Windowed Training
+
+Generate windowed datasets (3-hour windows, 30-minute stride) with the dataset builder:
+
+`uv run python -m leak_detect_ai_physics.data_layer.dataset_builder --clear --duration 86400 --timestep 300 --window-hours 3 --stride-steps 6`
+
+Train the CNN anomaly + pinpointer models:
+
+`uv run python -m leak_detect_ai_physics.ai_layer.trainer --dataset data/training_data.jsonl`
+
+Artifacts under `data/` are gitignored (datasets and trained models).
 
 ## Message Broker Notes
 Redis pub/sub is a good default for local development and low-throughput streams.
