@@ -79,3 +79,40 @@ def test_node_and_link_attributes_include_expected_keys():
         "status",
         "initial_status",
     }
+
+
+def test_build_payloads_include_expected_fields():
+    node_payload = wntr_driver.build_node_payload(
+        node_id="N1",
+        timestamp=120,
+        metrics={"pressure": 1.2, "head": 3.4, "demand": 0.5},
+        attributes={"node_type": "Junction"},
+        leak_plan=[{"leak_id": "junction_1"}],
+        active_leaks=[{"leak_id": "junction_1"}],
+        active_leak_nodes={"N1"},
+        active_leak_pipes=set(),
+    )
+
+    assert node_payload["entity_type"] == "node"
+    assert node_payload["sensor_id"] == "SENSOR_N1"
+    assert node_payload["leak_active"] is True
+    assert node_payload["pressure"] == 1.2
+    assert "node_metrics" in node_payload
+    assert "node_attributes" in node_payload
+
+    link_payload = wntr_driver.build_link_payload(
+        link_id="P1",
+        timestamp=120,
+        metrics={"flowrate": 2.5},
+        attributes={"link_type": "Pipe"},
+        leak_plan=[{"leak_id": "pipe_1"}],
+        active_leaks=[{"leak_id": "pipe_1"}],
+        active_leak_nodes=set(),
+        active_leak_pipes={"P1"},
+    )
+
+    assert link_payload["entity_type"] == "link"
+    assert link_payload["link_id"] == "P1"
+    assert link_payload["leak_active"] is True
+    assert "link_metrics" in link_payload
+    assert "link_attributes" in link_payload

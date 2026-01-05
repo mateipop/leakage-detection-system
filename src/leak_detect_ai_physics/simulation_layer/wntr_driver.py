@@ -1,4 +1,5 @@
 import json
+import logging
 import random
 import time
 
@@ -6,6 +7,8 @@ import redis
 import wntr
 
 from leak_detect_ai_physics import config
+
+LOG = logging.getLogger(__name__)
 
 SIM_DURATION_SECONDS = 24 * 3600
 SIM_TIMESTEP_SECONDS = 60
@@ -136,6 +139,60 @@ def link_attributes(link):
     }
 
 
+def build_node_payload(
+    node_id,
+    timestamp,
+    metrics,
+    attributes,
+    leak_plan,
+    active_leaks,
+    active_leak_nodes,
+    active_leak_pipes,
+):
+    return {
+        "entity_type": "node",
+        "sensor_id": f"SENSOR_{node_id}",
+        "node_id": node_id,
+        "timestamp": int(timestamp),
+        "network": config.NETWORK_NAME,
+        "node_attributes": attributes,
+        "node_metrics": metrics,
+        "pressure": metrics.get("pressure"),
+        "head": metrics.get("head"),
+        "demand": metrics.get("demand"),
+        "leak_active": node_id in active_leak_nodes,
+        "active_leaks": active_leaks,
+        "active_leak_nodes": list(active_leak_nodes),
+        "active_leak_pipes": list(active_leak_pipes),
+        "leak_plan": leak_plan,
+    }
+
+
+def build_link_payload(
+    link_id,
+    timestamp,
+    metrics,
+    attributes,
+    leak_plan,
+    active_leaks,
+    active_leak_nodes,
+    active_leak_pipes,
+):
+    return {
+        "entity_type": "link",
+        "link_id": link_id,
+        "timestamp": int(timestamp),
+        "network": config.NETWORK_NAME,
+        "link_attributes": attributes,
+        "link_metrics": metrics,
+        "leak_active": link_id in active_leak_pipes,
+        "active_leaks": active_leaks,
+        "active_leak_nodes": list(active_leak_nodes),
+        "active_leak_pipes": list(active_leak_pipes),
+        "leak_plan": leak_plan,
+    }
+
+
 def run_simulation():
     wn = wntr.network.WaterNetworkModel(config.NETWORK_NAME)
 
@@ -146,7 +203,7 @@ def run_simulation():
     wn.options.time.report_timestep = SIM_TIMESTEP_SECONDS
     wn.options.time.pattern_timestep = SIM_TIMESTEP_SECONDS
 
-    print("Running WNTR Hydraulic Engine...")
+    LOG.info("Running WNTR Hydraulic Engine...")
     sim = wntr.sim.EpanetSimulator(wn)
     results = sim.run_sim()
 
@@ -163,8 +220,8 @@ def run_simulation():
     node_ids = list(results.node[node_result_keys[0]].columns)
     link_ids = list(results.link[link_result_keys[0]].columns)
 
-    print("Starting real-time stream to Data Layer...")
-    print(f"Leak plan: {leak_plan}")
+    LOG.info("Starting real-time stream to Data Layer...")
+    LOG.debug("Leak plan: %s", leak_plan)
 
     for timestamp in timestamps:
         active_leaks, active_leak_nodes, active_leak_pipes = leak_active_sets(
@@ -177,24 +234,25 @@ def run_simulation():
                 key: float(results.node[key].loc[timestamp, node_id])
                 for key in node_result_keys
             }
-            payload = {
-                "entity_type": "node",
-                "sensor_id": f"SENSOR_{node_id}",
-                "node_id": node_id,
-                "timestamp": int(timestamp),
-                "network": config.NETWORK_NAME,
-                "node_attributes": node_attributes(node),
-                "node_metrics": metrics,
-                "pressure": metrics.get("pressure"),
-                "head": metrics.get("head"),
-                "demand": metrics.get("demand"),
-                "leak_active": node_id in active_leak_nodes,
-                "active_leaks": active_leaks,
-                "active_leak_nodes": list(active_leak_nodes),
-                "active_leak_pipes": list(active_leak_pipes),
-                "leak_plan": leak_plan,
-            }
+            payload = build_node_payload(
+                node_id=node_id,
+                timestamp=timestamp,
+                metrics=metrics,
+                attributes=node_attributes(node),
+                leak_plan=leak_plan,
+                active_leaks=active_leaks,
+                active_leak_nodes=active_leak_nodes,
+                active_leak_pipes=active_leak_pipes,
+            )
             r.publish(config.INPUT_CHANNEL, json.dumps(payload))
+            LOG.debug(
+                "Node payload sent: %s",
+                {
+                    "node_id": node_id,
+                    "timestamp": int(timestamp),
+                    "metrics": list(metrics.keys()),
+                },
+            )
 
         for link_id in link_ids:
             link = wn.get_link(link_id)
@@ -202,20 +260,25 @@ def run_simulation():
                 key: float(results.link[key].loc[timestamp, link_id])
                 for key in link_result_keys
             }
-            payload = {
-                "entity_type": "link",
-                "link_id": link_id,
-                "timestamp": int(timestamp),
-                "network": config.NETWORK_NAME,
-                "link_attributes": link_attributes(link),
-                "link_metrics": metrics,
-                "leak_active": link_id in active_leak_pipes,
-                "active_leaks": active_leaks,
-                "active_leak_nodes": list(active_leak_nodes),
-                "active_leak_pipes": list(active_leak_pipes),
-                "leak_plan": leak_plan,
-            }
+            payload = build_link_payload(
+                link_id=link_id,
+                timestamp=timestamp,
+                metrics=metrics,
+                attributes=link_attributes(link),
+                leak_plan=leak_plan,
+                active_leaks=active_leaks,
+                active_leak_nodes=active_leak_nodes,
+                active_leak_pipes=active_leak_pipes,
+            )
             r.publish(config.INPUT_CHANNEL, json.dumps(payload))
+            LOG.debug(
+                "Link payload sent: %s",
+                {
+                    "link_id": link_id,
+                    "timestamp": int(timestamp),
+                    "metrics": list(metrics.keys()),
+                },
+            )
 
         message = (
             "Time: {hours:>4.1f} hrs | Nodes: {node_count} | Links: {link_count}"
@@ -224,12 +287,16 @@ def run_simulation():
             node_count=len(node_ids),
             link_count=len(link_ids),
         )
-        print(message)
+        LOG.info(message)
         time.sleep(REALTIME_DELAY_SECONDS)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )
     try:
         run_simulation()
     except Exception as e:
-        print(f"Simulation error: {e}")
+        LOG.exception("Simulation error: %s", e)
