@@ -8,7 +8,7 @@
   suitable for anomaly scoring and pinpointer training.
 
 ### Data Layer
-- Subscribes to `sensor_telemetry` (currently expects node payloads).
+- Subscribes to `sensor_telemetry` and handles node + link payloads.
 - Validates telemetry, normalizes features, and writes labeled training records.
 - Streams normalized features to `live_features` for downstream consumers.
 
