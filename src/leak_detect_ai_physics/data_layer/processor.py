@@ -17,9 +17,7 @@ class FeatureProcessor:
         normalized = {}
         for feature_name, raw_value in raw_features.items():
             if feature_name not in self.buffers[sensor_id]:
-                self.buffers[sensor_id][feature_name] = deque(
-                    maxlen=self.window_size
-                )
+                self.buffers[sensor_id][feature_name] = deque(maxlen=self.window_size)
 
             self.buffers[sensor_id][feature_name].append(raw_value)
 
