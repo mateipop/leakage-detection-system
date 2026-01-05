@@ -6,6 +6,7 @@ Modular Pipeline Leakage Detection System. Integrates WNTR hydraulic physics wit
 ## Architecture
 The system is stratified into three isolated layers as defined in the Technical Architecture Document:
 * **Simulation Layer**: WNTR Engine generates physics-based hydraulic states.
+  It emits node + link telemetry plus leak metadata for pinpointer training.
 * **Data Layer**: Ingests raw telemetry, performs validation, and calculates Z-score normalization.
 * **AI Layer**: Interprets normalized features to detect leaks and issue control commands.
 

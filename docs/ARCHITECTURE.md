@@ -3,11 +3,12 @@
 ## Layers
 
 ### Simulation Layer
-- Runs WNTR and publishes telemetry for all sensors to the broker.
-- Output: `sensor_telemetry` messages with raw features and leak labels.
+- Runs WNTR and publishes node + link telemetry for the full network.
+- Output: `sensor_telemetry` messages with raw features, leak labels, and leak metadata
+  suitable for anomaly scoring and pinpointer training.
 
 ### Data Layer
-- Subscribes to `sensor_telemetry`.
+- Subscribes to `sensor_telemetry` (currently expects node payloads).
 - Validates telemetry, normalizes features, and writes labeled training records.
 - Streams normalized features to `live_features` for downstream consumers.
 
