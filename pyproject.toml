@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "leak-detect-ai-physics"
+version = "0.1.0"
+description = "Modular pipeline leakage detection system."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "certifi==2025.11.12",
+  "contourpy==1.3.3",
+  "cycler==0.12.1",
+  "fonttools==4.61.1",
+  "influxdb-client==1.49.0",
+  "kiwisolver==1.4.9",
+  "matplotlib==3.10.8",
+  "networkx==3.6.1",
+  "numpy==2.3.5",
+  "packaging==25.0",
+  "pandas==2.3.3",
+  "pillow==12.0.0",
+  "pyparsing==3.2.5",
+  "python-dateutil==2.9.0.post0",
+  "pytz==2025.2",
+  "reactivex==4.1.0",
+  "redis==7.1.0",
+  "scipy==1.16.3",
+  "setuptools==80.9.0",
+  "six==1.17.0",
+  "typing_extensions==4.15.0",
+  "tzdata==2025.3",
+  "urllib3==2.6.2",
+  "wntr==1.4.0",
+]
+
+[dependency-groups]
+dev = ["pytest==8.4.2"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["data_layer*"]
