@@ -47,6 +47,12 @@ def run_inference() -> int:
         default=config.PINPOINTER_MODEL_PATH,
         help="Path to the pinpointer model.",
     )
+    parser.add_argument(
+        "--anomaly-threshold",
+        type=float,
+        default=0.5,
+        help="Minimum anomaly score before running pinpointer.",
+    )
     args = parser.parse_args()
 
     if not args.anomaly_model.exists():
@@ -77,6 +83,7 @@ def run_inference() -> int:
         args.anomaly_model,
         args.pinpointer_model if pinpointer_model else "(no pinpointer)",
     )
+    LOG.info("Pinpointer enabled above anomaly threshold %.3f", args.anomaly_threshold)
 
     buffers: dict[str, list[list[float]]] = {}
 
@@ -103,7 +110,11 @@ def run_inference() -> int:
 
             pinpointer_prediction = None
             pinpointer_confidence = 0.0
-            if pinpointer_model and pinpointer_classes:
+            if (
+                pinpointer_model
+                and pinpointer_classes
+                and anomaly_score >= args.anomaly_threshold
+            ):
                 pin_buffer = buffers[key]
                 if len(pin_buffer) >= pinpointer_window_steps:
                     pin_window = pin_buffer[-pinpointer_window_steps:]
