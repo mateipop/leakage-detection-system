@@ -1,9 +1,6 @@
-import numpy as np
-
-
 def validate_telemetry(data):
     """Checks if the incoming dictionary has all required fields."""
-    required_fields = ["sensor_id", "timestamp", "pressure"]
+    required_fields = ["sensor_id", "timestamp", "pressure", "head", "demand"]
     return all(field in data for field in required_fields)
 
 

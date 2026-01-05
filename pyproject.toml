@@ -36,12 +36,25 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pytest==8.4.2"]
+dev = [
+    "pytest==8.4.2",
+    "ruff>=0.14.10",
+]
 
 [tool.pytest.ini_options]
-pythonpath = ["."]
+pythonpath = ["src"]
 testpaths = ["tests"]
 
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["data_layer*"]
+where = ["src"]
+include = ["leak_detect_ai_physics*"]

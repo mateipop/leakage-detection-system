@@ -1,15 +1,24 @@
 import numpy as np
 
-from data_layer.utils import calculate_z_score, validate_telemetry
+from leak_detect_ai_physics.data_layer.utils import (
+    calculate_z_score,
+    validate_telemetry,
+)
 
 
 def test_validate_telemetry_accepts_required_fields():
-    payload = {"sensor_id": "S1", "timestamp": 123, "pressure": 45.6}
+    payload = {
+        "sensor_id": "S1",
+        "timestamp": 123,
+        "pressure": 45.6,
+        "head": 50.1,
+        "demand": 1.2,
+    }
     assert validate_telemetry(payload) is True
 
 
 def test_validate_telemetry_rejects_missing_fields():
-    payload = {"sensor_id": "S1", "pressure": 45.6}
+    payload = {"sensor_id": "S1", "pressure": 45.6, "head": 50.1}
     assert validate_telemetry(payload) is False
 
 

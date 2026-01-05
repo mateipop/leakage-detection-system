@@ -21,7 +21,22 @@ Open three separate terminals in VS Code:
    `redis-server`
 
 2. **Start Data Layer**:
-   `python3 -m data_layer.collector`
+   `python3 -m leak_detect_ai_physics.data_layer.collector`
 
 3. **Start Simulation**:
-   `python3 simulation_layer/wntr_driver.py`
+   `python3 -m leak_detect_ai_physics.simulation_layer.wntr_driver`
+
+4. **Start AI Inference**:
+   `python3 -m leak_detect_ai_physics.ai_layer.inference`
+
+5. **Train Baseline Model**:
+   `python3 -m leak_detect_ai_physics.ai_layer.trainer`
+
+The AI entrypoints are stubs right now and document the intended flow.
+
+## Message Broker Notes
+Redis pub/sub is a good default for local development and low-throughput streams.
+If you need durability, replay, or higher fan-out, consider NATS or Kafka.
+
+## Architecture
+See `docs/ARCHITECTURE.md` for the layer responsibilities and data flow.
