@@ -87,6 +87,17 @@ class SensorAgent(Agent):
     def sampling_mode(self) -> SamplingMode:
         return self._sampling_mode
     
+    def reset(self):
+        """Reset sensor agent state."""
+        super().reset()
+        self._buffer.clear()
+        self._sampling_mode = SamplingMode.ECO
+        self._device_state = DeviceState.IDLE
+        self._last_alert_step = -self.ALERT_COOLDOWN
+        self._current_step = 0
+        self._anomaly_confidence = 0.0
+        self._readings_collected = 0
+
     def sense(self, environment: Dict[str, Any]) -> Dict[str, Any]:
         """
         Perceive the environment - read sensor value.
@@ -119,15 +130,37 @@ class SensorAgent(Agent):
         self._buffer.append(reading)
         self._readings_collected += 1
         
-        # Local anomaly detection
+        # === ENHANCED: Multi-metric anomaly detection ===
         is_anomaly = False
+        anomaly_reasons = []
+        
         if zscore is not None:
-            is_anomaly = abs(zscore) > self.LOCAL_ANOMALY_THRESHOLD
-            # Negative Z-score = pressure drop = more suspicious
+            # Standard Z-score detection
             if zscore < -self.LOCAL_ANOMALY_THRESHOLD:
+                is_anomaly = True
+                anomaly_reasons.append(f"zscore={zscore:.2f}")
                 self._anomaly_confidence = min(1.0, abs(zscore) / 4.0)
-            else:
-                self._anomaly_confidence = max(0.0, self._anomaly_confidence - 0.1)
+            elif abs(zscore) > self.LOCAL_ANOMALY_THRESHOLD:
+                is_anomaly = True
+                anomaly_reasons.append(f"zscore={zscore:.2f}")
+        
+        # Rate of change detection (catches sudden drops)
+        roc = self._compute_rate_of_change()
+        if roc is not None and roc < -0.5:  # Rapid pressure drop
+            is_anomaly = True
+            anomaly_reasons.append(f"rapid_drop={roc:.3f}")
+            self._anomaly_confidence = max(self._anomaly_confidence, min(1.0, abs(roc) / 2.0))
+        
+        # CUSUM detection (catches slow persistent leaks)
+        cusum = self._compute_local_cusum(measured_value)
+        if cusum > 3.0:  # Significant cumulative deviation
+            is_anomaly = True
+            anomaly_reasons.append(f"cusum={cusum:.2f}")
+            self._anomaly_confidence = max(self._anomaly_confidence, min(1.0, cusum / 6.0))
+        
+        # Decay confidence if no anomaly
+        if not is_anomaly:
+            self._anomaly_confidence = max(0.0, self._anomaly_confidence - 0.1)
         
         return {
             "node_id": self.node_id,
@@ -135,7 +168,10 @@ class SensorAgent(Agent):
             "zscore": zscore,
             "is_anomaly": is_anomaly,
             "confidence": self._anomaly_confidence,
-            "sim_time": sim_time
+            "sim_time": sim_time,
+            "rate_of_change": roc,
+            "cusum_score": cusum,
+            "anomaly_reasons": anomaly_reasons
         }
     
     def decide(self, observations: Dict[str, Any]) -> Dict[str, Any]:
@@ -265,19 +301,72 @@ class SensorAgent(Agent):
         
         return (value - mean) / std
     
+    def _compute_local_cusum(self, value: float) -> float:
+        """
+        Compute CUSUM score for detecting small persistent shifts.
+        
+        CUSUM is excellent at detecting slow leaks that Z-score might miss.
+        """
+        if len(self._buffer) < 10:
+            return 0.0
+        
+        values = [r.value for r in self._buffer]
+        
+        # Use first half as baseline
+        baseline_values = values[:len(values)//2]
+        target_mean = np.mean(baseline_values)
+        std = np.std(values) if np.std(values) > 0 else 1.0
+        k = 0.5  # Allowance parameter
+        
+        # Calculate CUSUM for negative shift (pressure drop)
+        cusum_neg = 0.0
+        for val in values:
+            normalized = (val - target_mean) / std
+            cusum_neg = max(0, cusum_neg - normalized - k)
+        
+        return float(cusum_neg)
+    
+    def _compute_rate_of_change(self) -> Optional[float]:
+        """Compute rate of change (first derivative) of recent values."""
+        if len(self._buffer) < 3:
+            return None
+        
+        recent = list(self._buffer)[-3:]
+        if recent[0].timestamp == recent[-1].timestamp:
+            return 0.0
+        
+        dt = recent[0].timestamp - recent[-1].timestamp
+        dv = recent[0].value - recent[-1].value
+        
+        return dv / dt if dt != 0 else 0.0
+    
     def _get_buffer_stats(self) -> Dict[str, float]:
         """Get statistics from local buffer."""
         if not self._buffer:
             return {}
         
         values = [r.value for r in self._buffer]
-        return {
+        
+        # Enhanced stats with new metrics
+        stats = {
             "mean": float(np.mean(values)),
             "std": float(np.std(values)),
             "min": float(np.min(values)),
             "max": float(np.max(values)),
             "trend": float(values[-1] - values[0]) if len(values) > 1 else 0.0
         }
+        
+        # Add rate of change
+        roc = self._compute_rate_of_change()
+        if roc is not None:
+            stats["rate_of_change"] = roc
+        
+        # Add CUSUM score
+        if len(self._buffer) >= 10:
+            latest_value = values[-1]
+            stats["cusum_score"] = self._compute_local_cusum(latest_value)
+        
+        return stats
     
     def get_status(self) -> Dict[str, Any]:
         """Get agent status for monitoring."""

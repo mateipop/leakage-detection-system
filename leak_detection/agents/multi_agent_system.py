@@ -126,6 +126,27 @@ class MultiAgentSystem:
             f"1 coordinator, 1 localizer"
         )
     
+    def reset(self) -> None:
+        """Reset all agents and system state."""
+        if not self._initialized:
+            return
+            
+        # Reset agents
+        for agent in self.sensor_agents.values():
+            agent.reset()
+        
+        if self.coordinator:
+            self.coordinator.reset()
+            
+        if self.localizer:
+            self.localizer.reset()
+            
+        # Clear all pending messages from the bus
+        self.message_bus.reset_queues()
+        self.message_bus.clear_log()
+        
+        logger.info("MultiAgentSystem reset complete")
+
     def step(self, environment: Dict[str, Any]) -> Dict[str, Any]:
         """
         Execute one step of the multi-agent system.

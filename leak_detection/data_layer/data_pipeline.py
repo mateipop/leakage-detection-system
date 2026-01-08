@@ -63,6 +63,12 @@ class DataPipeline:
         self._processed_count = 0
         self._valid_count = 0
         self._invalid_count = 0
+        
+        # Baseline snapshot - frozen stats from initial period
+        # Key: (node_id, reading_type) -> {'mean': float, 'std': float}
+        self._baseline_snapshot: Dict[tuple, Dict[str, float]] = {}
+        self._baseline_locked = False
+        self._baseline_samples_needed = 20  # Samples before locking baseline
 
         logger.info("DataPipeline initialized")
 
@@ -155,21 +161,43 @@ class DataPipeline:
         value: float
     ) -> Optional[float]:
         """
-        Calculate Z-score based on historical statistics.
+        Calculate Z-score based on FROZEN baseline statistics.
+        
+        Uses a locked baseline from system initialization rather than
+        a rolling window, to prevent leaks from corrupting the baseline.
 
         Returns:
             Z-score or None if insufficient history
         """
+        key = (node_id, reading_type)
+        
+        # Check if we have a frozen baseline
+        if self._baseline_locked and key in self._baseline_snapshot:
+            baseline = self._baseline_snapshot[key]
+            if baseline['std'] < 1e-6:
+                return 0.0
+            return (value - baseline['mean']) / baseline['std']
+        
+        # Still building baseline - use rolling window
         stats = self._buffer.get_windowed_statistics(
             node_id,
             reading_type,
             self.config.zscore_window
         )
 
-        if stats is None or stats['count'] < self.config.zscore_window // 2:
+        if stats is None or stats['count'] < self._baseline_samples_needed:
             return None
+        
+        # Save baseline snapshot if not locked yet
+        if not self._baseline_locked and stats['count'] >= self._baseline_samples_needed:
+            if key not in self._baseline_snapshot:
+                self._baseline_snapshot[key] = {
+                    'mean': stats['mean'],
+                    'std': max(stats['std'], 0.1)  # Minimum std to avoid division issues
+                }
+                logger.debug(f"Baseline captured for {node_id}/{reading_type}: mean={stats['mean']:.2f}, std={stats['std']:.2f}")
 
-        if stats['std'] < 1e-6:  # Avoid division by zero
+        if stats['std'] < 1e-6:
             return 0.0
 
         z_score = (value - stats['mean']) / stats['std']
@@ -228,10 +256,14 @@ class DataPipeline:
         record.filtered_value = filtered_value
 
         # Stage 4: Calculate Z-score normalization
+        # IMPORTANT: When baseline is locked (leak detection mode), use RAW value
+        # for z-score calculation. The moving average lags too much to detect
+        # sudden changes. When not locked (building baseline), use filtered value.
+        value_for_zscore = reading.value if self._baseline_locked else filtered_value
         z_score = self._calculate_zscore(
             reading.node_id,
             reading.reading_type,
-            filtered_value
+            value_for_zscore
         )
         record.z_score = z_score
 
@@ -319,6 +351,25 @@ class DataPipeline:
             )
         }
 
+    def lock_baseline(self):
+        """Lock the baseline - Z-scores will now be calculated against frozen baseline."""
+        if self._baseline_snapshot:
+            self._baseline_locked = True
+            logger.info(f"Baseline locked with {len(self._baseline_snapshot)} sensor baselines")
+        else:
+            logger.warning("Cannot lock baseline - no baseline data captured yet")
+    
+    def unlock_baseline(self):
+        """Unlock baseline to allow re-adaptation."""
+        self._baseline_locked = False
+        logger.info("Baseline unlocked")
+    
+    def clear_baseline(self):
+        """Clear the baseline snapshot."""
+        self._baseline_snapshot.clear()
+        self._baseline_locked = False
+        logger.info("Baseline cleared")
+
     def reset(self):
         """Reset the pipeline state."""
         self._buffer.clear()
@@ -326,3 +377,5 @@ class DataPipeline:
         self._processed_count = 0
         self._valid_count = 0
         self._invalid_count = 0
+        self._baseline_snapshot.clear()
+        self._baseline_locked = False

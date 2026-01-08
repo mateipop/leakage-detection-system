@@ -11,7 +11,7 @@ anomalous sensors into separate leak events based on network topology.
 import logging
 from typing import Dict, List, Optional, Tuple, Set
 from dataclasses import dataclass, field
-from collections import defaultdict
+from collections import defaultdict, deque
 
 import numpy as np
 
@@ -58,7 +58,9 @@ class LeakLocalizer:
         get_neighbors_fn,
         get_all_nodes_fn,
         sensored_nodes: Set[str],
-        cluster_separation_depth: int = None  # Auto-computed if None
+        cluster_separation_depth: int = None,  # Auto-computed if None
+        stabilization_window: int = 5,  # Number of cycles for voting
+        confidence_hysteresis: float = 0.15  # Min confidence improvement to switch
     ):
         """
         Initialize the localizer.
@@ -69,6 +71,8 @@ class LeakLocalizer:
             sensored_nodes: Set of node IDs that have sensors
             cluster_separation_depth: Min hops between sensors to consider them separate clusters
                                       If None, auto-computed from median sensor distance
+            stabilization_window: Number of cycles to consider for voting-based stabilization
+            confidence_hysteresis: Minimum confidence improvement required to change prediction
         """
         self._get_neighbors = get_neighbors_fn
         self._get_all_nodes = get_all_nodes_fn
@@ -86,8 +90,20 @@ class LeakLocalizer:
         else:
             self._cluster_separation_depth = cluster_separation_depth
 
+        # Temporal stabilization state
+        self._stabilization_window = stabilization_window
+        self._confidence_hysteresis = confidence_hysteresis
+        self._prediction_history: List[Tuple[str, float]] = []  # (node, confidence) history
+        self._current_stable_prediction: Optional[str] = None
+        self._current_stable_confidence: float = 0.0
+        self._cycles_at_current: int = 0
+        
+        # Exclusion zones - nodes to skip during localization (near confirmed leaks)
+        self._exclusion_zones: Set[str] = set()
+
         logger.info(f"LeakLocalizer initialized with {len(sensored_nodes)} sensors, "
-                    f"cluster_separation={self._cluster_separation_depth}")
+                    f"cluster_separation={self._cluster_separation_depth}, "
+                    f"stabilization_window={stabilization_window}")
 
     def _build_sensor_proximity_map(self, max_depth: int = 6):
         """
@@ -145,23 +161,52 @@ class LeakLocalizer:
     def _build_sensor_distance_matrix(self, max_depth: int = 12):
         """Build distance matrix between all pairs of sensors for clustering."""
         sensors = list(self._sensored_nodes)
+        sensors_set = set(sensors)
         
-        for i, sensor1 in enumerate(sensors):
-            for sensor2 in sensors[i+1:]:
-                # Find shortest path distance
-                distance = self._find_sensor_distance(sensor1, sensor2, max_depth)
-                self._sensor_distances[(sensor1, sensor2)] = distance
-                self._sensor_distances[(sensor2, sensor1)] = distance
+        # Efficient BFS from each sensor to find all other sensors within max_depth
+        for start_node in sensors:
+            queue = deque([(start_node, 0)])
+            visited = {start_node}
+            
+            while queue:
+                current, dist = queue.popleft()
+                
+                # If we found another sensor, record distance
+                if current in sensors_set and current != start_node:
+                    self._sensor_distances[(start_node, current)] = dist
+                    self._sensor_distances[(current, start_node)] = dist
+                
+                # Continue BFS if within search depth
+                if dist < max_depth:
+                    # Get immediate neighbors (depth=1)
+                    neighbors = self._get_neighbors(current, 1)
+                    for neighbor in neighbors:
+                        if neighbor not in visited:
+                            visited.add(neighbor)
+                            queue.append((neighbor, dist + 1))
 
     def _find_sensor_distance(self, sensor1: str, sensor2: str, max_depth: int) -> int:
         """Find the network distance (hops) between two sensors."""
+        # This is now only used as a fallback or utility, as matrix is pre-filled
         if sensor1 == sensor2:
             return 0
+        if (sensor1, sensor2) in self._sensor_distances:
+            return self._sensor_distances[(sensor1, sensor2)]
+            
+        # Fallback to BFS if not in matrix (e.g. dynamic queries)
+        queue = deque([(sensor1, 0)])
+        visited = {sensor1}
         
-        for depth in range(1, max_depth + 1):
-            neighbors = self._get_neighbors(sensor1, depth)
-            if sensor2 in neighbors:
-                return depth
+        while queue:
+            current, dist = queue.popleft()
+            if current == sensor2:
+                return dist
+            
+            if dist < max_depth:
+                for neighbor in self._get_neighbors(current, 1):
+                    if neighbor not in visited:
+                        visited.add(neighbor)
+                        queue.append((neighbor, dist + 1))
         
         return max_depth + 1  # Not found within max_depth
 
@@ -250,6 +295,125 @@ class LeakLocalizer:
         
         return filtered
 
+    def _stabilize_prediction(
+        self,
+        raw_node: str,
+        raw_confidence: float
+    ) -> Tuple[str, float]:
+        """
+        Apply temporal stabilization to prevent jittering predictions.
+        
+        Uses:
+        1. Voting window - tracks predictions over time
+        2. Confidence hysteresis - only switch if new is significantly better
+        3. Persistence - keeps current prediction unless clearly wrong
+        
+        Args:
+            raw_node: The raw (unstabilized) predicted node
+            raw_confidence: The raw confidence for this prediction
+            
+        Returns:
+            (stabilized_node, stabilized_confidence) tuple
+        """
+        # Add to history
+        self._prediction_history.append((raw_node, raw_confidence))
+        
+        # Trim history to window size
+        if len(self._prediction_history) > self._stabilization_window:
+            self._prediction_history = self._prediction_history[-self._stabilization_window:]
+        
+        # If no stable prediction yet, use the raw one
+        if self._current_stable_prediction is None:
+            self._current_stable_prediction = raw_node
+            self._current_stable_confidence = raw_confidence
+            self._cycles_at_current = 1
+            return raw_node, raw_confidence
+        
+        # Count votes for each node in the window
+        vote_counts: Dict[str, int] = defaultdict(int)
+        confidence_sums: Dict[str, float] = defaultdict(float)
+        
+        for node, conf in self._prediction_history:
+            vote_counts[node] += 1
+            confidence_sums[node] += conf
+        
+        # Get the winning node (most votes, then highest avg confidence)
+        sorted_candidates = sorted(
+            vote_counts.keys(),
+            key=lambda n: (vote_counts[n], confidence_sums[n] / max(vote_counts[n], 1)),
+            reverse=True
+        )
+        
+        winner = sorted_candidates[0] if sorted_candidates else raw_node
+        winner_votes = vote_counts[winner]
+        winner_avg_conf = confidence_sums[winner] / max(winner_votes, 1)
+        
+        # Check if we should switch predictions
+        current_votes = vote_counts.get(self._current_stable_prediction, 0)
+        current_avg_conf = confidence_sums.get(self._current_stable_prediction, 0) / max(current_votes, 1)
+        
+        should_switch = False
+        
+        # Switch if winner has significantly more votes
+        if winner_votes > current_votes + 1:
+            should_switch = True
+        # Or if same votes but significantly higher confidence
+        elif winner_votes >= current_votes and winner_avg_conf > current_avg_conf + self._confidence_hysteresis:
+            should_switch = True
+        # Or if current prediction has dropped out of top results
+        elif current_votes == 0:
+            should_switch = True
+        
+        if should_switch and winner != self._current_stable_prediction:
+            logger.info(f"Stabilized prediction switch: {self._current_stable_prediction} -> {winner} "
+                       f"(votes: {current_votes} -> {winner_votes}, conf: {current_avg_conf:.2f} -> {winner_avg_conf:.2f})")
+            self._current_stable_prediction = winner
+            self._current_stable_confidence = winner_avg_conf
+            self._cycles_at_current = 1
+        else:
+            self._cycles_at_current += 1
+            # Update confidence with rolling average
+            self._current_stable_confidence = (
+                0.7 * self._current_stable_confidence + 0.3 * current_avg_conf
+            )
+        
+        return self._current_stable_prediction, self._current_stable_confidence
+
+    def reset_stabilization(self):
+        """Reset the stabilization state (call when leaks are cleared)."""
+        self._prediction_history.clear()
+        self._current_stable_prediction = None
+        self._current_stable_confidence = 0.0
+        self._cycles_at_current = 0
+        self._exclusion_zones.clear()
+        logger.info("Leak localizer stabilization state reset")
+
+    def set_exclusion_zones(self, zones: Set[str]):
+        """
+        Set nodes to exclude from localization.
+        
+        These are typically nodes near confirmed leaks that should not
+        be considered for new leak detection.
+        
+        Args:
+            zones: Set of node IDs to exclude
+        """
+        self._exclusion_zones = zones
+        logger.info(f"Exclusion zones set: {len(zones)} nodes excluded from localization")
+
+    def add_exclusion_zone(self, node_id: str, depth: int = 2):
+        """
+        Add a node and its neighbors to exclusion zones.
+        
+        Args:
+            node_id: Center node of exclusion zone
+            depth: How many hops around the node to exclude
+        """
+        self._exclusion_zones.add(node_id)
+        neighbors = self._get_neighbors(node_id, depth)
+        self._exclusion_zones.update(neighbors)
+        logger.info(f"Added exclusion zone around {node_id}: {len(neighbors) + 1} nodes")
+
     def localize(
         self,
         inference_results: Dict[str, InferenceResult],
@@ -258,6 +422,7 @@ class LeakLocalizer:
         """
         Estimate leak location from inference results (single leak mode).
 
+        Returns the highest-confidence detection, excluding nodes in exclusion zones.
         For multiple leaks, use localize_multiple() instead.
 
         Args:
@@ -268,10 +433,12 @@ class LeakLocalizer:
             LocalizationResult or None if no leak detected
         """
         # Get anomalous sensors sorted by confidence
+        # Filter out nodes in exclusion zones (near confirmed leaks)
         anomalies = [
             (node_id, result)
             for node_id, result in inference_results.items()
             if result.confidence >= anomaly_threshold
+            and node_id not in self._exclusion_zones
         ]
 
         if not anomalies:
@@ -279,11 +446,10 @@ class LeakLocalizer:
 
         anomalies.sort(key=lambda x: x[1].confidence, reverse=True)
 
-        # Method 1: Direct detection - highest confidence sensor
+        # Get raw localization - return the highest confidence result directly
         top_node, top_result = anomalies[0]
 
         if len(anomalies) == 1:
-            # Single anomaly - likely at or near that sensor
             return LocalizationResult(
                 estimated_node=top_node,
                 confidence=top_result.confidence,
@@ -294,9 +460,8 @@ class LeakLocalizer:
                 cluster_id=0,
                 contributing_anomalies=[top_node]
             )
-
-        # Method 2: Triangulation - multiple anomalous sensors
-        # Find the region where anomalies cluster
+        
+        # Triangulation for multiple anomalies
         return self._triangulate(anomalies, anomaly_threshold)
 
     def localize_multiple(
@@ -397,44 +562,82 @@ class LeakLocalizer:
 
         The principle: a leak causes pressure drops that propagate through
         the network. Sensors closer to the leak see larger drops.
-        We find the point that best explains the observed pattern.
+        
+        NEW APPROACH: Find the node that is the CENTER of the anomaly pattern.
+        - For each candidate node, compute weighted distance to all anomalous sensors
+        - The weighted center should be where distance * confidence is minimized
+        - Also consider: the sensor with highest confidence is likely NEAR the leak
         """
-        # Score each node based on how well it explains the anomaly pattern
-        all_nodes = self._get_all_nodes()
-        node_scores: Dict[str, float] = defaultdict(float)
         contributing_anomalies = [node for node, _ in anomalies]
-
-        # Weight each anomalous sensor by its confidence
-        anomaly_weights = {
-            node_id: result.confidence
-            for node_id, result in anomalies
-        }
-
-        for candidate in all_nodes:
+        
+        # Sort anomalies by confidence - highest first
+        sorted_anomalies = sorted(anomalies, key=lambda x: x[1].confidence, reverse=True)
+        top_node, top_result = sorted_anomalies[0]
+        
+        # Weight each anomalous sensor by its confidence and z-score magnitude
+        anomaly_weights = {}
+        for node_id, result in anomalies:
+            # Use z-score magnitude if available, else just confidence
+            z_mag = abs(result.z_score) if hasattr(result, 'z_score') and result.z_score is not None else 0
+            # Combined weight: confidence indicates certainty, z-score indicates magnitude
+            weight = result.confidence * (1.0 + min(z_mag, 10.0) / 10.0)
+            anomaly_weights[node_id] = weight
+        
+        # Strategy 1: The highest-confidence sensor is probably very close to the leak
+        # Use it as an anchor - search only in its neighborhood
+        anchor_depth = 4  # Search within 4 hops of top sensor
+        
+        # Get candidates near the anchor (top-confidence sensor)
+        anchor_neighbors = set(self._get_neighbors(top_node, anchor_depth))
+        anchor_neighbors.add(top_node)
+        
+        # Also add candidates near other high-confidence sensors
+        for node_id, result in sorted_anomalies[1:3]:  # Top 3 sensors
+            if result.confidence > 0.6:
+                anchor_neighbors.update(self._get_neighbors(node_id, 3))
+                anchor_neighbors.add(node_id)
+        
+        all_nodes = self._get_all_nodes()
+        node_scores: Dict[str, float] = {}
+        
+        # Score candidates in the anchor region
+        candidates = anchor_neighbors if anchor_neighbors else all_nodes
+        
+        for candidate in candidates:
             nearby = self._nearby_sensors_cache.get(candidate, [])
-
             if not nearby:
                 continue
-
+            
+            # Compute weighted inverse distance score
+            # High score = close to high-confidence anomalies
             score = 0.0
-            contributing_sensors = []
-
+            total_weight = 0.0
+            min_anomaly_dist = float('inf')
+            
             for sensor_id, distance in nearby:
                 if sensor_id in anomaly_weights:
-                    # Closer sensors with higher confidence = higher score
-                    # Weight decreases with distance (inverse relationship)
                     weight = anomaly_weights[sensor_id]
-                    distance_factor = 1.0 / (1.0 + distance * 0.3)
+                    # Sharp distance penalty: 1/(1+d)^2 instead of 1/(1+0.3d)
+                    distance_factor = 1.0 / ((1.0 + distance) ** 1.5)
                     score += weight * distance_factor
-                    contributing_sensors.append(sensor_id)
-
-            if contributing_sensors:
-                # Normalize by number of contributing sensors
-                node_scores[candidate] = score / len(contributing_sensors)
+                    total_weight += weight
+                    min_anomaly_dist = min(min_anomaly_dist, distance)
+            
+            # Also check if candidate IS an anomalous sensor (distance 0)
+            if candidate in anomaly_weights:
+                weight = anomaly_weights[candidate]
+                score += weight * 1.0  # Max distance factor for self
+                total_weight += weight
+                min_anomaly_dist = 0
+            
+            if total_weight > 0:
+                # DON'T normalize by sensor count - reward being close to STRONG anomalies
+                # Add bonus for being very close to any anomaly
+                proximity_bonus = 1.0 / (1.0 + min_anomaly_dist) if min_anomaly_dist < float('inf') else 0
+                node_scores[candidate] = score + proximity_bonus * max(anomaly_weights.values())
 
         if not node_scores:
             # Fallback to top anomaly
-            top_node, top_result = anomalies[0]
             return LocalizationResult(
                 estimated_node=top_node,
                 confidence=top_result.confidence,
@@ -453,24 +656,30 @@ class LeakLocalizer:
         # Get nearby sensors that contributed
         nearby = self._nearby_sensors_cache.get(best_node, [])
         contributing = [s for s, _ in nearby if s in anomaly_weights]
+        
+        # If best_node IS an anomalous sensor, include it
+        if best_node in anomaly_weights and best_node not in contributing:
+            contributing.insert(0, best_node)
 
-        # Get candidate region (nodes with similar scores)
-        score_threshold = best_score * 0.8
+        # Get candidate region (nodes with similar high scores)
+        score_threshold = best_score * 0.85
         candidate_region = [
             n for n, s in node_scores.items()
             if s >= score_threshold
         ]
 
-        # Confidence based on score relative to max possible
-        max_possible = sum(anomaly_weights.values())
-        confidence = min(1.0, best_score / max_possible) if max_possible > 0 else 0.5
+        # Confidence: use the top contributing sensor's confidence
+        # boosted slightly if we have multiple confirming sensors
+        base_conf = top_result.confidence
+        multi_sensor_boost = min(0.1, 0.02 * len(contributing))
+        confidence = min(1.0, base_conf + multi_sensor_boost)
 
         return LocalizationResult(
             estimated_node=best_node,
             confidence=confidence,
             is_sensored=best_node in self._sensored_nodes,
             nearby_sensors=contributing,
-            candidate_region=candidate_region[:20],  # Limit size
+            candidate_region=candidate_region[:20],
             method="triangulation",
             cluster_id=cluster_id,
             contributing_anomalies=contributing_anomalies

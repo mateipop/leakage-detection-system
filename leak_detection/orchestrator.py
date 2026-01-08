@@ -194,17 +194,27 @@ class SystemOrchestrator:
         Inject a leak at a random node.
 
         Args:
-            at_sensor: If True, inject at a node with a sensor (detectable).
+            at_sensor: If True, inject at a node with a PRESSURE sensor (detectable).
                        If False, inject at any junction (may be undetectable).
 
         Returns:
             Node ID where leak was injected, or None
         """
+        # Lock baseline before first leak injection to prevent contamination
+        if not self._agent.pipeline._baseline_locked:
+            self._agent.pipeline.lock_baseline()
+            self._emit_event("[cyan]Baseline locked[/cyan]")
+        
         if at_sensor:
-            # Get monitored nodes (where we have sensors)
-            candidates = self._fleet.monitored_nodes
+            # Get nodes with PRESSURE sensors (not just any monitored node)
+            # Pressure sensors are the key to detecting leaks
+            pressure_sensor_nodes, _ = self._network.get_sensor_locations()
+            candidates = list(pressure_sensor_nodes)
             if not candidates:
-                logger.warning("No monitored nodes available for leak injection")
+                # Fallback to any monitored node
+                candidates = self._fleet.monitored_nodes
+            if not candidates:
+                logger.warning("No sensor nodes available for leak injection")
                 return None
         else:
             # Any junction in the network
@@ -219,8 +229,8 @@ class SystemOrchestrator:
         event = self._leak_injector.inject_leak(node_id, leak_rate, self._sim_time)
 
         if event:
-            is_monitored = node_id in self._fleet.monitored_nodes
-            sensor_status = "[SENSORED]" if is_monitored else "[UNSENSORED]"
+            has_pressure = node_id in self._network.get_sensor_locations()[0]
+            sensor_status = "[PRESSURE SENSOR]" if has_pressure else "[NO PRESSURE SENSOR]"
             self._emit_event(f"[red]LEAK INJECTED at {node_id} ({leak_rate:.1f} L/s) {sensor_status}[/red]")
 
             # Re-run simulation with leak
@@ -235,6 +245,21 @@ class SystemOrchestrator:
         """Remove all active leaks."""
         self._leak_injector.remove_all_leaks(self._sim_time)
         self._emit_event("[green]All leaks cleared[/green]")
+        
+        # FULL Reset of legacy Single-Agent to prevent ghost detections
+        self._agent.reset()
+        
+        # Completely re-initialize Multi-Agent System to ensure clean state
+        # This prevents any lingering state (messages, active investigations) from persisting
+        if self._use_multi_agent:
+            # Explicitly shutdown old system if needed
+            if self._multi_agent_system:
+                # Optional: self._multi_agent_system.shutdown() 
+                pass
+            self._setup_multi_agent_system()
+        
+        # Clear all confirmed leak exclusion zones
+        self._agent.clear_confirmed_leaks()
 
         # Re-run simulation without leaks
         if not self._network.is_mock:
@@ -249,14 +274,113 @@ class SystemOrchestrator:
         return self._leak_injector.get_detection_summary()
 
     def record_detection(self, estimated_node: str):
-        """Record that the AI detected a leak."""
+        """Record that the AI detected a leak.
+        
+        Matches the detection to the closest undetected leak.
+        """
         ground_truth = self.get_ground_truth()
-        if ground_truth:
+        if not ground_truth:
+            return
+        
+        # Check if system is in cooldown
+        if self._agent.is_in_cooldown(self._sim_time):
+            logger.debug(f"Detection skipped - system in cooldown")
+            return
+        
+        # Find the closest active leak to the estimated location
+        best_leak = None
+        best_distance = 999
+        
+        for actual_node in ground_truth:
+            # Check if this leak was already detected
+            active_leaks = self._leak_injector.get_active_leaks()
+            if actual_node in active_leaks and active_leaks[actual_node].detected:
+                continue  # Skip already-detected leaks
+            
+            # Calculate distance
+            dist = self._calculate_detection_distance(actual_node, estimated_node)
+            if dist < best_distance:
+                best_distance = dist
+                best_leak = actual_node
+        
+        if best_leak:
             self._leak_injector.record_detection(
-                ground_truth[0],  # First active leak
+                best_leak,
                 estimated_node,
                 self._sim_time
             )
+            # Start cooldown after successful detection
+            self._agent.start_cooldown(self._sim_time)
+    
+    def confirm_leak(self, node_id: str) -> bool:
+        """
+        Confirm a detected leak and add it to exclusion zones.
+        
+        This prevents the confirmed leak from interfering with
+        detection of new leaks.
+        
+        Args:
+            node_id: Node where the leak is confirmed
+            
+        Returns:
+            True if leak was confirmed, False if not found
+        """
+        # Get pressure signature (empty for now - we don't track it yet)
+        pressure_signature = {}
+        
+        # Confirm in leak injector
+        confirmed = self._leak_injector.confirm_leak(
+            node_id, 
+            pressure_signature, 
+            self._sim_time
+        )
+        
+        if confirmed:
+            # Add to agent controller exclusion zones
+            self._agent.confirm_leak(node_id, depth=2)
+            self._emit_event(f"[cyan]✓ Leak at {node_id} confirmed and masked[/cyan]")
+            return True
+        
+        return False
+    
+    def auto_confirm_detections(self, min_cycles: int = 5):
+        """
+        Automatically confirm leaks that have been detected for multiple cycles.
+        
+        Args:
+            min_cycles: Minimum stable detection cycles before auto-confirm
+        """
+        active_leaks = self._leak_injector.get_active_leaks()
+        
+        for node_id, event in active_leaks.items():
+            if event.detected and not event.confirmed:
+                # For now, confirm immediately after detection
+                # In a real system, you'd check detection_time vs current time
+                self.confirm_leak(node_id)
+    
+    def get_confirmed_leaks(self) -> List[str]:
+        """Get list of confirmed leak locations."""
+        return self._leak_injector.get_confirmed_leaks()
+    
+    def get_unconfirmed_detections(self) -> List[str]:
+        """Get detected but not yet confirmed leaks."""
+        active_leaks = self._leak_injector.get_active_leaks()
+        return [
+            node_id for node_id, event in active_leaks.items()
+            if event.detected and not event.confirmed
+        ]
+    
+    def _calculate_detection_distance(self, actual_node: str, estimated_node: str) -> int:
+        """Calculate network distance between two nodes."""
+        if actual_node == estimated_node:
+            return 0
+        
+        for depth in range(1, 10):
+            neighbors = self._network.get_node_neighbors(actual_node, depth=depth)
+            if estimated_node in neighbors:
+                return depth
+        
+        return 99
 
     def step(self) -> OrchestrationResult:
         """
@@ -278,7 +402,8 @@ class SystemOrchestrator:
         metrics = {}
         for node_id in self._fleet.monitored_nodes:
             pressure = state.pressures.get(node_id, 0)
-            flow = state.flows.get(node_id, 0)
+            # Use node_flows for junction-level flow (not pipe flows)
+            flow = state.node_flows.get(node_id, 0) if state.node_flows else state.demands.get(node_id, 0)
 
             # Get Z-scores from features
             features = cycle_result.features.get(node_id)
@@ -322,19 +447,30 @@ class SystemOrchestrator:
                         conf = loc.get("confidence", 0)
                         self._emit_event(f"[yellow]🔍 Multi-Agent: Leak localized at {node} ({conf:.0%} confidence)[/yellow]")
 
-        # Get top anomaly (original system)
+        # Get AI's estimate (original system)
+        estimated_location = self._agent.get_estimated_leak_location()
+        
+        # === HYBRID DETECTION STRATEGY ===
+        # Use Multi-Agent System results if available (Priority 1)
+        if self._multi_agent_system and detected_leaks:
+            # Find high-confidence leak
+            best_leak = max(detected_leaks, key=lambda x: x.get('confidence', 0))
+            if best_leak.get('confidence', 0) > 0.5:
+                # Override single-agent estimate with MAS result
+                estimated_location = best_leak['location']
+                # Record detection directly from MAS
+                self.record_detection(estimated_location)
+
+        # Fallback to single-agent logic if MAS didn't trigger
+        elif (estimated_location and
+            cycle_result.agent_status.system_status.name == 'LEAK_CONFIRMED'):
+            self.record_detection(estimated_location)
+
+        # Get top anomaly for UI (from original system)
         anomalies = self._agent.inference_engine.get_anomalies(
             cycle_result.inference_results
         )
         top_anomaly = anomalies[0] if anomalies else None
-
-        # Get AI's estimate (original system)
-        estimated_location = self._agent.get_estimated_leak_location()
-
-        # Record detection if leak confirmed
-        if (cycle_result.decision.estimated_leak_location and
-            cycle_result.agent_status.system_status.name == 'LEAK_CONFIRMED'):
-            self.record_detection(estimated_location)
 
         return OrchestrationResult(
             sim_time=self._sim_time,

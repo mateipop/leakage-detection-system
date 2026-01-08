@@ -28,6 +28,7 @@ class SimulationState:
     pressures: Dict[str, float]  # node_id -> pressure (psi)
     flows: Dict[str, float]      # link_id -> flow (L/s)
     demands: Dict[str, float]    # node_id -> demand (L/s)
+    node_flows: Dict[str, float] = None  # node_id -> flow at node (L/s)
 
 
 class MockNetwork:
@@ -98,11 +99,15 @@ class MockNetwork:
             base_f = self._base_flows[p]
             flows[p] = base_f * demand_multiplier
 
+        # Node flows = demands at nodes
+        node_flows = dict(demands)
+
         return SimulationState(
             time_seconds=time_seconds,
             pressures=pressures,
             flows=flows,
-            demands=demands
+            demands=demands,
+            node_flows=node_flows
         )
 
 
@@ -370,11 +375,16 @@ class NetworkSimulator:
             except KeyError:
                 demands[node_id] = 0.0
 
+        # Also add node-level flows (demand at node = flow through node)
+        # For flow sensors at junctions, we use the demand value
+        node_flows = dict(demands)  # Flow at junction = demand at junction
+
         return SimulationState(
             time_seconds=actual_time,
             pressures=pressures,
             flows=flows,
-            demands=demands
+            demands=demands,
+            node_flows=node_flows
         )
 
     def step(self, dt_seconds: float = None) -> SimulationState:

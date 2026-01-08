@@ -91,7 +91,25 @@ class CoordinatorAgent(Agent):
         self.subscribe(MessageType.LOCALIZATION_RESULT)
         self.subscribe(MessageType.STATUS_REPORT)
         
+        # Internal message buffer
+        self._pending_messages: List[Message] = []
+        
         logger.info(f"CoordinatorAgent '{agent_id}' managing {len(sensor_ids)} sensors")
+    
+    def reset(self):
+        """Reset coordinator state."""
+        super().reset()
+        self._pending_messages.clear()
+        self._recent_anomalies.clear()
+        self._active_investigations.clear()
+        self._investigation_counter = 0
+        self._sensor_states.clear()
+        self._sensors_in_high_res.clear()
+        self._system_mode = "NORMAL"
+
+    def on_message(self, message: Message):
+        """Store incoming messages for the sense cycle."""
+        self._pending_messages.append(message)
     
     def sense(self, environment: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -105,11 +123,11 @@ class CoordinatorAgent(Agent):
         new_anomalies = []
         localization_results = []
         
-        while True:
-            message = self.receive_message()
-            if message is None:
-                break
-            
+        # Make a copy and clear the buffer
+        messages_to_process = list(self._pending_messages)
+        self._pending_messages.clear()
+        
+        for message in messages_to_process:
             if message.msg_type == MessageType.ANOMALY_ALERT:
                 anomaly = self._process_anomaly_alert(message)
                 if anomaly:

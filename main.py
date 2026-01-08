@@ -89,6 +89,9 @@ class LeakDetectionApp:
         """Main update loop running in background."""
         # Initial delay to let UI settle
         await asyncio.sleep(0.5)
+        
+        # Track last detection count to log new ones
+        last_detection_count = 0
 
         while True:
             try:
@@ -109,8 +112,23 @@ class LeakDetectionApp:
                             (loc.estimated_node, loc.confidence)
                             for loc in multi.localizations
                         ]
+                    
+                    # Get detection history and log new detections
+                    detection_history = self._orchestrator.leak_injector.get_last_detections(5)
+                    current_count = len(detection_history)
+                    
+                    # Log new detection when it happens
+                    if current_count > last_detection_count and detection_history:
+                        det = detection_history[0]  # Most recent
+                        dist = det['distance']
+                        dist_str = "EXACT MATCH" if dist == 0 else f"{dist} hops away"
+                        self._dashboard.log_message(
+                            f"[bold cyan]DETECTION #{current_count}:[/bold cyan] "
+                            f"Actual={det['actual']} | Detected={det['estimated']} | {dist_str}"
+                        )
+                        last_detection_count = current_count
 
-                    # Update dashboard with multi-agent summary
+                    # Update dashboard
                     if self._dashboard:
                         self._dashboard.update_metrics(result.metrics)
                         self._dashboard.update_status(
@@ -119,9 +137,18 @@ class LeakDetectionApp:
                             result.ground_truth,
                             result.estimated_location,
                             multi_leak_results,
-                            result.agent_summary  # Pass multi-agent system data
+                            result.agent_summary,
+                            detection_count=current_count
                         )
                         self._dashboard.update_anomaly(result.anomaly)
+                        
+                        # Get confirmed leaks for history display
+                        confirmed_leaks = self._orchestrator.get_confirmed_leaks()
+                        self._dashboard.update_history(detection_history, confirmed_leaks)
+                        
+                        # Auto-confirm detected leaks after a few cycles
+                        # This masks them so new leaks can be detected
+                        self._orchestrator.auto_confirm_detections(min_cycles=3)
 
                 # Control simulation speed (faster than real-time)
                 # 0.2 seconds real time = 1 simulation step (5 min simulated)

@@ -70,6 +70,12 @@ class LocalizerAgent(Agent):
         
         logger.info(f"LocalizerAgent '{agent_id}' initialized with {len(sensor_nodes)} sensor nodes")
     
+    def reset(self):
+        """Reset localizer state."""
+        super().reset()
+        self._pending_requests.clear()
+        self._localizations_performed = 0
+
     def sense(self, environment: Dict[str, Any]) -> Dict[str, Any]:
         """
         Perceive - check for localization requests.

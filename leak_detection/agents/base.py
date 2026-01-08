@@ -149,6 +149,16 @@ class MessageBus:
         with self._lock:
             self._message_log.clear()
 
+    def reset_queues(self):
+        """Empty all message queues."""
+        with self._lock:
+            for q in self._queues.values():
+                while not q.empty():
+                    try:
+                        q.get_nowait()
+                    except queue.Empty:
+                        break
+
 
 class Agent(ABC):
     """
@@ -287,3 +297,8 @@ class Agent(ABC):
         """Clean up agent resources."""
         self._bus.unregister_agent(self.agent_id)
         logger.info(f"Agent '{self.agent_id}' shut down")
+
+    def reset(self):
+        """Reset agent state. Override in subclasses."""
+        self._state.clear()
+        

@@ -112,6 +112,11 @@ class AgentController:
         self._alerts_triggered = 0
         self._leaks_detected = 0
         self._samples_processed = 0
+        
+        # Multi-leak detection cooldown
+        self._detection_cooldown: float = 0.0  # Time when cooldown ends
+        self._cooldown_duration: float = 5.0   # Cycles to wait after detection
+        self._confirmed_leak_zones: set = set()  # Node IDs near confirmed leaks
 
         logger.info("AgentController initialized")
 
@@ -155,7 +160,11 @@ class AgentController:
             if device.reading_type == 'pressure':
                 true_value = state.pressures.get(device.node_id, 0.0)
             else:
-                true_value = state.flows.get(device.node_id, 0.0)
+                # Use node_flows for junction-based flow sensors
+                if state.node_flows:
+                    true_value = state.node_flows.get(device.node_id, 0.0)
+                else:
+                    true_value = state.demands.get(device.node_id, 0.0)
 
             # Take noisy reading
             reading = device.sample(true_value, sim_time, add_noise=True)
@@ -383,8 +392,61 @@ class AgentController:
         self._alerts_triggered = 0
         self._leaks_detected = 0
         self._samples_processed = 0
+        self._detection_cooldown = 0.0
+        self._confirmed_leak_zones.clear()
 
         self._pipeline.reset()
         self._inference_engine.reset_history()
         self._decision_engine.reset()
         self._fleet.reset_all()
+        self._leak_localizer.reset_stabilization()
+
+    def reset_localizer(self):
+        """Reset just the leak localizer stabilization (call when leaks are cleared)."""
+        self._leak_localizer.reset_stabilization()
+        self._confirmed_leak_zones.clear()
+        self._detection_cooldown = 0.0
+
+    def is_in_cooldown(self, sim_time: float) -> bool:
+        """Check if system is in detection cooldown period."""
+        return sim_time < self._detection_cooldown
+    
+    def start_cooldown(self, sim_time: float):
+        """Start a cooldown period after detecting a new leak."""
+        self._detection_cooldown = sim_time + self._cooldown_duration
+        logger.info(f"Detection cooldown started, ends at {self._detection_cooldown:.1f}")
+    
+    def confirm_leak(self, node_id: str, depth: int = 2):
+        """
+        Confirm a leak and add its zone to exclusion areas.
+        
+        This prevents the same leak from being re-detected.
+        
+        Args:
+            node_id: Node where leak was confirmed
+            depth: How many hops around to exclude
+        """
+        # Add to inference engine exclusion
+        self._inference_engine.add_exclusion_zone(node_id)
+        
+        # Add to localizer exclusion
+        self._leak_localizer.add_exclusion_zone(node_id, depth)
+        
+        # Track locally
+        self._confirmed_leak_zones.add(node_id)
+        neighbors = self._network.get_node_neighbors(node_id, depth)
+        self._confirmed_leak_zones.update(neighbors)
+        
+        logger.info(f"Leak confirmed at {node_id}, added to exclusion zones")
+    
+    def clear_confirmed_leaks(self):
+        """Clear all confirmed leak exclusion zones."""
+        self._inference_engine.clear_leak_mask()
+        self._leak_localizer._exclusion_zones.clear()
+        self._confirmed_leak_zones.clear()
+        logger.info("Cleared all confirmed leak exclusion zones")
+    
+    @property
+    def confirmed_leak_zones(self) -> set:
+        """Get the set of nodes in confirmed leak zones."""
+        return self._confirmed_leak_zones.copy()

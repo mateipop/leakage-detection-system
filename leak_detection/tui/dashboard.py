@@ -12,7 +12,8 @@ from textual.app import App, ComposeResult
 from textual.containers import Container, Horizontal, Vertical, ScrollableContainer
 from textual.widgets import (
     Header, Footer, Static, Label,
-    DataTable, ProgressBar, RichLog
+    DataTable, ProgressBar, RichLog,
+    TabbedContent, TabPane
 )
 from textual.reactive import reactive
 from textual.timer import Timer
@@ -26,7 +27,6 @@ from rich.console import Group
 from ..config import SamplingMode, SystemStatus, DEFAULT_CONFIG
 from ..ai_layer.agent_controller import AgentStatus, MonitoringCycleResult
 from ..ai_layer.inference_engine import InferenceResult
-
 
 logger = logging.getLogger(__name__)
 
@@ -118,6 +118,7 @@ class SystemStatusPanel(Static):
         self._estimated_location: Optional[str] = None
         self._multi_leak_results: List[tuple] = []  # [(node, confidence), ...]
         self._agent_summary: Optional[Dict] = None  # Multi-agent system summary
+        self._detection_count: int = 0  # Actual detection count from leak_injector
 
     def update_status(
         self,
@@ -126,7 +127,8 @@ class SystemStatusPanel(Static):
         ground_truth: List[str] = None,
         estimated_location: str = None,
         multi_leak_results: List[tuple] = None,
-        agent_summary: Dict = None
+        agent_summary: Dict = None,
+        detection_count: int = None
     ):
         """Update displayed status."""
         self._status = status
@@ -135,6 +137,7 @@ class SystemStatusPanel(Static):
         self._estimated_location = estimated_location
         self._multi_leak_results = multi_leak_results or []
         self._agent_summary = agent_summary
+        self._detection_count = detection_count if detection_count is not None else status.leaks_detected
         self.refresh()
 
     def render(self) -> Panel:
@@ -174,7 +177,7 @@ class SystemStatusPanel(Static):
             f"[bold]Monitored Nodes:[/bold] {self._status.monitored_nodes}",
             f"[bold]Samples Processed:[/bold] {self._status.samples_processed}",
             f"[bold]Alerts Triggered:[/bold] {self._status.alerts_triggered}",
-            f"[bold]Leaks Detected:[/bold] {self._status.leaks_detected}",
+            f"[bold]Leaks Detected:[/bold] {self._detection_count}",
         ]
 
         # Show current decision
@@ -297,6 +300,85 @@ class AnomalyPanel(Static):
         )
 
 
+class DetectionHistoryPanel(Static):
+    """Panel showing detection history with accuracy and confirmation status."""
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._history: List[Dict] = []
+        self._confirmed_leaks: List[str] = []
+
+    def update_history(self, history: List[Dict], confirmed_leaks: List[str] = None):
+        """Update the detection history."""
+        self._history = history
+        self._confirmed_leaks = confirmed_leaks or []
+        self.refresh()
+
+    def render(self) -> Panel:
+        """Render the detection history panel."""
+        if not self._history:
+            return Panel(
+                "[dim]No detections yet.[/dim]\n\n"
+                "Press [bold]L[/bold] to inject a leak and wait for detection.",
+                title="Detection History (0 total)",
+                border_style="dim"
+            )
+
+        table = Table(
+            title=None,
+            show_header=True,
+            header_style="bold cyan",
+            expand=True,
+            box=None
+        )
+        table.add_column("#", style="dim", width=3)
+        table.add_column("Actual Leak", width=12)
+        table.add_column("AI Detected", width=12)
+        table.add_column("Distance", width=10)
+        table.add_column("Status", width=12)
+
+        for i, det in enumerate(self._history, 1):
+            actual = det.get('actual', '?')
+            estimated = det.get('estimated', '?')
+            distance = det.get('distance', 99)
+            
+            if distance == 0:
+                dist_str = "[green]0 (exact)[/green]"
+            elif distance == 1:
+                dist_str = "[cyan]1 hop[/cyan]"
+            elif distance == 2:
+                dist_str = "[yellow]2 hops[/yellow]"
+            elif distance <= 4:
+                dist_str = f"[yellow]{distance} hops[/yellow]"
+            else:
+                dist_str = f"[red]{distance}+ hops[/red]"
+            
+            # Check if this leak is confirmed
+            if actual in self._confirmed_leaks:
+                status_str = "[cyan]✓ CONFIRMED[/cyan]"
+            else:
+                status_str = "[yellow]⏳ NEW[/yellow]"
+
+            table.add_row(str(i), actual, estimated, dist_str, status_str)
+
+        # Stats summary
+        total = len(self._history)
+        exact = sum(1 for d in self._history if d.get('distance', 99) == 0)
+        within_2 = sum(1 for d in self._history if d.get('distance', 99) <= 2)
+        confirmed = len(self._confirmed_leaks)
+        
+        stats = f"\nExact: {exact}/{total} | Within 2 hops: {within_2}/{total} | Confirmed: {confirmed}"
+
+        from rich.console import Group
+        content = Group(table, stats)
+
+        return Panel(
+            content,
+            title=f"Detection History ({total} total)",
+            border_style="cyan"
+        )
+
+
 class LeakDetectionDashboard(App):
     """Main TUI Dashboard Application."""
 
@@ -325,7 +407,7 @@ class LeakDetectionDashboard(App):
     }
 
     #log-panel {
-        height: 10;
+        height: 8;
         border: solid green;
     }
 
@@ -335,11 +417,18 @@ class LeakDetectionDashboard(App):
     }
 
     #status-panel {
-        height: 1fr;
+        height: auto;
+        min-height: 15;
     }
 
     #anomaly-panel {
-        height: 1fr;
+        height: auto;
+        min-height: 10;
+    }
+    
+    #history-panel {
+        height: auto;
+        min-height: 12;
     }
     """
 
@@ -383,9 +472,10 @@ class LeakDetectionDashboard(App):
                     yield MetricsPanel(id="metrics-panel")
                 yield RichLog(id="log-panel", highlight=True, markup=True, max_lines=50)
 
-            with Vertical(id="right-column"):
+            with ScrollableContainer(id="right-column"):
                 yield SystemStatusPanel(id="status-panel")
                 yield AnomalyPanel(id="anomaly-panel")
+                yield DetectionHistoryPanel(id="history-panel")
 
         yield Footer()
 
@@ -447,13 +537,19 @@ class LeakDetectionDashboard(App):
         ground_truth: List[str] = None,
         estimated_location: str = None,
         multi_leak_results: List[tuple] = None,
-        agent_summary: Dict = None
+        agent_summary: Dict = None,
+        detection_count: int = None
     ) -> None:
         """Update the status display."""
         panel = self.query_one("#status-panel", SystemStatusPanel)
-        panel.update_status(status, sim_time, ground_truth, estimated_location, multi_leak_results, agent_summary)
+        panel.update_status(status, sim_time, ground_truth, estimated_location, multi_leak_results, agent_summary, detection_count)
 
     def update_anomaly(self, anomaly: Optional[InferenceResult]) -> None:
         """Update the anomaly display."""
         panel = self.query_one("#anomaly-panel", AnomalyPanel)
         panel.update_anomaly(anomaly)
+
+    def update_history(self, detections: List[Dict], confirmed_leaks: List[str] = None) -> None:
+        """Update the detection history panel."""
+        panel = self.query_one("#history-panel", DetectionHistoryPanel)
+        panel.update_history(detections, confirmed_leaks)
