@@ -14,7 +14,8 @@ The system is stratified into three isolated layers as defined in the Technical 
 * Python 3.12+
 * Redis Server (`brew install redis`)
 * WNTR Library (`pip install wntr`)
-* PyTorch installs from the CUDA wheel index by default (expects NVIDIA GPU drivers).
+* NVIDIA GPU install uses the optional `gpu` group (CUDA wheels via uv index config):
+  `uv sync --group gpu --no-dev`
 
 ## How to Run
 Open three separate terminals in VS Code:

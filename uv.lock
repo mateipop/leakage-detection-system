@@ -293,7 +293,6 @@ dependencies = [
     { name = "scipy" },
     { name = "setuptools" },
     { name = "six" },
-    { name = "torch" },
     { name = "typing-extensions" },
     { name = "tzdata" },
     { name = "urllib3" },
@@ -305,6 +304,9 @@ dev = [
     { name = "pytest" },
     { name = "ruff" },
     { name = "ty" },
+]
+gpu = [
+    { name = "torch" },
 ]
 
 [package.metadata]
@@ -329,7 +331,6 @@ requires-dist = [
     { name = "scipy", specifier = "==1.16.3" },
     { name = "setuptools", specifier = "==80.9.0" },
     { name = "six", specifier = "==1.17.0" },
-    { name = "torch", specifier = ">=2.5.1", index = "https://download.pytorch.org/whl/cu121" },
     { name = "typing-extensions", specifier = "==4.15.0" },
     { name = "tzdata", specifier = "==2025.3" },
     { name = "urllib3", specifier = "==2.6.2" },
@@ -342,6 +343,7 @@ dev = [
     { name = "ruff", specifier = ">=0.14.10" },
     { name = "ty", specifier = ">=0.0.10" },
 ]
+gpu = [{ name = "torch", specifier = ">=2.5.1", index = "https://download.pytorch.org/whl/cu121" }]
 
 [[package]]
 name = "markupsafe"
