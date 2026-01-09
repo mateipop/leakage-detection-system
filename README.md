@@ -14,6 +14,7 @@ The system is stratified into three isolated layers as defined in the Technical 
 * Python 3.12+
 * Redis Server (`brew install redis`)
 * WNTR Library (`pip install wntr`)
+* PyTorch installs from the CUDA wheel index by default (expects NVIDIA GPU drivers).
 
 ## How to Run
 Open three separate terminals in VS Code:
@@ -37,15 +38,17 @@ Open three separate terminals in VS Code:
 
 Generate windowed datasets (3-hour windows, 30-minute stride) with the dataset builder.
 Each window contains either no leak or a single leak node, and includes `leak_coords`
-for pinpointer regression:
+for pinpointer regression. Window labels are balanced to a 50/50 leak/no-leak split:
 
 `uv run python -m leak_detect_ai_physics.data_layer.dataset_builder --clear --duration 86400 --timestep 300 --window-hours 3 --stride-steps 6`
 
-Train the CNN anomaly + pinpointer models (pinpointer regresses coordinates):
+Train the anomaly (Conv1D + BiGRU) + pinpointer models (pinpointer regresses coordinates):
 
 `uv run python -m leak_detect_ai_physics.ai_layer.trainer --dataset data/training_data.jsonl`
 
 Use `--patience` to enable early stopping based on validation F1 for anomaly training.
+Training augments features with per-step deltas internally; the dataset schema stays unchanged.
+Inference applies the same delta augmentation using metadata stored with the models.
 
 Artifacts under `data/` are gitignored (datasets and trained models).
 

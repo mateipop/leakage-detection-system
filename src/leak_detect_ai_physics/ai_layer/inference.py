@@ -3,11 +3,12 @@ import json
 import logging
 from pathlib import Path
 
+import numpy as np
 import redis
 import torch
 
 from leak_detect_ai_physics import config
-from leak_detect_ai_physics.ai_layer.trainer import CnnClassifier, ModelSpec
+from leak_detect_ai_physics.ai_layer.trainer import AnomalyNet, CnnClassifier, ModelSpec
 
 LOG = logging.getLogger(__name__)
 
@@ -15,12 +16,16 @@ LOG = logging.getLogger(__name__)
 def _load_model(path: Path):
     payload = torch.load(path, map_location="cpu")
     metadata = payload["metadata"]
-    spec = ModelSpec(
-        input_dim=metadata["spec"]["input_dim"],
-        hidden_sizes=metadata["spec"]["hidden_sizes"],
-        output_dim=metadata["spec"]["output_dim"],
-    )
-    model = CnnClassifier(spec)
+    arch = metadata.get("arch")
+    if arch == "anomaly_net_v2":
+        model = AnomalyNet(int(metadata.get("input_dim", 0)))
+    else:
+        spec = ModelSpec(
+            input_dim=metadata["spec"]["input_dim"],
+            hidden_sizes=metadata["spec"]["hidden_sizes"],
+            output_dim=metadata["spec"]["output_dim"],
+        )
+        model = CnnClassifier(spec)
     model.load_state_dict(payload["state_dict"])
     model.eval()
     return model, metadata
@@ -29,6 +34,19 @@ def _load_model(path: Path):
 def _build_feature_vector(payload: dict, features: list[str]) -> list[float]:
     normalized = payload.get("normalized") or {}
     return [float(normalized.get(name, 0.0)) for name in features]
+
+
+def _apply_feature_engineering(
+    window: list[list[float]],
+    *,
+    include_deltas: bool,
+) -> torch.Tensor:
+    data = np.array(window, dtype=np.float32)
+    if include_deltas:
+        deltas = np.zeros_like(data)
+        deltas[1:] = data[1:] - data[:-1]
+        data = np.concatenate([data, deltas], axis=1)
+    return torch.tensor([data], dtype=torch.float32)
 
 
 def run_inference() -> int:
@@ -59,14 +77,27 @@ def run_inference() -> int:
         LOG.error("Anomaly model not found: %s", args.anomaly_model)
         return 1
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     anomaly_model, anomaly_meta = _load_model(args.anomaly_model)
+    anomaly_model = anomaly_model.to(device)
     anomaly_features = anomaly_meta.get("features", [])
+    anomaly_feature_engineering = anomaly_meta.get("feature_engineering") or {}
+    anomaly_include_deltas = bool(
+        anomaly_feature_engineering.get("include_deltas", False)
+    )
     window_steps = int(anomaly_meta.get("window_steps", 1))
     pinpointer_model = None
     pinpointer_meta = {}
     if args.pinpointer_model.exists():
         pinpointer_model, pinpointer_meta = _load_model(args.pinpointer_model)
+        pinpointer_model = pinpointer_model.to(device)
     pinpointer_classes = pinpointer_meta.get("class_names", [])
+    pinpointer_feature_engineering = (
+        pinpointer_meta.get("feature_engineering") or anomaly_feature_engineering
+    )
+    pinpointer_include_deltas = bool(
+        pinpointer_feature_engineering.get("include_deltas", False)
+    )
     pinpointer_window_steps = int(pinpointer_meta.get("window_steps", window_steps))
 
     r = redis.Redis(
@@ -103,7 +134,10 @@ def run_inference() -> int:
                 continue
             if len(buffers[key]) > window_steps:
                 buffers[key] = buffers[key][-window_steps:]
-            window_tensor = torch.tensor([buffers[key]], dtype=torch.float32)
+            window_tensor = _apply_feature_engineering(
+                buffers[key],
+                include_deltas=anomaly_include_deltas,
+            ).to(device)
             with torch.no_grad():
                 logits = anomaly_model(window_tensor)
                 anomaly_score = float(torch.sigmoid(logits)[0][0].item())
@@ -119,10 +153,12 @@ def run_inference() -> int:
                 if len(pin_buffer) >= pinpointer_window_steps:
                     pin_window = pin_buffer[-pinpointer_window_steps:]
                     with torch.no_grad():
-                        logits = pinpointer_model(
-                            torch.tensor([pin_window], dtype=torch.float32)
-                        )
-                        probs = torch.softmax(logits, dim=1)[0].numpy()
+                        pin_tensor = _apply_feature_engineering(
+                            pin_window,
+                            include_deltas=pinpointer_include_deltas,
+                        ).to(device)
+                        logits = pinpointer_model(pin_tensor)
+                        probs = torch.softmax(logits, dim=1)[0].detach().cpu().numpy()
                     best_idx = int(probs.argmax())
                     pinpointer_prediction = pinpointer_classes[best_idx]
                     pinpointer_confidence = float(probs[best_idx])

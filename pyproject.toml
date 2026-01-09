@@ -29,7 +29,7 @@ dependencies = [
   "scipy==1.16.3",
   "setuptools==80.9.0",
   "six==1.17.0",
-  "torch>=2.9.1",
+  "torch>=2.5.1",
   "typing_extensions==4.15.0",
   "tzdata==2025.3",
   "urllib3==2.6.2",
@@ -48,12 +48,12 @@ pythonpath = ["src"]
 testpaths = ["tests"]
 
 [[tool.uv.index]]
-name = "pytorch-cpu"
-url = "https://download.pytorch.org/whl/cpu"
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
 explicit = true
 
 [tool.uv.sources]
-torch = { index = "pytorch-cpu" }
+torch = { index = "pytorch-cu121" }
 
 [tool.ruff]
 line-length = 88

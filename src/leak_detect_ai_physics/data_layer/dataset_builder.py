@@ -2,6 +2,7 @@ import argparse
 import json
 import logging
 import os
+import random
 import subprocess
 import sys
 import time
@@ -294,6 +295,7 @@ def run() -> int:
             window_steps=window_steps,
             stride_steps=stride_steps,
             node_coords=node_coords,
+            seed=args.seed,
         )
     LOG.info("Dataset saved to %s", output_path)
     return 0
@@ -358,45 +360,69 @@ def _write_windowed_dataset(
     window_steps: int,
     stride_steps: int,
     node_coords: dict,
+    seed: int | None,
 ) -> None:
     if window_steps <= 1:
         return
     feature_names = _collect_feature_names(entity_series)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with output_path.open("w", encoding="utf-8") as handle:
-        for series in entity_series.values():
-            if len(series) < window_steps:
+    leak_records = []
+    no_leak_records = []
+    for series in entity_series.values():
+        if len(series) < window_steps:
+            continue
+        for start in range(0, len(series) - window_steps + 1, stride_steps):
+            window = series[start : start + window_steps]
+            leak_nodes = _window_leak_nodes(window)
+            if len(leak_nodes) > 1:
                 continue
-            for start in range(0, len(series) - window_steps + 1, stride_steps):
-                window = series[start : start + window_steps]
-                leak_nodes = _window_leak_nodes(window)
-                if len(leak_nodes) > 1:
-                    continue
-                leak_node_id = next(iter(leak_nodes)) if leak_nodes else None
-                leak_coords = None
-                if leak_node_id:
-                    coords = node_coords.get(leak_node_id)
-                    if coords:
-                        leak_coords = {
-                            "x": float(coords.get("x", 0.0)),
-                            "y": float(coords.get("y", 0.0)),
-                        }
-                window_features = [
-                    [float(step["normalized"].get(name, 0.0)) for name in feature_names]
-                    for step in window
-                ]
-                record = {
-                    "entity_type": window[0]["entity_type"],
-                    "entity_id": window[0]["entity_id"],
-                    "timestamp_start": window[0]["timestamp"],
-                    "timestamp_end": window[-1]["timestamp"],
-                    "features": window_features,
-                    "feature_names": feature_names,
-                    "label": int(bool(leak_node_id)),
-                    "leak_node_id": leak_node_id,
-                    "leak_coords": leak_coords,
-                }
-                handle.write(json.dumps(record) + "\n")
+            leak_node_id = next(iter(leak_nodes)) if leak_nodes else None
+            leak_coords = None
+            if leak_node_id:
+                coords = node_coords.get(leak_node_id)
+                if coords:
+                    leak_coords = {
+                        "x": float(coords.get("x", 0.0)),
+                        "y": float(coords.get("y", 0.0)),
+                    }
+            window_features = [
+                [float(step["normalized"].get(name, 0.0)) for name in feature_names]
+                for step in window
+            ]
+            record = {
+                "entity_type": window[0]["entity_type"],
+                "entity_id": window[0]["entity_id"],
+                "timestamp_start": window[0]["timestamp"],
+                "timestamp_end": window[-1]["timestamp"],
+                "features": window_features,
+                "feature_names": feature_names,
+                "label": int(bool(leak_node_id)),
+                "leak_node_id": leak_node_id,
+                "leak_coords": leak_coords,
+            }
+            if leak_node_id:
+                leak_records.append(record)
+            else:
+                no_leak_records.append(record)
+
+    if not leak_records or not no_leak_records:
+        LOG.warning(
+            "Cannot balance leak labels (leak=%s, no_leak=%s). Using all windows.",
+            len(leak_records),
+            len(no_leak_records),
+        )
+        records = leak_records + no_leak_records
+    else:
+        target = min(len(leak_records), len(no_leak_records))
+        rng = random.Random(seed)
+        rng.shuffle(leak_records)
+        rng.shuffle(no_leak_records)
+        records = leak_records[:target] + no_leak_records[:target]
+        rng.shuffle(records)
+
+    with output_path.open("w", encoding="utf-8") as handle:
+        for record in records:
+            handle.write(json.dumps(record) + "\n")
 
 
 def _collect_feature_names(entity_series: dict) -> list[str]:

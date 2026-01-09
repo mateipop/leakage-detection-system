@@ -22,6 +22,41 @@ class ModelSpec:
     output_dim: int
 
 
+class AnomalyNet(nn.Module):
+    def __init__(self, input_dim: int):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv1d(input_dim, 64, kernel_size=3, padding=1),
+            nn.BatchNorm1d(64),
+            nn.GELU(),
+            nn.Dropout(p=0.1),
+            nn.Conv1d(64, 128, kernel_size=3, padding=1),
+            nn.BatchNorm1d(128),
+            nn.GELU(),
+            nn.Dropout(p=0.1),
+        )
+        self.gru = nn.GRU(
+            input_size=128,
+            hidden_size=64,
+            num_layers=1,
+            batch_first=True,
+            bidirectional=True,
+        )
+        self.head = nn.Sequential(
+            nn.Linear(128, 64),
+            nn.GELU(),
+            nn.Dropout(p=0.2),
+            nn.Linear(64, 1),
+        )
+
+    def forward(self, x):
+        x = x.transpose(1, 2)
+        x = self.conv(x).transpose(1, 2)
+        x, _ = self.gru(x)
+        x = x.mean(dim=1)
+        return self.head(x)
+
+
 class CnnClassifier(nn.Module):
     def __init__(self, spec: ModelSpec):
         super().__init__()
@@ -87,7 +122,12 @@ def _collect_features(records: list[dict]) -> list[str]:
     return sorted(feature_set)
 
 
-def _build_feature_tensor(records: list[dict], features: list[str]) -> np.ndarray:
+def _build_feature_tensor(
+    records: list[dict],
+    features: list[str],
+    *,
+    include_deltas: bool,
+) -> np.ndarray:
     feature_count = len(features)
     x = np.zeros(
         (len(records), len(records[0]["features"]), feature_count),
@@ -100,6 +140,10 @@ def _build_feature_tensor(records: list[dict], features: list[str]) -> np.ndarra
                 if jdx >= feature_count:
                     break
                 x[idx, tdx, jdx] = float(value)
+    if include_deltas:
+        deltas = np.zeros_like(x)
+        deltas[:, 1:, :] = x[:, 1:, :] - x[:, :-1, :]
+        x = np.concatenate([x, deltas], axis=2)
     return x
 
 
@@ -177,11 +221,13 @@ def _train_anomaly(
     batch_size: int,
     seed: int,
     patience: int,
-) -> tuple[CnnClassifier, dict]:
+) -> tuple[AnomalyNet, dict]:
     torch.manual_seed(seed)
-    spec = ModelSpec(input_dim=x_train.shape[2], hidden_sizes=[], output_dim=1)
-    model = CnnClassifier(spec)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = AnomalyNet(x_train.shape[2]).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+    pos_rate = float(y_train.mean()) if len(y_train) else 0.5
+    alpha = min(0.75, max(0.5, 1.0 - pos_rate + 0.05))
 
     train_dataset = TensorDataset(
         torch.from_numpy(x_train),
@@ -197,16 +243,18 @@ def _train_anomaly(
     model.train()
     for _ in range(epochs):
         for xb, yb in train_loader:
+            xb = xb.to(device)
+            yb = yb.to(device)
             optimizer.zero_grad()
             logits = model(xb)
-            loss = _binary_focal_loss(logits, yb)
+            loss = _binary_focal_loss(logits, yb, alpha=alpha)
             loss.backward()
             optimizer.step()
 
         model.eval()
         with torch.no_grad():
-            val_logits = model(torch.from_numpy(x_val))
-            val_probs = torch.sigmoid(val_logits).squeeze(1).numpy()
+            val_logits = model(torch.from_numpy(x_val).to(device))
+            val_probs = torch.sigmoid(val_logits).squeeze(1).detach().cpu().numpy()
         val_preds = (val_probs >= 0.5).astype(int)
         report = _binary_metrics(y_val, val_preds)
         if report["f1"] > best_f1:
@@ -222,7 +270,7 @@ def _train_anomaly(
 
     if best_state is not None:
         model.load_state_dict(best_state)
-    metadata = {"spec": spec.__dict__}
+    metadata = {"arch": "anomaly_net_v2", "input_dim": int(x_train.shape[2])}
     return model, {"metrics": best_metrics or report, "metadata": metadata}
 
 
@@ -234,12 +282,17 @@ def _train_pinpointer(
     batch_size: int,
     seed: int,
     test_size: float,
+    include_deltas: bool,
 ) -> tuple[PinpointerRegressor | None, dict]:
     pin_records = [record for record in records if record.get("leak_coords")]
     if not pin_records:
         return None, {}
 
-    pin_x = _build_feature_tensor(pin_records, features)
+    pin_x = _build_feature_tensor(
+        pin_records,
+        features,
+        include_deltas=include_deltas,
+    )
     pin_y = np.array(
         [
             [
@@ -259,7 +312,8 @@ def _train_pinpointer(
     pin_y_train, pin_y_val = pin_y[train_idx], pin_y[val_idx]
 
     torch.manual_seed(seed)
-    model = PinpointerRegressor(pin_x.shape[2])
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = PinpointerRegressor(pin_x.shape[2]).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
     criterion = nn.SmoothL1Loss(beta=1.0)
 
@@ -272,6 +326,8 @@ def _train_pinpointer(
     model.train()
     for _ in range(epochs):
         for xb, yb in train_loader:
+            xb = xb.to(device)
+            yb = yb.to(device)
             optimizer.zero_grad()
             logits = model(xb)
             loss = criterion(logits, yb)
@@ -280,7 +336,7 @@ def _train_pinpointer(
 
     model.eval()
     with torch.no_grad():
-        val_preds = model(torch.from_numpy(pin_x_val)).numpy()
+        val_preds = model(torch.from_numpy(pin_x_val).to(device)).detach().cpu().numpy()
     distance_report = _pinpointer_distance_report(
         pin_y_val,
         val_preds,
@@ -335,7 +391,12 @@ def run_training() -> int:
         return 1
 
     features = _collect_features(records)
-    x_all = _build_feature_tensor(records, features)
+    feature_engineering = {"include_deltas": True}
+    x_all = _build_feature_tensor(
+        records,
+        features,
+        include_deltas=feature_engineering["include_deltas"],
+    )
     y_all = np.array(
         [int(record.get("label", 0)) for record in records],
         dtype=np.int64,
@@ -363,6 +424,7 @@ def run_training() -> int:
         state_dict=anomaly_model.state_dict(),
         metadata={
             "features": features,
+            "feature_engineering": feature_engineering,
             "window_steps": x_all.shape[1],
             **anomaly_report["metadata"],
         },
@@ -375,6 +437,7 @@ def run_training() -> int:
         batch_size=args.batch_size,
         seed=args.seed,
         test_size=args.test_size,
+        include_deltas=feature_engineering["include_deltas"],
     )
     if pinpointer_model:
         _save_model(
@@ -382,6 +445,7 @@ def run_training() -> int:
             state_dict=pinpointer_model.state_dict(),
             metadata={
                 "features": features,
+                "feature_engineering": feature_engineering,
                 "window_steps": x_all.shape[1],
                 **pinpointer_report["metadata"],
             },
