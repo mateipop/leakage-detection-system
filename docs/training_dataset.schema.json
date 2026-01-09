@@ -1,99 +1,46 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://local.leak_detect_ai_physics/training_dataset.schema.json",
-  "title": "Leak Detection Training Record",
+  "title": "Leak Detection Windowed Training Record",
   "type": "object",
   "required": [
     "entity_type",
     "entity_id",
-    "sensor_id",
-    "timestamp",
-    "network",
-    "coordinates",
+    "timestamp_start",
+    "timestamp_end",
     "features",
-    "normalized",
-    "leak_active",
+    "feature_names",
     "label",
-    "active_leak_nodes",
-    "active_leak_pipes",
-    "leak_targets",
-    "active_leak_targets"
+    "leak_node_id",
+    "leak_coords"
   ],
   "properties": {
     "entity_type": { "type": "string" },
     "entity_id": { "type": "string" },
-    "sensor_id": { "type": ["string", "null"] },
-    "timestamp": { "type": "integer" },
-    "network": { "type": ["string", "null"] },
-    "coordinates": {
-      "type": "object",
+    "timestamp_start": { "type": "integer" },
+    "timestamp_end": { "type": "integer" },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": { "type": "number" }
+      }
+    },
+    "feature_names": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "label": { "type": "integer", "enum": [0, 1] },
+    "leak_node_id": { "type": ["string", "null"] },
+    "leak_coords": {
+      "type": ["object", "null"],
       "required": ["x", "y"],
       "properties": {
         "x": { "type": "number" },
         "y": { "type": "number" }
       },
       "additionalProperties": true
-    },
-    "features": {
-      "type": "object",
-      "additionalProperties": { "type": "number" }
-    },
-    "normalized": {
-      "type": "object",
-      "additionalProperties": { "type": "number" }
-    },
-    "leak_active": { "type": "boolean" },
-    "label": { "type": "integer" },
-    "active_leak_nodes": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "active_leak_pipes": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "leak_targets": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/leakTarget" }
-    },
-    "active_leak_targets": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/leakTarget" }
     }
   },
-  "additionalProperties": true,
-  "$defs": {
-    "leakTarget": {
-      "type": "object",
-      "required": [
-        "leak_id",
-        "type",
-        "node_id",
-        "leak_node_id",
-        "pipe_id",
-        "new_pipe_id",
-        "split_fraction",
-        "area",
-        "start_time",
-        "end_time",
-        "x",
-        "y"
-      ],
-      "properties": {
-        "leak_id": { "type": ["string", "null"] },
-        "type": { "type": ["string", "null"] },
-        "node_id": { "type": ["string", "null"] },
-        "leak_node_id": { "type": ["string", "null"] },
-        "pipe_id": { "type": ["string", "null"] },
-        "new_pipe_id": { "type": ["string", "null"] },
-        "split_fraction": { "type": ["number", "null"] },
-        "area": { "type": ["number", "null"] },
-        "start_time": { "type": ["number", "null"] },
-        "end_time": { "type": ["number", "null"] },
-        "x": { "type": "number" },
-        "y": { "type": "number" }
-      },
-      "additionalProperties": true
-    }
-  }
+  "additionalProperties": true
 }

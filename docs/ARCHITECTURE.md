@@ -11,12 +11,13 @@
 - Subscribes to `sensor_telemetry` and handles node + link payloads.
 - Validates telemetry, normalizes features, and writes labeled training records.
 - Builds windowed datasets with pre/post leak context for model training.
+- Filters windowed records to ensure a single leak node (or no leak) per window.
 - Streams normalized features to `live_features` for downstream consumers.
 
 ### AI Layer
 - Inference consumes normalized features from the data layer only.
 - Training reads windowed records from `data/training_data.jsonl`, including leak window
-  labels and `leak_node_id` for pinpointer targets.
+  labels, `leak_node_id`, and `leak_coords` for pinpointer regression.
 
 ## Data Flow
 
@@ -31,5 +32,4 @@
 - `live_features`: normalized features from data layer.
 - `ai_predictions`: model scores emitted by AI inference.
 - `data/training_data.jsonl`: windowed training set records.
-- `data/training_data.meta.json`: windowing metadata and node coordinates.
 - `data/models/`: model artifacts.

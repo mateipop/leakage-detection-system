@@ -35,13 +35,17 @@ Open three separate terminals in VS Code:
 
 ## Windowed Training
 
-Generate windowed datasets (3-hour windows, 30-minute stride) with the dataset builder:
+Generate windowed datasets (3-hour windows, 30-minute stride) with the dataset builder.
+Each window contains either no leak or a single leak node, and includes `leak_coords`
+for pinpointer regression:
 
 `uv run python -m leak_detect_ai_physics.data_layer.dataset_builder --clear --duration 86400 --timestep 300 --window-hours 3 --stride-steps 6`
 
-Train the CNN anomaly + pinpointer models:
+Train the CNN anomaly + pinpointer models (pinpointer regresses coordinates):
 
 `uv run python -m leak_detect_ai_physics.ai_layer.trainer --dataset data/training_data.jsonl`
+
+Use `--patience` to enable early stopping based on validation F1 for anomaly training.
 
 Artifacts under `data/` are gitignored (datasets and trained models).
 

@@ -1,10 +1,10 @@
 import argparse
+import copy
 import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
 
-import copy
 import numpy as np
 import torch
 from torch import nn
@@ -67,6 +67,7 @@ class PinpointerRegressor(nn.Module):
         x = x.transpose(1, 2)
         x = self.conv(x).squeeze(-1)
         return self.head(x)
+
 
 def _iter_training_records(path: Path):
     with path.open("r", encoding="utf-8") as handle:
@@ -233,7 +234,7 @@ def _train_pinpointer(
     batch_size: int,
     seed: int,
     test_size: float,
-) -> tuple[CnnClassifier | None, dict]:
+) -> tuple[PinpointerRegressor | None, dict]:
     pin_records = [record for record in records if record.get("leak_coords")]
     if not pin_records:
         return None, {}
