@@ -51,15 +51,28 @@ def build_leak_plan(
     *,
     leak_start_min: int | None = None,
     leak_start_max: int | None = None,
+    max_junction_leaks: int = MAX_JUNCTION_LEAKS,
+    max_pipe_leaks: int = MAX_PIPE_LEAKS,
+    max_total_leaks: int | None = None,
 ):
     rng = random.Random(seed)
     plan = []
+    remaining = None if max_total_leaks is None else max(0, max_total_leaks)
+    max_junction_leaks = max(0, max_junction_leaks)
+    max_pipe_leaks = max(0, max_pipe_leaks)
 
     junctions = list(wn.junction_name_list)
-    if junctions:
-        junction_leaks = rng.randint(1, min(MAX_JUNCTION_LEAKS, len(junctions)))
+    if junctions and max_junction_leaks > 0:
+        if remaining == 0:
+            return plan
+        junction_cap = min(max_junction_leaks, len(junctions))
+        if remaining is not None:
+            junction_cap = min(junction_cap, remaining)
+        junction_leaks = rng.randint(1, junction_cap)
         leak_nodes = rng.sample(junctions, k=junction_leaks)
         for idx, node_id in enumerate(leak_nodes, start=1):
+            if remaining == 0:
+                return plan
             start_time, end_time = random_leak_window(
                 rng,
                 duration_seconds,
@@ -83,12 +96,21 @@ def build_leak_plan(
                     "end_time": end_time,
                 }
             )
+            if remaining is not None:
+                remaining -= 1
 
     pipes = list(wn.pipe_name_list)
-    if pipes:
-        pipe_leaks = rng.randint(0, min(MAX_PIPE_LEAKS, len(pipes)))
+    if pipes and max_pipe_leaks > 0:
+        if remaining == 0:
+            return plan
+        pipe_cap = min(max_pipe_leaks, len(pipes))
+        if remaining is not None:
+            pipe_cap = min(pipe_cap, remaining)
+        pipe_leaks = rng.randint(0, pipe_cap)
         leak_pipes = rng.sample(pipes, k=pipe_leaks)
         for idx, pipe_id in enumerate(leak_pipes, start=1):
+            if remaining == 0:
+                return plan
             split_fraction = rng.uniform(0.2, 0.8)
             new_pipe_id = f"{pipe_id}_leak_seg_{idx}"
             leak_node_id = f"{pipe_id}_leak_node_{idx}"
@@ -130,6 +152,8 @@ def build_leak_plan(
                     "end_time": end_time,
                 }
             )
+            if remaining is not None:
+                remaining -= 1
 
     return plan
 

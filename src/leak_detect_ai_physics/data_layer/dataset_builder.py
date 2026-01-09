@@ -181,6 +181,11 @@ def run() -> int:
         leak_start_max = args.leak_start_max
         window_steps = int((args.window_hours * 3600) / timestep)
         stride_steps = max(1, args.stride_steps)
+        window_seconds = window_steps * timestep
+        if leak_start_min is None:
+            leak_start_min = max(1, window_seconds)
+        if leak_start_max is None:
+            leak_start_max = max(leak_start_min, duration - window_seconds)
 
         wn = wntr.network.WaterNetworkModel(config.NETWORK_NAME)
         leak_plan = build_leak_plan(
@@ -189,7 +194,24 @@ def run() -> int:
             seed=seed,
             leak_start_min=leak_start_min,
             leak_start_max=leak_start_max,
+            max_junction_leaks=0,
+            max_pipe_leaks=1,
+            max_total_leaks=1,
         )
+        if not leak_plan:
+            leak_plan = build_leak_plan(
+                wn,
+                duration,
+                seed=seed,
+                leak_start_min=leak_start_min,
+                leak_start_max=leak_start_max,
+                max_junction_leaks=1,
+                max_pipe_leaks=0,
+                max_total_leaks=1,
+            )
+        if not leak_plan:
+            LOG.error("Failed to generate a leak plan for dataset build.")
+            return 1
         wn.options.time.duration = duration
         wn.options.time.hydraulic_timestep = timestep
         wn.options.time.report_timestep = timestep
@@ -271,16 +293,8 @@ def run() -> int:
             window_steps=window_steps,
             stride_steps=stride_steps,
             label_mode=args.label_mode,
-        )
-        _write_metadata(
-            output_path.with_suffix(".meta.json"),
-            window_steps=window_steps,
-            stride_steps=stride_steps,
-            timestep_seconds=timestep,
-            label_mode=args.label_mode,
             node_coords=node_coords,
         )
-
     LOG.info("Dataset saved to %s", output_path)
     return 0
 
@@ -344,6 +358,7 @@ def _write_windowed_dataset(
     window_steps: int,
     stride_steps: int,
     label_mode: str,
+    node_coords: dict,
 ) -> None:
     if window_steps <= 1:
         return
@@ -357,6 +372,14 @@ def _write_windowed_dataset(
                 window = series[start : start + window_steps]
                 label = _window_label(window, mode=label_mode)
                 leak_node_id = _window_leak_node(window)
+                leak_coords = None
+                if leak_node_id:
+                    coords = node_coords.get(leak_node_id)
+                    if coords:
+                        leak_coords = {
+                            "x": float(coords.get("x", 0.0)),
+                            "y": float(coords.get("y", 0.0)),
+                        }
                 window_features = [
                     [float(step["normalized"].get(name, 0.0)) for name in feature_names]
                     for step in window
@@ -370,6 +393,7 @@ def _write_windowed_dataset(
                     "feature_names": feature_names,
                     "label": int(label),
                     "leak_node_id": leak_node_id,
+                    "leak_coords": leak_coords,
                 }
                 handle.write(json.dumps(record) + "\n")
 
@@ -396,27 +420,6 @@ def _window_leak_node(window: list[dict]) -> str | None:
     if not counts:
         return None
     return counts.most_common(1)[0][0]
-
-
-def _write_metadata(
-    path: Path,
-    *,
-    window_steps: int,
-    stride_steps: int,
-    timestep_seconds: int,
-    label_mode: str,
-    node_coords: dict,
-) -> None:
-    payload = {
-        "window_steps": window_steps,
-        "stride_steps": stride_steps,
-        "timestep_seconds": timestep_seconds,
-        "label_mode": label_mode,
-        "node_coords": node_coords,
-    }
-    with path.open("w", encoding="utf-8") as handle:
-        json.dump(payload, handle, indent=2, sort_keys=True)
-        handle.write("\n")
 
 
 if __name__ == "__main__":

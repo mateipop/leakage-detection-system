@@ -115,34 +115,20 @@ def _binary_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
 
 
 def _pinpointer_distance_report(
-    records: list[dict],
-    predictions: np.ndarray,
-    class_names: list[str],
-    node_coords: dict,
+    actual: np.ndarray,
+    predicted: np.ndarray,
 ) -> dict:
-    coord_map = node_coords or {}
+    distances = np.linalg.norm(actual - predicted, axis=1)
 
-    distances = []
-    for record, predicted_idx in zip(records, predictions, strict=False):
-        actual_id = record.get("leak_node_id")
-        predicted_id = class_names[int(predicted_idx)]
-        actual_coords = coord_map.get(actual_id)
-        predicted_coords = coord_map.get(predicted_id)
-        if not actual_coords or not predicted_coords:
-            continue
-        dx = float(actual_coords.get("x", 0.0)) - float(predicted_coords.get("x", 0.0))
-        dy = float(actual_coords.get("y", 0.0)) - float(predicted_coords.get("y", 0.0))
-        distances.append((dx**2 + dy**2) ** 0.5)
-
-    if not distances:
+    if distances.size == 0:
         return {}
-    distances.sort()
-    mean_dist = sum(distances) / len(distances)
-    median_dist = distances[len(distances) // 2]
+    distances = np.sort(distances)
+    mean_dist = float(distances.mean())
+    median_dist = float(distances[len(distances) // 2])
     return {
         "mean_distance": mean_dist,
         "median_distance": median_dist,
-        "samples": len(distances),
+        "samples": int(distances.size),
     }
 
 
@@ -194,21 +180,27 @@ def _train_anomaly(
 def _train_pinpointer(
     records: list[dict],
     features: list[str],
-    node_coords: dict,
     *,
     epochs: int,
     batch_size: int,
     seed: int,
     test_size: float,
 ) -> tuple[CnnClassifier | None, dict]:
-    pin_records = [record for record in records if record.get("leak_node_id")]
+    pin_records = [record for record in records if record.get("leak_coords")]
     if not pin_records:
         return None, {}
 
-    class_names = sorted({record["leak_node_id"] for record in pin_records})
-    class_map = {name: idx for idx, name in enumerate(class_names)}
     pin_x = _build_feature_tensor(pin_records, features)
-    pin_y = np.array([class_map[record["leak_node_id"]] for record in pin_records])
+    pin_y = np.array(
+        [
+            [
+                float(record["leak_coords"].get("x", 0.0)),
+                float(record["leak_coords"].get("y", 0.0)),
+            ]
+            for record in pin_records
+        ],
+        dtype=np.float32,
+    )
     train_idx, val_idx = _split_indices(
         len(pin_records),
         test_size=test_size,
@@ -216,21 +208,20 @@ def _train_pinpointer(
     )
     pin_x_train, pin_x_val = pin_x[train_idx], pin_x[val_idx]
     pin_y_train, pin_y_val = pin_y[train_idx], pin_y[val_idx]
-    pin_val_records = [pin_records[idx] for idx in val_idx]
 
     torch.manual_seed(seed)
     spec = ModelSpec(
         input_dim=pin_x.shape[2],
         hidden_sizes=[],
-        output_dim=len(class_names),
+        output_dim=2,
     )
     model = CnnClassifier(spec)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.MSELoss()
 
     train_dataset = TensorDataset(
         torch.from_numpy(pin_x_train),
-        torch.from_numpy(pin_y_train.astype(np.int64)),
+        torch.from_numpy(pin_y_train),
     )
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
@@ -245,19 +236,14 @@ def _train_pinpointer(
 
     model.eval()
     with torch.no_grad():
-        val_logits = model(torch.from_numpy(pin_x_val))
-        val_preds = val_logits.argmax(dim=1).numpy()
-    accuracy = float((val_preds == pin_y_val).mean())
+        val_preds = model(torch.from_numpy(pin_x_val)).numpy()
     distance_report = _pinpointer_distance_report(
-        pin_val_records,
+        pin_y_val,
         val_preds,
-        class_names,
-        node_coords,
     )
     return model, {
-        "accuracy": accuracy,
         "distance": distance_report,
-        "metadata": {"spec": spec.__dict__, "class_names": class_names},
+        "metadata": {"spec": spec.__dict__},
     }
 
 
@@ -331,17 +317,9 @@ def run_training() -> int:
         },
     )
 
-    meta = {}
-    meta_path = args.dataset.with_suffix(".meta.json")
-    if meta_path.exists():
-        with meta_path.open("r", encoding="utf-8") as handle:
-            meta = json.load(handle)
-    node_coords = meta.get("node_coords", {})
-
     pinpointer_model, pinpointer_report = _train_pinpointer(
         records,
         features,
-        node_coords,
         epochs=args.epochs,
         batch_size=args.batch_size,
         seed=args.seed,
