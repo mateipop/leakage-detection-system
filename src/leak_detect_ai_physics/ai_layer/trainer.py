@@ -4,6 +4,7 @@ import logging
 from dataclasses import dataclass
 from pathlib import Path
 
+import copy
 import numpy as np
 import torch
 from torch import nn
@@ -38,6 +39,34 @@ class CnnClassifier(nn.Module):
         x = self.conv(x).squeeze(-1)
         return self.fc(x)
 
+
+class PinpointerRegressor(nn.Module):
+    def __init__(self, input_dim: int):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv1d(input_dim, 32, kernel_size=5, padding=2),
+            nn.BatchNorm1d(32),
+            nn.ReLU(),
+            nn.Conv1d(32, 64, kernel_size=3, padding=1),
+            nn.BatchNorm1d(64),
+            nn.ReLU(),
+            nn.Conv1d(64, 128, kernel_size=3, padding=1),
+            nn.BatchNorm1d(128),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool1d(1),
+        )
+        self.head = nn.Sequential(
+            nn.Dropout(p=0.2),
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Dropout(p=0.1),
+            nn.Linear(64, 2),
+        )
+
+    def forward(self, x):
+        x = x.transpose(1, 2)
+        x = self.conv(x).squeeze(-1)
+        return self.head(x)
 
 def _iter_training_records(path: Path):
     with path.open("r", encoding="utf-8") as handle:
@@ -146,6 +175,7 @@ def _train_anomaly(
     epochs: int,
     batch_size: int,
     seed: int,
+    patience: int,
 ) -> tuple[CnnClassifier, dict]:
     torch.manual_seed(seed)
     spec = ModelSpec(input_dim=x_train.shape[2], hidden_sizes=[], output_dim=1)
@@ -158,6 +188,11 @@ def _train_anomaly(
     )
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
+    best_state = None
+    best_metrics = None
+    best_f1 = -1.0
+    stagnant_epochs = 0
+
     model.train()
     for _ in range(epochs):
         for xb, yb in train_loader:
@@ -167,14 +202,27 @@ def _train_anomaly(
             loss.backward()
             optimizer.step()
 
-    model.eval()
-    with torch.no_grad():
-        val_logits = model(torch.from_numpy(x_val))
-        val_probs = torch.sigmoid(val_logits).squeeze(1).numpy()
-    val_preds = (val_probs >= 0.5).astype(int)
-    report = _binary_metrics(y_val, val_preds)
+        model.eval()
+        with torch.no_grad():
+            val_logits = model(torch.from_numpy(x_val))
+            val_probs = torch.sigmoid(val_logits).squeeze(1).numpy()
+        val_preds = (val_probs >= 0.5).astype(int)
+        report = _binary_metrics(y_val, val_preds)
+        if report["f1"] > best_f1:
+            best_f1 = report["f1"]
+            best_metrics = report
+            best_state = copy.deepcopy(model.state_dict())
+            stagnant_epochs = 0
+        else:
+            stagnant_epochs += 1
+            if patience > 0 and stagnant_epochs >= patience:
+                break
+        model.train()
+
+    if best_state is not None:
+        model.load_state_dict(best_state)
     metadata = {"spec": spec.__dict__}
-    return model, {"metrics": report, "metadata": metadata}
+    return model, {"metrics": best_metrics or report, "metadata": metadata}
 
 
 def _train_pinpointer(
@@ -210,14 +258,9 @@ def _train_pinpointer(
     pin_y_train, pin_y_val = pin_y[train_idx], pin_y[val_idx]
 
     torch.manual_seed(seed)
-    spec = ModelSpec(
-        input_dim=pin_x.shape[2],
-        hidden_sizes=[],
-        output_dim=2,
-    )
-    model = CnnClassifier(spec)
+    model = PinpointerRegressor(pin_x.shape[2])
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-    criterion = nn.MSELoss()
+    criterion = nn.SmoothL1Loss(beta=1.0)
 
     train_dataset = TensorDataset(
         torch.from_numpy(pin_x_train),
@@ -243,7 +286,7 @@ def _train_pinpointer(
     )
     return model, {
         "distance": distance_report,
-        "metadata": {"spec": spec.__dict__},
+        "metadata": {"spec": {"input_dim": int(pin_x.shape[2]), "output_dim": 2}},
     }
 
 
@@ -272,6 +315,12 @@ def run_training() -> int:
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--batch-size", type=int, default=256)
     parser.add_argument("--test-size", type=float, default=0.2)
+    parser.add_argument(
+        "--patience",
+        type=int,
+        default=5,
+        help="Early stopping patience based on validation F1.",
+    )
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
@@ -306,6 +355,7 @@ def run_training() -> int:
         epochs=args.epochs,
         batch_size=args.batch_size,
         seed=args.seed,
+        patience=args.patience,
     )
     _save_model(
         args.anomaly_model,

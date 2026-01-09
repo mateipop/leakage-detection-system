@@ -5,7 +5,6 @@ import os
 import subprocess
 import sys
 import time
-from collections import Counter
 from pathlib import Path
 
 import redis
@@ -194,9 +193,10 @@ def run() -> int:
             seed=seed,
             leak_start_min=leak_start_min,
             leak_start_max=leak_start_max,
-            max_junction_leaks=0,
-            max_pipe_leaks=1,
-            max_total_leaks=1,
+            max_junction_leaks=2,
+            max_pipe_leaks=3,
+            max_total_leaks=4,
+            non_overlapping=True,
         )
         if not leak_plan:
             leak_plan = build_leak_plan(
@@ -205,9 +205,10 @@ def run() -> int:
                 seed=seed,
                 leak_start_min=leak_start_min,
                 leak_start_max=leak_start_max,
-                max_junction_leaks=1,
-                max_pipe_leaks=0,
-                max_total_leaks=1,
+                max_junction_leaks=2,
+                max_pipe_leaks=2,
+                max_total_leaks=4,
+                non_overlapping=True,
             )
         if not leak_plan:
             LOG.error("Failed to generate a leak plan for dataset build.")
@@ -292,7 +293,6 @@ def run() -> int:
             output_path,
             window_steps=window_steps,
             stride_steps=stride_steps,
-            label_mode=args.label_mode,
             node_coords=node_coords,
         )
     LOG.info("Dataset saved to %s", output_path)
@@ -357,7 +357,6 @@ def _write_windowed_dataset(
     *,
     window_steps: int,
     stride_steps: int,
-    label_mode: str,
     node_coords: dict,
 ) -> None:
     if window_steps <= 1:
@@ -370,8 +369,10 @@ def _write_windowed_dataset(
                 continue
             for start in range(0, len(series) - window_steps + 1, stride_steps):
                 window = series[start : start + window_steps]
-                label = _window_label(window, mode=label_mode)
-                leak_node_id = _window_leak_node(window)
+                leak_nodes = _window_leak_nodes(window)
+                if len(leak_nodes) > 1:
+                    continue
+                leak_node_id = next(iter(leak_nodes)) if leak_nodes else None
                 leak_coords = None
                 if leak_node_id:
                     coords = node_coords.get(leak_node_id)
@@ -391,7 +392,7 @@ def _write_windowed_dataset(
                     "timestamp_end": window[-1]["timestamp"],
                     "features": window_features,
                     "feature_names": feature_names,
-                    "label": int(label),
+                    "label": int(bool(leak_node_id)),
                     "leak_node_id": leak_node_id,
                     "leak_coords": leak_coords,
                 }
@@ -406,20 +407,11 @@ def _collect_feature_names(entity_series: dict) -> list[str]:
     return sorted(names)
 
 
-def _window_label(window: list[dict], *, mode: str) -> bool:
-    if mode == "any":
-        return any(step["leak_any"] for step in window)
-    return False
-
-
-def _window_leak_node(window: list[dict]) -> str | None:
-    counts = Counter()
+def _window_leak_nodes(window: list[dict]) -> set[str]:
+    leak_nodes = set()
     for step in window:
-        for node_id in step.get("active_leak_nodes") or []:
-            counts[node_id] += 1
-    if not counts:
-        return None
-    return counts.most_common(1)[0][0]
+        leak_nodes.update(step.get("active_leak_nodes") or [])
+    return leak_nodes
 
 
 if __name__ == "__main__":

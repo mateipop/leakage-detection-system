@@ -54,12 +54,34 @@ def build_leak_plan(
     max_junction_leaks: int = MAX_JUNCTION_LEAKS,
     max_pipe_leaks: int = MAX_PIPE_LEAKS,
     max_total_leaks: int | None = None,
+    non_overlapping: bool = False,
 ):
     rng = random.Random(seed)
     plan = []
     remaining = None if max_total_leaks is None else max(0, max_total_leaks)
     max_junction_leaks = max(0, max_junction_leaks)
     max_pipe_leaks = max(0, max_pipe_leaks)
+    occupied = []
+
+    def pick_leak_window():
+        if not non_overlapping:
+            return random_leak_window(
+                rng,
+                duration_seconds,
+                start_min=leak_start_min,
+                start_max=leak_start_max,
+            )
+        for _ in range(100):
+            start_time, end_time = random_leak_window(
+                rng,
+                duration_seconds,
+                start_min=leak_start_min,
+                start_max=leak_start_max,
+            )
+            if all(end_time < start or start_time > end for start, end in occupied):
+                occupied.append((start_time, end_time))
+                return start_time, end_time
+        return None, None
 
     junctions = list(wn.junction_name_list)
     if junctions and max_junction_leaks > 0:
@@ -73,12 +95,9 @@ def build_leak_plan(
         for idx, node_id in enumerate(leak_nodes, start=1):
             if remaining == 0:
                 return plan
-            start_time, end_time = random_leak_window(
-                rng,
-                duration_seconds,
-                start_min=leak_start_min,
-                start_max=leak_start_max,
-            )
+            start_time, end_time = pick_leak_window()
+            if start_time is None or end_time is None:
+                break
             area = rng.uniform(*LEAK_AREA_RANGE)
             node = wn.get_node(node_id)
             node.add_leak(wn, area=area, start_time=start_time, end_time=end_time)
@@ -124,12 +143,9 @@ def build_leak_plan(
                 return_copy=False,
             )
 
-            start_time, end_time = random_leak_window(
-                rng,
-                duration_seconds,
-                start_min=leak_start_min,
-                start_max=leak_start_max,
-            )
+            start_time, end_time = pick_leak_window()
+            if start_time is None or end_time is None:
+                break
             area = rng.uniform(*LEAK_AREA_RANGE)
             leak_node = wn.get_node(leak_node_id)
             leak_node.add_leak(
