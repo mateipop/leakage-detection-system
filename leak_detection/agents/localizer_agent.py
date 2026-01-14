@@ -1,9 +1,3 @@
-"""
-Localizer Agent - Specializes in triangulating leak locations.
-
-The LocalizerAgent receives anomaly clusters and uses network topology
-to pinpoint the most likely leak location(s).
-"""
 
 import logging
 from typing import Dict, Any, List, Optional
@@ -15,76 +9,59 @@ from .base import Agent, MessageBus, MessageType, Message
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class LocalizationResult:
-    """Result of leak localization."""
     investigation_id: str
     probable_location: str  # Most likely node
     confidence: float
     candidate_nodes: List[Dict[str, Any]]  # Ranked candidates
     cluster_info: Dict[str, Any]
 
-
 class LocalizerAgent(Agent):
-    """
-    Localizer Agent - Expert system for leak triangulation.
-    
-    This agent specializes in:
-    - Receiving anomaly clusters from Coordinator
-    - Using sensor distances for triangulation
-    - Ranking probable leak locations
-    - Returning localization results
-    
-    Design: Domain Expert Agent
-    - Holds specialized knowledge (network topology, sensor distances)
-    - Activated on-demand by Coordinator
-    - Provides expert opinion back to Coordinator
-    """
     
     def __init__(
         self,
         agent_id: str,
         message_bus: MessageBus,
         sensor_nodes: List[str],
-        network_distances: Optional[Dict[str, Dict[str, float]]] = None
+        network_distances: Optional[Dict[str, Dict[str, float]]] = None,
+        candidate_nodes: Optional[List[str]] = None,
+        candidate_distances: Optional[Dict[str, Dict[str, float]]] = None
     ):
         super().__init__(agent_id, message_bus)
         
         self.sensor_nodes = sensor_nodes
+        self.candidate_nodes = candidate_nodes or sensor_nodes
         
-        # Network topology: distances between sensor nodes
-        # distances[node_a][node_b] = shortest path distance in meters
         self._distances = network_distances or {}
         
-        # Cached computations
+        self._candidate_distances = candidate_distances or {}
+        
+        if not self._candidate_distances and self._distances:
+            for s1 in self.sensor_nodes:
+                self._candidate_distances[s1] = {}
+                for s2 in self.sensor_nodes:
+                    if s2 in self._distances.get(s1, {}):
+                        self._candidate_distances[s1][s2] = self._distances[s1][s2]
+        
         self._cluster_separation_depth = self._compute_separation_depth()
         
-        # Statistics
         self._localizations_performed = 0
         self._pending_requests: List[Dict] = []
         
-        # Subscribe to localization requests
         self.subscribe(MessageType.LOCALIZE_REQUEST)
         self.subscribe(MessageType.ANOMALY_CLUSTER)
         
         logger.info(f"LocalizerAgent '{agent_id}' initialized with {len(sensor_nodes)} sensor nodes")
     
     def reset(self):
-        """Reset localizer state."""
         super().reset()
         self._pending_requests.clear()
         self._localizations_performed = 0
 
     def sense(self, environment: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Perceive - check for localization requests.
-        
-        For the localizer, we mainly listen for requests from coordinator.
-        """
         new_requests = []
         
-        # Process messages
         while True:
             message = self.receive_message()
             if message is None:
@@ -93,7 +70,6 @@ class LocalizerAgent(Agent):
             if message.msg_type == MessageType.LOCALIZE_REQUEST:
                 new_requests.append(message.payload)
             elif message.msg_type == MessageType.ANOMALY_CLUSTER:
-                # Direct cluster data (alternative input)
                 new_requests.append(message.payload)
         
         self._pending_requests.extend(new_requests)
@@ -104,16 +80,12 @@ class LocalizerAgent(Agent):
         }
     
     def decide(self, observations: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Decide how to process localization requests.
-        """
         actions = {
             "requests_to_process": [],
             "skip": False
         }
         
         if self._pending_requests:
-            # Process oldest request first (FIFO)
             actions["requests_to_process"] = [self._pending_requests.pop(0)]
         else:
             actions["skip"] = True
@@ -121,9 +93,6 @@ class LocalizerAgent(Agent):
         return actions
     
     def act(self, actions: Dict[str, Any]) -> None:
-        """
-        Execute localization and send results.
-        """
         if actions["skip"]:
             return
         
@@ -131,7 +100,6 @@ class LocalizerAgent(Agent):
             result = self._perform_localization(request)
             
             if result:
-                # Send result back to coordinator
                 self.send_message(
                     MessageType.LOCALIZATION_RESULT,
                     "coordinator",
@@ -152,20 +120,9 @@ class LocalizerAgent(Agent):
                 )
     
     def on_message(self, message: Message):
-        """Handle direct messages."""
-        # Mainly handled in sense()
         pass
     
     def _perform_localization(self, request: Dict) -> Optional[LocalizationResult]:
-        """
-        Perform leak localization using triangulation.
-        
-        Algorithm:
-        1. Extract anomaly nodes and their severities
-        2. Cluster anomalies if multiple distinct locations
-        3. For each cluster, find network region with highest anomaly density
-        4. Rank candidate nodes by weighted proximity to anomalous sensors
-        """
         anomalies = request.get("anomalies", [])
         investigation_id = request.get("investigation_id", "unknown")
         
@@ -173,19 +130,15 @@ class LocalizerAgent(Agent):
             logger.warning("LocalizerAgent: No anomalies in localization request")
             return None
         
-        # Extract nodes and their anomaly weights
         anomaly_weights = {}
         for anom in anomalies:
             node_id = anom["node_id"]
-            # Weight by zscore magnitude (more negative = more weight)
             weight = abs(anom.get("zscore", 1.0)) * anom.get("confidence", 1.0)
             anomaly_weights[node_id] = max(anomaly_weights.get(node_id, 0), weight)
         
-        # If we have distance data, perform triangulation
         if self._distances:
             candidates = self._triangulate_with_distances(anomaly_weights)
         else:
-            # Fallback: just rank by anomaly weight
             candidates = [
                 {"node_id": node, "score": weight, "confidence": min(1.0, weight / 4.0)}
                 for node, weight in sorted(anomaly_weights.items(), key=lambda x: -x[1])
@@ -209,55 +162,51 @@ class LocalizerAgent(Agent):
         )
     
     def _triangulate_with_distances(self, anomaly_weights: Dict[str, float]) -> List[Dict]:
-        """
-        Triangulate leak position using network distances.
-        
-        Uses inverse-distance weighting: nodes closer to more anomalous
-        sensors get higher scores.
-        """
         candidates = []
-        anomaly_nodes = list(anomaly_weights.keys())
         
-        # Score each sensor node
-        for node in self.sensor_nodes:
-            if node not in self._distances:
-                continue
+        search_space = self.candidate_nodes
+        
+        for node in search_space:
             
-            # Sum of weighted inverse distances to anomalous nodes
             score = 0.0
             weights_sum = 0.0
             
-            for anom_node, weight in anomaly_weights.items():
-                if anom_node in self._distances.get(node, {}):
-                    dist = self._distances[node][anom_node]
-                    if dist > 0:
-                        # Inverse distance weighting
-                        score += weight / (1 + dist / 100)  # Normalize by 100m
-                        weights_sum += weight
-                elif anom_node == node:
-                    # Same node - highest weight
-                    score += weight * 2
+            dists = self._candidate_distances.get(node, {})
+            
+            valid_distances_found = False
+            
+            for anom_sensor, weight in anomaly_weights.items():
+                
+                used_dist = 9999.0
+                if node == anom_sensor:
+                     used_dist = 0.0
+                     valid_distances_found = True
+                elif anom_sensor in dists:
+                    used_dist = dists[anom_sensor]
+                    valid_distances_found = True
+                else:
+                    used_dist = 9999.0
+                    
+                if used_dist < 5000: # Only consider reasonably close sensors
+                    # Use a larger smoothing factor (200.0) to avoid over-biasing towards sensor nodes
+                    # 1 hop is approx 100m. 200m smoothing means 2 hops.
+                    score += weight / (200.0 + used_dist) 
                     weights_sum += weight
             
-            if weights_sum > 0:
-                # Average score
-                avg_score = score / weights_sum
-                confidence = min(1.0, avg_score / 2.0)
+            if weights_sum > 0 and valid_distances_found:
+                avg_score = score # / weights_sum  <-- Don't normalize by sum, magnitude matters here
+                confidence = min(1.0, avg_score * 20000) # Scaling factor adjustments for new smoothing
                 
                 candidates.append({
                     "node_id": node,
                     "score": avg_score,
                     "confidence": confidence,
-                    "is_anomaly_node": node in anomaly_nodes
                 })
         
-        # Sort by score descending
-        candidates.sort(key=lambda x: -x["score"])
-        
+        candidates.sort(key=lambda x: x["score"], reverse=True)
         return candidates
     
     def _compute_separation_depth(self) -> float:
-        """Compute optimal cluster separation depth from topology."""
         if not self._distances:
             return 500.0  # Default 500m
         
@@ -268,17 +217,14 @@ class LocalizerAgent(Agent):
                     all_distances.append(dist)
         
         if all_distances:
-            # Use 25th percentile for local clustering
             return float(np.percentile(all_distances, 25))
         return 500.0
     
     def set_distances(self, distances: Dict[str, Dict[str, float]]):
-        """Update network distances (for dynamic topology)."""
         self._distances = distances
         self._cluster_separation_depth = self._compute_separation_depth()
     
     def get_status(self) -> Dict[str, Any]:
-        """Get agent status."""
         return {
             "agent_id": self.agent_id,
             "sensor_nodes": len(self.sensor_nodes),
@@ -289,12 +235,6 @@ class LocalizerAgent(Agent):
         }
     
     def step(self, environment: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Execute one sense-decide-act cycle.
-        
-        Overrides base to NOT pre-process messages (we handle them in sense()).
-        """
-        # Skip base class message processing - we do it in sense()
         observations = self.sense(environment)
         actions = self.decide(observations)
         self.act(actions)

@@ -1,10 +1,8 @@
-"""
-Dashboard - Main TUI application using Textual.
-"""
 
 import asyncio
 import logging
-from typing import Optional, List, Dict, Callable
+import threading
+from typing import Optional, List, Dict, Callable, Any
 from datetime import datetime
 from collections import deque
 
@@ -25,26 +23,20 @@ from rich.table import Table
 from rich.console import Group
 
 from ..config import SamplingMode, SystemStatus, DEFAULT_CONFIG
-from ..ai_layer.agent_controller import AgentStatus, MonitoringCycleResult
-from ..ai_layer.inference_engine import InferenceResult
 
 logger = logging.getLogger(__name__)
 
-
 class MetricsPanel(Static):
-    """Panel showing live pressure/flow metrics."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._metrics: Dict[str, Dict] = {}
 
     def update_metrics(self, metrics: Dict[str, Dict]):
-        """Update displayed metrics."""
         self._metrics = metrics
         self.refresh()
 
     def render(self) -> Panel:
-        """Render the metrics panel."""
         table = Table(
             title="Live Sensor Metrics",
             show_header=True,
@@ -59,14 +51,12 @@ class MetricsPanel(Static):
         table.add_column("F-Z", justify="right", width=8, no_wrap=True)
         table.add_column("Status", justify="center", width=8, no_wrap=True)
 
-        # Sort by confidence (highest first) to show anomalies at top
         sorted_metrics = sorted(
             self._metrics.items(),
             key=lambda x: (x[1].get('confidence', 0), abs(x[1].get('pressure_zscore') or 0)),
             reverse=True
         )
 
-        # Show up to 20 nodes, prioritizing anomalies
         for node_id, data in sorted_metrics[:20]:
             pressure = data.get('pressure', 0)
             p_zscore = data.get('pressure_zscore')
@@ -74,20 +64,18 @@ class MetricsPanel(Static):
             f_zscore = data.get('flow_zscore')
             confidence = data.get('confidence', 0)
 
-            # Color code based on confidence and Z-score
-            if confidence >= 0.6:
+            if confidence >= 0.4:
                 status = Text("!! ALERT", style="bold red")
-            elif p_zscore is not None and abs(p_zscore) > 2:
-                status = Text("! ANOMALY", style="red")
-            elif confidence > 0.4:
+            elif confidence >= 0.2:
                 status = Text("? WATCH", style="yellow")
+            elif p_zscore is not None and abs(p_zscore) > 2.0:
+                status = Text("! ANOMALY", style="magenta")
             else:
                 status = Text("OK", style="green")
 
             p_zscore_str = f"{p_zscore:.2f}" if p_zscore is not None else "---"
             f_zscore_str = f"{f_zscore:.2f}" if f_zscore is not None else "---"
 
-            # Color Z-scores
             if p_zscore is not None and p_zscore < -2:
                 p_zscore_str = f"[red]{p_zscore_str}[/red]"
             elif p_zscore is not None and abs(p_zscore) > 1.5:
@@ -102,17 +90,14 @@ class MetricsPanel(Static):
                 status
             )
 
-        # Show total monitored count
         total = len(self._metrics)
         return Panel(table, title=f"Live Sensor Metrics ({total} nodes)", border_style="blue")
 
-
 class SystemStatusPanel(Static):
-    """Panel showing system status and AI mode."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._status: Optional[AgentStatus] = None
+        self._status: Any = None
         self._sim_time: float = 0.0
         self._ground_truth: List[str] = []
         self._estimated_location: Optional[str] = None
@@ -122,7 +107,7 @@ class SystemStatusPanel(Static):
 
     def update_status(
         self,
-        status: AgentStatus,
+        status: Any,
         sim_time: float,
         ground_truth: List[str] = None,
         estimated_location: str = None,
@@ -130,64 +115,79 @@ class SystemStatusPanel(Static):
         agent_summary: Dict = None,
         detection_count: int = None
     ):
-        """Update displayed status."""
         self._status = status
         self._sim_time = sim_time
         self._ground_truth = ground_truth or []
         self._estimated_location = estimated_location
         self._multi_leak_results = multi_leak_results or []
         self._agent_summary = agent_summary
-        self._detection_count = detection_count if detection_count is not None else status.leaks_detected
+        
+        if detection_count is not None:
+             self._detection_count = detection_count
+        elif status and hasattr(status, 'leaks_detected'):
+             self._detection_count = status.leaks_detected
+        
         self.refresh()
 
     def render(self) -> Panel:
-        """Render the status panel."""
-        if self._status is None:
+        if self._status is None and self._agent_summary is None:
             return Panel("Initializing...", title="System Status")
 
-        # Format simulation time
         hours = int(self._sim_time // 3600)
         minutes = int((self._sim_time % 3600) // 60)
         seconds = int(self._sim_time % 60)
         time_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+        
+        system_status_name = "UNKNOWN"
+        sampling_mode_str = "UNKNOWN"
+        monitored_nodes = 0
+        samples_processed = 0
+        alerts_triggered = 0
+        
+        if self._status:
+            system_status_name = self._status.system_status.name
+            sampling_mode_str = "ECO" if self._status.sampling_mode == SamplingMode.ECO else "HIGH-RES"
+            monitored_nodes = self._status.monitored_nodes
+            samples_processed = self._status.samples_processed
+            alerts_triggered = self._status.alerts_triggered
+        elif self._agent_summary:
+            coord = self._agent_summary.get("coordinator", {})
+            system_status_name = coord.get("system_mode", "NORMAL")
+            
+            if system_status_name == "INVESTIGATING":
+                 sampling_mode_str = "HIGH-RES"
+            else:
+                 sampling_mode_str = "ECO"
+                 
+            monitored_nodes = self._agent_summary.get("sensor_count", 0)
+            alerts_triggered = coord.get("total_alerts_received", 0)
 
-        # System status color
         status_colors = {
-            SystemStatus.NORMAL: ("green", "●"),
-            SystemStatus.ALERT: ("yellow", "⚠"),
-            SystemStatus.INVESTIGATING: ("yellow", "◉"),
-            SystemStatus.LEAK_CONFIRMED: ("red", "⬤"),
+            "NORMAL": ("green", "●"),
+            "ALERT": ("yellow", "⚠"),
+            "INVESTIGATING": ("yellow", "◉"),
+            "LEAK_CONFIRMED": ("red", "⬤"),
         }
         color, icon = status_colors.get(
-            self._status.system_status,
+            system_status_name,
             ("white", "○")
         )
 
-        # Sampling mode display
-        mode_str = "ECO (Low Power)" if self._status.sampling_mode == SamplingMode.ECO else "HIGH-RES (High Power)"
-        mode_color = "green" if self._status.sampling_mode == SamplingMode.ECO else "red"
+        mode_text = "ECO (Low Power)" if sampling_mode_str == "ECO" else "HIGH-RES (High Power)"
+        mode_color = "green" if sampling_mode_str == "ECO" else "red"
 
-        # Build content
         lines = [
             f"[bold]Simulation Time:[/bold] {time_str}",
             "",
-            f"[bold]System Status:[/bold] [{color}]{icon} {self._status.system_status.name}[/{color}]",
-            f"[bold]Sampling Mode:[/bold] [{mode_color}]{mode_str}[/{mode_color}]",
+            f"[bold]System Status:[/bold] [{color}]{icon} {system_status_name}[/{color}]",
+            f"[bold]Sampling Mode:[/bold] [{mode_color}]{mode_text}[/{mode_color}]",
             "",
-            f"[bold]Monitored Nodes:[/bold] {self._status.monitored_nodes}",
-            f"[bold]Samples Processed:[/bold] {self._status.samples_processed}",
-            f"[bold]Alerts Triggered:[/bold] {self._status.alerts_triggered}",
+            f"[bold]Monitored Nodes:[/bold] {monitored_nodes}",
+            f"[bold]Samples Processed:[/bold] {samples_processed}",
+            f"[bold]Alerts Triggered:[/bold] {alerts_triggered}",
             f"[bold]Leaks Detected:[/bold] {self._detection_count}",
         ]
 
-        # Show current decision
-        if self._status.current_decision:
-            lines.append("")
-            lines.append(f"[bold]Current Action:[/bold] {self._status.current_decision.action.name}")
-            if self._status.current_decision.confidence > 0:
-                lines.append(f"[bold]Confidence:[/bold] {self._status.current_decision.confidence:.1%}")
-
-        # === MULTI-AGENT SYSTEM STATUS ===
         if self._agent_summary:
             lines.append("")
             lines.append("[bold magenta]=== MULTI-AGENT SYSTEM ===[/bold magenta]")
@@ -198,7 +198,6 @@ class SystemStatusPanel(Static):
             lines.append(f"[bold]Alerts Received:[/bold] {coord.get('total_alerts_received', 0)}")
             lines.append(f"[bold]Investigations:[/bold] {coord.get('investigations_opened', 0)}")
             
-            # Show active investigations
             active_invs = self._agent_summary.get("active_investigations", [])
             if active_invs:
                 lines.append(f"[bold yellow]Active Investigations ({len(active_invs)}):[/bold yellow]")
@@ -210,7 +209,6 @@ class SystemStatusPanel(Static):
                         loc_str = f" → {loc.get('probable_location', '?')} ({loc.get('confidence', 0):.0%})"
                     lines.append(f"  {status_icon} {inv['id']}: {inv['status']}{loc_str}")
 
-        # Show leak comparison (always show this section)
         lines.append("")
         lines.append("[bold cyan]=== LEAK ANALYSIS ===[/bold cyan]")
 
@@ -219,7 +217,6 @@ class SystemStatusPanel(Static):
         else:
             lines.append("[bold]Active Leaks:[/bold] [green]None[/green]")
 
-        # Show multi-leak detection results
         if self._multi_leak_results:
             lines.append(f"[bold]AI Detected ({len(self._multi_leak_results)}):[/bold]")
             for node, confidence in self._multi_leak_results[:5]:  # Show top 5
@@ -238,21 +235,17 @@ class SystemStatusPanel(Static):
             border_style="cyan"
         )
 
-
 class AnomalyPanel(Static):
-    """Panel showing current anomaly information."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._anomaly: Optional[InferenceResult] = None
+        self._anomaly: Any = None
 
-    def update_anomaly(self, anomaly: Optional[InferenceResult]):
-        """Update displayed anomaly."""
+    def update_anomaly(self, anomaly: Any):
         self._anomaly = anomaly
         self.refresh()
 
     def render(self) -> Panel:
-        """Render the anomaly panel."""
         if self._anomaly is None:
             return Panel(
                 "[green]No anomalies detected[/green]\n\n"
@@ -261,11 +254,13 @@ class AnomalyPanel(Static):
                 border_style="green"
             )
 
-        confidence_pct = self._anomaly.confidence * 100
+        confidence = getattr(self._anomaly, 'confidence', 0) if not isinstance(self._anomaly, dict) else self._anomaly.get('confidence', 0)
+        node_id = getattr(self._anomaly, 'node_id', 'Unknown') if not isinstance(self._anomaly, dict) else self._anomaly.get('node_id', 'Unknown')
+        
+        confidence_pct = confidence * 100
 
-        # Confidence bar
         bar_width = 20
-        filled = int(bar_width * self._anomaly.confidence)
+        filled = int(bar_width * confidence)
         bar = "█" * filled + "░" * (bar_width - filled)
 
         if confidence_pct >= 80:
@@ -278,19 +273,14 @@ class AnomalyPanel(Static):
         lines = [
             f"[bold red]⚠ ANOMALY DETECTED[/bold red]",
             "",
-            f"[bold]Node:[/bold] {self._anomaly.node_id}",
-            f"[bold]Type:[/bold] {self._anomaly.anomaly_type.value}",
+            f"[bold]Node:[/bold] {node_id}",
+            f"[bold]Type:[/bold] Network Anomaly",
             "",
             f"[bold]Confidence:[/bold] [{conf_color}]{confidence_pct:.1f}%[/{conf_color}]",
             f"  [{conf_color}]{bar}[/{conf_color}]",
             "",
-            f"[bold]Contributions:[/bold]",
-            f"  Pressure: {self._anomaly.pressure_contribution:.1%}",
-            f"  Flow:     {self._anomaly.flow_contribution:.1%}",
-            f"  Spatial:  {self._anomaly.spatial_contribution:.1%}",
-            "",
             f"[bold]Analysis:[/bold]",
-            f"  {self._anomaly.explanation}",
+            f"  Multi-Agent Network Detection",
         ]
 
         return Panel(
@@ -299,9 +289,7 @@ class AnomalyPanel(Static):
             border_style="red" if confidence_pct >= 80 else "yellow"
         )
 
-
 class DetectionHistoryPanel(Static):
-    """Panel showing detection history with accuracy and confirmation status."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -309,13 +297,11 @@ class DetectionHistoryPanel(Static):
         self._confirmed_leaks: List[str] = []
 
     def update_history(self, history: List[Dict], confirmed_leaks: List[str] = None):
-        """Update the detection history."""
         self._history = history
         self._confirmed_leaks = confirmed_leaks or []
         self.refresh()
 
     def render(self) -> Panel:
-        """Render the detection history panel."""
         if not self._history:
             return Panel(
                 "[dim]No detections yet.[/dim]\n\n"
@@ -353,7 +339,6 @@ class DetectionHistoryPanel(Static):
             else:
                 dist_str = f"[red]{distance}+ hops[/red]"
             
-            # Check if this leak is confirmed
             if actual in self._confirmed_leaks:
                 status_str = "[cyan]✓ CONFIRMED[/cyan]"
             else:
@@ -361,7 +346,6 @@ class DetectionHistoryPanel(Static):
 
             table.add_row(str(i), actual, estimated, dist_str, status_str)
 
-        # Stats summary
         total = len(self._history)
         exact = sum(1 for d in self._history if d.get('distance', 99) == 0)
         within_2 = sum(1 for d in self._history if d.get('distance', 99) <= 2)
@@ -378,9 +362,7 @@ class DetectionHistoryPanel(Static):
             border_style="cyan"
         )
 
-
 class LeakDetectionDashboard(App):
-    """Main TUI Dashboard Application."""
 
     CSS = """
     Screen {
@@ -480,59 +462,64 @@ class LeakDetectionDashboard(App):
         yield Footer()
 
     def on_mount(self) -> None:
-        """Called when app is mounted."""
         self.log_message("[green]System initialized[/green]")
         self.log_message("Press [bold]L[/bold] to inject a leak, [bold]Q[/bold] to quit")
 
     def action_inject_leak(self) -> None:
-        """Inject a leak."""
         if self._inject_leak_callback:
             self._inject_leak_callback()
             self.log_message("[red bold]LEAK INJECTED![/red bold]")
 
     def action_clear_leaks(self) -> None:
-        """Clear all leaks."""
         if self._clear_leaks_callback:
             self._clear_leaks_callback()
             self.log_message("[green]All leaks cleared[/green]")
 
     def action_show_summary(self) -> None:
-        """Show detection summary."""
         if self._show_summary_callback:
             summary = self._show_summary_callback()
             self.log_message("\n" + summary)
 
     def action_reset_system(self) -> None:
-        """Reset the system."""
         if self._reset_callback:
             self._reset_callback()
             self.log_message("[yellow]System reset[/yellow]")
 
     def action_toggle_pause(self) -> None:
-        """Toggle pause state."""
         self._paused = not self._paused
         status = "PAUSED" if self._paused else "RESUMED"
         self.log_message(f"[yellow]Simulation {status}[/yellow]")
 
     @property
     def is_paused(self) -> bool:
-        """Check if simulation is paused."""
         return self._paused
 
     def log_message(self, message: str) -> None:
-        """Add a message to the log."""
         timestamp = datetime.now().strftime("%H:%M:%S")
-        log_widget = self.query_one("#log-panel", RichLog)
-        log_widget.write(f"[dim]{timestamp}[/dim] {message}")
+        def _write():
+            try:
+                log_widget = self.query_one("#log-panel", RichLog)
+                log_widget.write(f"[dim]{timestamp}[/dim] {message}")
+            except Exception:
+                pass
+        
+        # If on the main thread, run directly. If on a background thread, schedule it.
+        if hasattr(self, '_thread_id') and self._thread_id == threading.get_ident():
+            _write()
+        else:
+            self.call_from_thread(_write)
 
     def update_metrics(self, metrics: Dict[str, Dict]) -> None:
-        """Update the metrics display."""
-        panel = self.query_one("#metrics-panel", MetricsPanel)
-        panel.update_metrics(metrics)
+        try:
+            panel = self.query_one("#metrics-panel", MetricsPanel)
+            panel.update_metrics(metrics)
+        except Exception as e:
+            with open("dashboard_error.log", "a") as f:
+                f.write(f"Update Metrics Error: {e}\n")
 
     def update_status(
         self,
-        status: AgentStatus,
+        status: Any,
         sim_time: float,
         ground_truth: List[str] = None,
         estimated_location: str = None,
@@ -540,16 +527,13 @@ class LeakDetectionDashboard(App):
         agent_summary: Dict = None,
         detection_count: int = None
     ) -> None:
-        """Update the status display."""
         panel = self.query_one("#status-panel", SystemStatusPanel)
         panel.update_status(status, sim_time, ground_truth, estimated_location, multi_leak_results, agent_summary, detection_count)
 
-    def update_anomaly(self, anomaly: Optional[InferenceResult]) -> None:
-        """Update the anomaly display."""
+    def update_anomaly(self, anomaly: Any) -> None:
         panel = self.query_one("#anomaly-panel", AnomalyPanel)
         panel.update_anomaly(anomaly)
 
     def update_history(self, detections: List[Dict], confirmed_leaks: List[str] = None) -> None:
-        """Update the detection history panel."""
         panel = self.query_one("#history-panel", DetectionHistoryPanel)
         panel.update_history(detections, confirmed_leaks)

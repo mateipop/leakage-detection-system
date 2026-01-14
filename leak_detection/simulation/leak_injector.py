@@ -1,6 +1,3 @@
-"""
-Leak Injector - Controlled leak injection for testing the detection system.
-"""
 
 import logging
 import random
@@ -12,10 +9,8 @@ from .network_simulator import NetworkSimulator
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class LeakEvent:
-    """Record of a leak injection event."""
     leak_id: str
     node_id: str
     start_time: float
@@ -29,26 +24,9 @@ class LeakEvent:
     confirmation_time: Optional[float] = None
     pressure_signature: Optional[Dict[str, float]] = None  # Pressure drop caused at each sensor
 
-
 class LeakInjector:
-    """
-    Controls leak injection for testing the detection system.
-
-    Provides methods to:
-    - Inject leaks at specific nodes
-    - Inject random leaks
-    - Track leak history for evaluation
-    - Compare ground truth with AI predictions
-    - Manage confirmed leaks for masking
-    """
 
     def __init__(self, network: NetworkSimulator):
-        """
-        Initialize the leak injector.
-
-        Args:
-            network: The network simulator instance
-        """
         self.network = network
         self._leak_history: List[LeakEvent] = []
         self._active_leaks: Dict[str, LeakEvent] = {}
@@ -61,17 +39,6 @@ class LeakInjector:
         leak_rate: float = 5.0,
         sim_time: float = 0.0
     ) -> Optional[LeakEvent]:
-        """
-        Inject a leak at a specific node.
-
-        Args:
-            node_id: Junction node ID where leak occurs
-            leak_rate: Leak rate in L/s
-            sim_time: Current simulation time
-
-        Returns:
-            LeakEvent if successful, None otherwise
-        """
         if node_id in self._active_leaks:
             logger.warning(f"Leak already active at {node_id}")
             return None
@@ -102,17 +69,6 @@ class LeakInjector:
         sim_time: float = 0.0,
         exclude_nodes: List[str] = None
     ) -> Optional[LeakEvent]:
-        """
-        Inject a leak at a random junction node.
-
-        Args:
-            leak_rate_range: (min, max) leak rate in L/s
-            sim_time: Current simulation time
-            exclude_nodes: Nodes to exclude from selection
-
-        Returns:
-            LeakEvent if successful, None otherwise
-        """
         exclude_nodes = exclude_nodes or []
         available_nodes = [
             n for n in self.network.junction_names
@@ -129,16 +85,6 @@ class LeakInjector:
         return self.inject_leak(node_id, leak_rate, sim_time)
 
     def remove_leak(self, node_id: str, sim_time: float = 0.0) -> bool:
-        """
-        Remove a leak from a node.
-
-        Args:
-            node_id: Node to remove leak from
-            sim_time: Current simulation time
-
-        Returns:
-            True if leak was removed
-        """
         if node_id not in self._active_leaks:
             return False
 
@@ -151,7 +97,6 @@ class LeakInjector:
         return success
 
     def remove_all_leaks(self, sim_time: float = 0.0):
-        """Remove all active leaks."""
         for node_id in list(self._active_leaks.keys()):
             self.remove_leak(node_id, sim_time)
 
@@ -161,21 +106,9 @@ class LeakInjector:
         estimated_node: str,
         detection_time: float
     ) -> Optional[LeakEvent]:
-        """
-        Record that the AI detected a leak.
-
-        Args:
-            actual_node: The actual leak location (from active leaks)
-            estimated_node: The AI's estimated location
-            detection_time: Time of detection
-
-        Returns:
-            Updated LeakEvent if found, None if already detected or not found
-        """
         if actual_node in self._active_leaks:
             event = self._active_leaks[actual_node]
             
-            # Don't re-record if already detected
             if event.detected:
                 return None
             
@@ -183,13 +116,11 @@ class LeakInjector:
             event.detection_time = detection_time
             event.estimated_location = estimated_node
             
-            # Calculate network distance
             event.distance_hops = self._calculate_distance(actual_node, estimated_node)
             
             logger.info(f"Recorded detection: actual={actual_node}, estimated={estimated_node}, distance={event.distance_hops} hops")
             return event
 
-        # Try to find the nearest undetected active leak
         for node_id, event in self._active_leaks.items():
             if not event.detected:
                 event.detected = True
@@ -206,25 +137,9 @@ class LeakInjector:
         pressure_signature: Dict[str, float],
         confirmation_time: float
     ) -> Optional[LeakEvent]:
-        """
-        Confirm a detected leak and add it to the masked list.
-        
-        Once confirmed, the leak's pressure signature will be subtracted
-        from sensor readings so new leaks can be detected.
-        
-        Args:
-            node_id: The actual or estimated leak location
-            pressure_signature: Pressure drop at each sensor caused by this leak
-            confirmation_time: Time of confirmation
-            
-        Returns:
-            The confirmed LeakEvent or None if not found
-        """
-        # Find the leak event (check active leaks)
         event = self._active_leaks.get(node_id)
         
         if event is None:
-            # Try to find by estimated location
             for actual_node, evt in self._active_leaks.items():
                 if evt.estimated_location == node_id and evt.detected and not evt.confirmed:
                     event = evt
@@ -238,26 +153,18 @@ class LeakInjector:
         event.confirmation_time = confirmation_time
         event.pressure_signature = pressure_signature
         
-        # Add to confirmed leaks (for masking)
         self._confirmed_leaks[event.node_id] = event
         
         logger.info(f"Confirmed leak {event.leak_id} at {event.node_id} - will be masked from detection")
         return event
 
     def get_confirmed_leaks(self) -> Dict[str, LeakEvent]:
-        """Get all confirmed (masked) leaks."""
         return dict(self._confirmed_leaks)
 
     def get_unconfirmed_detected_leaks(self) -> List[LeakEvent]:
-        """Get leaks that are detected but not yet confirmed."""
         return [e for e in self._active_leaks.values() if e.detected and not e.confirmed]
 
     def get_total_pressure_signature(self) -> Dict[str, float]:
-        """
-        Get combined pressure signature of all confirmed leaks.
-        
-        This should be subtracted from sensor readings to mask known leaks.
-        """
         combined = {}
         for event in self._confirmed_leaks.values():
             if event.pressure_signature:
@@ -266,11 +173,6 @@ class LeakInjector:
         return combined
 
     def get_exclusion_zones(self, depth: int = 2) -> set:
-        """
-        Get nodes that should be excluded from new leak detection.
-        
-        Returns nodes within 'depth' hops of confirmed leaks.
-        """
         exclusion = set()
         for node_id in self._confirmed_leaks.keys():
             exclusion.add(node_id)
@@ -279,39 +181,18 @@ class LeakInjector:
         return exclusion
     
     def _calculate_distance(self, actual_node: str, estimated_node: str) -> int:
-        """Calculate network distance (hops) between two nodes."""
-        if actual_node == estimated_node:
-            return 0
-        
-        for depth in range(1, 10):
-            neighbors = self.network.get_node_neighbors(actual_node, depth=depth)
-            if estimated_node in neighbors:
-                return depth
-        
-        return 99  # Far away / not found
+        return self.network.calculate_shortest_path_distance(actual_node, estimated_node)
 
     def get_active_leaks(self) -> Dict[str, LeakEvent]:
-        """Get all currently active leaks."""
         return dict(self._active_leaks)
 
     def get_ground_truth(self) -> List[str]:
-        """Get list of nodes with active leaks (ground truth)."""
         return list(self._active_leaks.keys())
 
     def get_leak_history(self) -> List[LeakEvent]:
-        """Get full leak history."""
         return list(self._leak_history)
     
     def get_last_detections(self, n: int = 5) -> List[Dict]:
-        """
-        Get the last N detection results with accuracy info.
-        
-        Args:
-            n: Number of recent detections to return
-            
-        Returns:
-            List of detection result dictionaries
-        """
         detected_events = [e for e in self._leak_history if e.detected]
         recent = detected_events[-n:] if len(detected_events) >= n else detected_events
         
@@ -351,12 +232,6 @@ class LeakInjector:
         return results
 
     def calculate_detection_accuracy(self) -> Dict:
-        """
-        Calculate detection accuracy metrics.
-
-        Returns:
-            Dictionary with accuracy metrics
-        """
         if not self._leak_history:
             return {
                 'total_leaks': 0,
@@ -374,7 +249,6 @@ class LeakInjector:
             if e.detected and e.estimated_location == e.node_id
         )
 
-        # Calculate average detection delay
         delays = [
             e.detection_time - e.start_time
             for e in self._leak_history
@@ -382,7 +256,6 @@ class LeakInjector:
         ]
         avg_delay = sum(delays) / len(delays) if delays else 0.0
 
-        # Calculate location error (using topology distance)
         details = []
         for event in self._leak_history:
             detail = {
@@ -398,7 +271,6 @@ class LeakInjector:
                 )
             }
 
-            # Check if estimate is a neighbor
             if event.detected and event.estimated_location:
                 neighbors = self.network.get_node_neighbors(event.node_id, depth=2)
                 detail['is_neighbor'] = event.estimated_location in neighbors
@@ -416,7 +288,6 @@ class LeakInjector:
         }
 
     def get_detection_summary(self) -> str:
-        """Get a human-readable detection summary."""
         metrics = self.calculate_detection_accuracy()
 
         lines = [
@@ -455,7 +326,6 @@ class LeakInjector:
         return "\n".join(lines)
 
     def reset(self):
-        """Reset all leak history and active leaks."""
         self.remove_all_leaks()
         self._leak_history.clear()
         self._confirmed_leaks.clear()

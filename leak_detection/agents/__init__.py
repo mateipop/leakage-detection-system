@@ -1,14 +1,3 @@
-"""
-Multi-Agent System for Leak Detection.
-
-This module implements a distributed multi-agent architecture where:
-- SensorAgents: Autonomous IoT devices with local anomaly detection
-- CoordinatorAgent: Aggregates alerts and coordinates investigation
-- LocalizerAgent: Specializes in triangulating leak locations
-- MultiAgentSystem: Orchestrates all agents together
-
-Agents communicate via an asynchronous message-passing system.
-"""
 
 from .base import Agent, Message, MessageBus, MessageType
 from .sensor_agent import SensorAgent

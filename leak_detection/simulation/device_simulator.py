@@ -1,6 +1,3 @@
-"""
-Device Simulator - IoT sensor device simulation with state machine.
-"""
 
 import logging
 import time
@@ -14,10 +11,8 @@ from ..config import DeviceState, SamplingMode, SimulationConfig, DEFAULT_CONFIG
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class SensorReading:
-    """A single sensor reading from a device."""
     device_id: str
     node_id: str
     timestamp: float
@@ -26,10 +21,8 @@ class SensorReading:
     unit: str
     is_corrupted: bool = False
 
-
 @dataclass
 class DeviceStatus:
-    """Current status of a device."""
     device_id: str
     node_id: str
     state: DeviceState
@@ -39,24 +32,12 @@ class DeviceStatus:
     samples_collected: int
     last_sample_time: Optional[float]
 
-
 class DeviceSimulator:
-    """
-    Simulates an IoT sensor device with state machine behavior.
 
-    State Machine:
-        IDLE (Low Power) -> CALCULATING -> SAMPLING (High Power) -> IDLE
-
-    The device can measure pressure or flow at a network node and
-    responds to commands to change sampling rate.
-    """
-
-    # Power consumption in milliwatts
     POWER_IDLE = 0.5
     POWER_CALCULATING = 10.0
     POWER_SAMPLING = 50.0
 
-    # Battery capacity in mWh
     BATTERY_CAPACITY = 5000.0
 
     def __init__(
@@ -66,15 +47,6 @@ class DeviceSimulator:
         reading_type: str = 'pressure',
         config: SimulationConfig = None
     ):
-        """
-        Initialize the device simulator.
-
-        Args:
-            device_id: Unique identifier for this device
-            node_id: Network node this device monitors
-            reading_type: 'pressure' or 'flow'
-            config: Simulation configuration
-        """
         self.device_id = device_id
         self.node_id = node_id
         self.reading_type = reading_type
@@ -87,7 +59,6 @@ class DeviceSimulator:
         self._last_sample_time: Optional[float] = None
         self._last_state_change: float = time.time()
 
-        # Noise parameters based on reading type
         if reading_type == 'pressure':
             self._noise_std = self.config.noise_std_pressure
             self._unit = 'psi'
@@ -99,28 +70,23 @@ class DeviceSimulator:
 
     @property
     def state(self) -> DeviceState:
-        """Current device state."""
         return self._state
 
     @property
     def sampling_mode(self) -> SamplingMode:
-        """Current sampling mode."""
         return self._sampling_mode
 
     @property
     def battery_level(self) -> float:
-        """Battery level as fraction (0.0 to 1.0)."""
         return self._battery_mwh / self.BATTERY_CAPACITY
 
     @property
     def sampling_interval(self) -> float:
-        """Current sampling interval in seconds."""
         if self._sampling_mode == SamplingMode.ECO:
             return self.config.eco_sampling_interval
         return self.config.highres_sampling_interval
 
     def get_status(self) -> DeviceStatus:
-        """Get current device status."""
         power = {
             DeviceState.IDLE: self.POWER_IDLE,
             DeviceState.CALCULATING: self.POWER_CALCULATING,
@@ -139,30 +105,21 @@ class DeviceSimulator:
         )
 
     def set_sampling_mode(self, mode: SamplingMode):
-        """
-        Change the sampling mode.
-
-        Args:
-            mode: New sampling mode (ECO or HIGH_RES)
-        """
         if mode != self._sampling_mode:
             logger.info(f"Device {self.device_id}: Switching from {self._sampling_mode.name} to {mode.name}")
             self._sampling_mode = mode
 
     def _consume_power(self, duration_seconds: float):
-        """Consume battery power based on current state."""
         power_mw = {
             DeviceState.IDLE: self.POWER_IDLE,
             DeviceState.CALCULATING: self.POWER_CALCULATING,
             DeviceState.SAMPLING: self.POWER_SAMPLING
         }[self._state]
 
-        # Convert to mWh consumed
         consumed = power_mw * (duration_seconds / 3600.0)
         self._battery_mwh = max(0.0, self._battery_mwh - consumed)
 
     def _transition_state(self, new_state: DeviceState):
-        """Transition to a new state."""
         now = time.time()
         duration = now - self._last_state_change
         self._consume_power(duration)
@@ -178,34 +135,15 @@ class DeviceSimulator:
         add_noise: bool = True,
         corrupt_probability: float = 0.0  # Disabled - set > 0 to test error handling
     ) -> SensorReading:
-        """
-        Take a sensor reading.
-
-        This method implements the full state machine cycle:
-        IDLE -> CALCULATING -> SAMPLING -> IDLE
-
-        Args:
-            true_value: The true physical value from simulation
-            sim_time: Simulation timestamp
-            add_noise: Whether to add Gaussian noise
-            corrupt_probability: Probability of data corruption (0 = disabled)
-
-        Returns:
-            SensorReading with measured value
-        """
-        # State machine: IDLE -> CALCULATING
         if self._state == DeviceState.IDLE:
             self._transition_state(DeviceState.CALCULATING)
 
-        # State machine: CALCULATING -> SAMPLING
         if self._state == DeviceState.CALCULATING:
             self._transition_state(DeviceState.SAMPLING)
 
-        # Generate reading
         is_corrupted = corrupt_probability > 0 and np.random.random() < corrupt_probability
 
         if is_corrupted:
-            # Corrupted data - could be NaN, extreme value, or garbage
             corruption_type = np.random.choice(['nan', 'extreme', 'stuck'])
             if corruption_type == 'nan':
                 value = float('nan')
@@ -214,10 +152,7 @@ class DeviceSimulator:
             else:  # stuck
                 value = 0.0
         else:
-            # Normal reading with optional noise
-            # Scale noise relative to the signal magnitude for realism
             if add_noise:
-                # Use relative noise (0.5% of value) + base noise
                 relative_noise = abs(true_value) * 0.005
                 noise_std = max(self._noise_std, relative_noise)
                 value = true_value + np.random.normal(0, noise_std)
@@ -237,21 +172,11 @@ class DeviceSimulator:
         self._samples_collected += 1
         self._last_sample_time = sim_time
 
-        # State machine: SAMPLING -> IDLE
         self._transition_state(DeviceState.IDLE)
 
         return reading
 
     def should_sample(self, current_time: float) -> bool:
-        """
-        Check if device should take a sample based on sampling interval.
-
-        Args:
-            current_time: Current simulation time in seconds
-
-        Returns:
-            True if enough time has passed since last sample
-        """
         if self._last_sample_time is None:
             return True
 
@@ -259,7 +184,6 @@ class DeviceSimulator:
         return elapsed >= self.sampling_interval
 
     def reset(self):
-        """Reset device to initial state."""
         self._state = DeviceState.IDLE
         self._sampling_mode = SamplingMode.ECO
         self._battery_mwh = self.BATTERY_CAPACITY
@@ -267,11 +191,7 @@ class DeviceSimulator:
         self._last_sample_time = None
         self._last_state_change = time.time()
 
-
 class DeviceFleet:
-    """
-    Manages a fleet of IoT sensor devices across the network.
-    """
 
     def __init__(self, config: SimulationConfig = None):
         self.config = config or DEFAULT_CONFIG.simulation
@@ -284,7 +204,6 @@ class DeviceFleet:
         node_id: str,
         reading_type: str = 'pressure'
     ) -> DeviceSimulator:
-        """Add a new device to the fleet."""
         device = DeviceSimulator(device_id, node_id, reading_type, self.config)
         self._devices[device_id] = device
 
@@ -295,40 +214,32 @@ class DeviceFleet:
         return device
 
     def get_device(self, device_id: str) -> Optional[DeviceSimulator]:
-        """Get a device by ID."""
         return self._devices.get(device_id)
 
     def get_devices_at_node(self, node_id: str) -> List[DeviceSimulator]:
-        """Get all devices monitoring a specific node."""
         device_ids = self._node_to_devices.get(node_id, [])
         return [self._devices[did] for did in device_ids]
 
     def set_all_sampling_mode(self, mode: SamplingMode):
-        """Set sampling mode for all devices."""
         for device in self._devices.values():
             device.set_sampling_mode(mode)
 
     def set_node_sampling_mode(self, node_ids: List[str], mode: SamplingMode):
-        """Set sampling mode for devices at specific nodes."""
         for node_id in node_ids:
             for device in self.get_devices_at_node(node_id):
                 device.set_sampling_mode(mode)
 
     def get_all_statuses(self) -> Dict[str, DeviceStatus]:
-        """Get status of all devices."""
         return {did: dev.get_status() for did, dev in self._devices.items()}
 
     @property
     def device_ids(self) -> List[str]:
-        """List of all device IDs."""
         return list(self._devices.keys())
 
     @property
     def monitored_nodes(self) -> List[str]:
-        """List of all monitored node IDs."""
         return list(self._node_to_devices.keys())
 
     def reset_all(self):
-        """Reset all devices."""
         for device in self._devices.values():
             device.reset()
