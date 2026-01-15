@@ -1,6 +1,6 @@
 ; Filename: C:\Users\mihai\Documents\leaking\leak_detection\simulation\..\..\data\L-TOWN.inp
 ; WNTR: 1.4.0
-; Created: 2026-01-14 01:29:28
+; Created: 2026-01-15 20:54:19
 [TITLE]
 L-TOWN v1.2
 L-TOWN (v1.2) was developed by KIOS Research and Innovation Center of Excellence for the BattLeDIM 2020 competition
@@ -4772,14 +4772,17 @@ DEMAND CHARGE          0.0000
 
 [EMITTERS]
 ;ID        Flow coefficient
-n246       4.007957233222102
-n562       3.6941728379396657
-n596       2.992221525334872
-n603       4.766929219542645
-n637       4.560287061121431
-n659       2.7341094688379135
-n746       3.756762529912842
-n759       4.5115340934151
+n10        3.3977607671503334
+n71        4.164356293574389
+n123       4.680026126361156
+n236       1.9451627716130384
+n258       4.260084333218332
+n262       3.1262612072637905
+n315       4.731993403267571
+n420       2.0887216947083984
+n566       3.321445285566418
+n599       4.127985814136726
+n687       3.607291304768615
 
 [QUALITY]
 

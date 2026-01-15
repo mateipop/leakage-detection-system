@@ -165,6 +165,8 @@ class LocalizerAgent(Agent):
         candidates = []
         
         search_space = self.candidate_nodes
+        alerting_sensors = set(anomaly_weights.keys())
+        silent_sensors = [s for s in self.sensor_nodes if s not in alerting_sensors]
         
         for node in search_space:
             
@@ -175,8 +177,8 @@ class LocalizerAgent(Agent):
             
             valid_distances_found = False
             
+            # Positive evidence from alerting sensors
             for anom_sensor, weight in anomaly_weights.items():
-                
                 used_dist = 9999.0
                 if node == anom_sensor:
                      used_dist = 0.0
@@ -193,9 +195,27 @@ class LocalizerAgent(Agent):
                     score += weight / (200.0 + used_dist) 
                     weights_sum += weight
             
-            if weights_sum > 0 and valid_distances_found:
-                avg_score = score # / weights_sum  <-- Don't normalize by sum, magnitude matters here
-                confidence = min(1.0, avg_score * 20000) # Scaling factor adjustments for new smoothing
+            # Negative evidence from silent sensors
+            # If a candidate is very close to a silent sensor, it's unlikely to be the leak
+            penalty_score = 0.0
+            for silent_s in silent_sensors:
+                s_dist = 9999.0
+                if node == silent_s:
+                    s_dist = 0.0
+                elif silent_s in dists:
+                    s_dist = dists[silent_s]
+                
+                # If within ~4 hops (400m) of a silent sensor, penalize heavily
+                if s_dist < 400.0:
+                    # Decay: At 0m -> 1/50. At 400m -> 1/450.
+                    penalty_factor = 1.0 / (50.0 + s_dist)
+                    penalty_score += penalty_factor * 20.0 # Weight of negative evidence
+
+            final_score = score - penalty_score
+            
+            if weights_sum > 0 and valid_distances_found and final_score > 0:
+                avg_score = final_score
+                confidence = min(1.0, avg_score * 20000) 
                 
                 candidates.append({
                     "node_id": node,

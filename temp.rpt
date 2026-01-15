@@ -1,4 +1,4 @@
-  Page 1                                    Wed Jan 14 01:29:28 2026
+  Page 1                                    Thu Jan 15 20:54:19 2026
 
   ******************************************************************
   *                           E P A N E T                          *
@@ -7,38 +7,38 @@
   *                         Version 2.2                            *
   ******************************************************************
   
-  Analysis begun Wed Jan 14 01:29:28 2026
+  Analysis begun Thu Jan 15 20:54:19 2026
 
    
   Hydraulic Status:
   -----------------------------------------------------------------------
      0:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 1.293792
+              Trial  1: relative flow change = 1.175679
               PRV PRV-1 switched from active to closed
               PRV PRV-2 switched from active to closed
-              Trial  2: relative flow change = 3.470258
+              Trial  2: relative flow change = 3.819123
               PRV PRV-1 switched from closed to active
               PRV PRV-2 switched from closed to active
               PRV PRV-3 switched from active to open
               Pump PUMP_1 switched from open to closed
-              Trial  3: relative flow change = 1.014203
+              Trial  3: relative flow change = 1.102914
               PRV PRV-3 switched from open to active
-              Trial  4: relative flow change = 0.711918
+              Trial  4: relative flow change = 0.914543
               Pump PUMP_1 switched from closed to open
-              Trial  5: relative flow change = 0.865761
+              Trial  5: relative flow change = 0.798704
               PRV PRV-3 switched from active to open
-              Trial  6: relative flow change = 0.878429
+              Trial  6: relative flow change = 0.773230
               PRV PRV-3 switched from open to active
-              Trial  7: relative flow change = 0.769153
-              Trial  8: relative flow change = 0.603716
-              Trial  9: relative flow change = 0.419905
-              Trial 10: relative flow change = 0.248146
-              Trial 11: relative flow change = 0.113966
-              Trial 12: relative flow change = 0.030105
-              Trial 13: relative flow change = 0.002735
-                        maximum  flow change = 2.6968 for Link PRV-1
-                        maximum  head error  = 0.0060 for Link PUMP_1
+              Trial  7: relative flow change = 0.601309
+              Trial  8: relative flow change = 0.547741
+              Trial  9: relative flow change = 0.365942
+              Trial 10: relative flow change = 0.189030
+              Trial 11: relative flow change = 0.066785
+              Trial 12: relative flow change = 0.011032
+              Trial 13: relative flow change = 0.001051
+                        maximum  flow change = 0.9034 for Link PRV-1
+                        maximum  head error  = 0.0002 for Link p705
 
      0:00:00: Balanced after 13 trials
      0:00:00: Reservoir R1 is emptying
@@ -47,2367 +47,2354 @@
    
      0:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005965
-                        maximum  flow change = 1.4661 for Link p110
+              Trial  1: relative flow change = 0.005156
+                        maximum  flow change = 1.4462 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      0:05:00: Balanced after 1 trials
    
      0:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006828
-                        maximum  flow change = 1.5240 for Link p110
+              Trial  1: relative flow change = 0.005898
+                        maximum  flow change = 1.5026 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      0:10:00: Balanced after 1 trials
    
      0:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006824
-                        maximum  flow change = 1.5445 for Link p235
+              Trial  1: relative flow change = 0.005890
+                        maximum  flow change = 1.5232 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      0:15:00: Balanced after 1 trials
    
      0:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006718
-                        maximum  flow change = 1.5287 for Link p235
+              Trial  1: relative flow change = 0.005795
+                        maximum  flow change = 1.5076 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      0:20:00: Balanced after 1 trials
    
      0:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006611
-                        maximum  flow change = 1.4965 for Link p235
+              Trial  1: relative flow change = 0.005699
+                        maximum  flow change = 1.4758 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      0:25:00: Balanced after 1 trials
    
      0:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006564
-                        maximum  flow change = 1.4672 for Link p235
+              Trial  1: relative flow change = 0.005655
+                        maximum  flow change = 1.4469 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      0:30:00: Balanced after 1 trials
    
      0:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006549
-                        maximum  flow change = 1.4515 for Link p235
+              Trial  1: relative flow change = 0.005639
+                        maximum  flow change = 1.4313 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      0:35:00: Balanced after 1 trials
    
      0:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006614
-                        maximum  flow change = 1.4416 for Link p235
+              Trial  1: relative flow change = 0.005691
+                        maximum  flow change = 1.4215 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      0:40:00: Balanced after 1 trials
    
      0:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006657
-                        maximum  flow change = 1.4507 for Link p235
+              Trial  1: relative flow change = 0.005725
+                        maximum  flow change = 1.4305 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      0:45:00: Balanced after 1 trials
    
      0:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006657
-                        maximum  flow change = 1.4491 for Link p235
+              Trial  1: relative flow change = 0.005720
+                        maximum  flow change = 1.4291 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      0:50:00: Balanced after 1 trials
    
      0:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006569
-                        maximum  flow change = 1.4400 for Link p235
+              Trial  1: relative flow change = 0.005640
+                        maximum  flow change = 1.4204 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      0:55:00: Balanced after 1 trials
    
      1:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006428
-                        maximum  flow change = 1.4078 for Link p235
+              Trial  1: relative flow change = 0.005513
+                        maximum  flow change = 1.3890 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:00:00: Balanced after 1 trials
    
      1:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006197
-                        maximum  flow change = 1.3678 for Link p235
+              Trial  1: relative flow change = 0.005310
+                        maximum  flow change = 1.3500 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:05:00: Balanced after 1 trials
    
      1:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005957
-                        maximum  flow change = 1.3068 for Link p235
+              Trial  1: relative flow change = 0.005100
+                        maximum  flow change = 1.2901 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:10:00: Balanced after 1 trials
    
      1:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005774
-                        maximum  flow change = 1.2495 for Link p235
+              Trial  1: relative flow change = 0.004939
+                        maximum  flow change = 1.2339 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:15:00: Balanced after 1 trials
    
      1:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005659
-                        maximum  flow change = 1.2054 for Link p235
+              Trial  1: relative flow change = 0.004837
+                        maximum  flow change = 1.1905 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:20:00: Balanced after 1 trials
    
      1:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005600
-                        maximum  flow change = 1.1767 for Link p235
+              Trial  1: relative flow change = 0.004783
+                        maximum  flow change = 1.1624 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:25:00: Balanced after 1 trials
    
      1:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005620
-                        maximum  flow change = 1.1615 for Link p235
+              Trial  1: relative flow change = 0.004796
+                        maximum  flow change = 1.1475 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:30:00: Balanced after 1 trials
    
      1:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005639
-                        maximum  flow change = 1.1627 for Link p235
+              Trial  1: relative flow change = 0.004811
+                        maximum  flow change = 1.1487 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:35:00: Balanced after 1 trials
    
      1:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005593
-                        maximum  flow change = 1.1612 for Link p235
+              Trial  1: relative flow change = 0.004769
+                        maximum  flow change = 1.1473 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:40:00: Balanced after 1 trials
    
      1:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005463
-                        maximum  flow change = 1.1460 for Link p235
+              Trial  1: relative flow change = 0.004656
+                        maximum  flow change = 1.1323 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:45:00: Balanced after 1 trials
    
      1:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005214
-                        maximum  flow change = 1.1123 for Link p235
+              Trial  1: relative flow change = 0.004441
+                        maximum  flow change = 1.0990 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:50:00: Balanced after 1 trials
    
      1:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004871
-                        maximum  flow change = 1.0528 for Link p235
+              Trial  1: relative flow change = 0.004147
+                        maximum  flow change = 1.0402 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      1:55:00: Balanced after 1 trials
    
      2:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004399
-                        maximum  flow change = 0.9761 for Link p235
+              Trial  1: relative flow change = 0.003743
+                        maximum  flow change = 0.9645 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      2:00:00: Balanced after 1 trials
    
      2:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003954
-                        maximum  flow change = 0.8731 for Link p235
+              Trial  1: relative flow change = 0.003360
+                        maximum  flow change = 0.8628 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      2:05:00: Balanced after 1 trials
    
      2:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003555
-                        maximum  flow change = 0.7808 for Link p235
+              Trial  1: relative flow change = 0.003015
+                        maximum  flow change = 0.7716 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      2:10:00: Balanced after 1 trials
    
      2:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003225
-                        maximum  flow change = 0.6976 for Link p235
+              Trial  1: relative flow change = 0.002731
+                        maximum  flow change = 0.6895 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      2:15:00: Balanced after 1 trials
    
      2:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003032
-                        maximum  flow change = 0.6320 for Link p235
+              Trial  1: relative flow change = 0.002564
+                        maximum  flow change = 0.6246 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      2:20:00: Balanced after 1 trials
    
      2:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002950
-                        maximum  flow change = 0.5948 for Link p235
+              Trial  1: relative flow change = 0.002492
+                        maximum  flow change = 0.5880 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      2:25:00: Balanced after 1 trials
    
      2:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002923
-                        maximum  flow change = 0.5802 for Link p235
+              Trial  1: relative flow change = 0.002467
+                        maximum  flow change = 0.5735 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      2:30:00: Balanced after 1 trials
    
-     2:32:02: Pump PUMP_1 changed by Tank T1 control
-     2:32:02: Balancing the network:
-
-              Trial  1: relative flow change = 0.267326
-              Trial  2: relative flow change = 0.042819
-              Trial  3: relative flow change = 0.003589
-                        maximum  flow change = 0.4894 for Link p420
-                        maximum  head error  = 0.0001 for Link p37
-
-     2:32:02: Balanced after 3 trials
-     2:32:02: Tank T1 is emptying at 3.90 m
-     2:32:02: Pump PUMP_1 changed from open to closed
-   
      2:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003069
-                        maximum  flow change = 0.5636 for Link p110
+              Trial  1: relative flow change = 0.002519
+                        maximum  flow change = 0.5758 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      2:35:00: Balanced after 1 trials
    
      2:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003520
-                        maximum  flow change = 0.5896 for Link p110
+              Trial  1: relative flow change = 0.002543
+                        maximum  flow change = 0.5834 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      2:40:00: Balanced after 1 trials
    
      2:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003562
-                        maximum  flow change = 0.5972 for Link p235
+              Trial  1: relative flow change = 0.002562
+                        maximum  flow change = 0.5884 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      2:45:00: Balanced after 1 trials
    
      2:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003504
-                        maximum  flow change = 0.6003 for Link p235
+              Trial  1: relative flow change = 0.002517
+                        maximum  flow change = 0.5915 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      2:50:00: Balanced after 1 trials
    
      2:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003296
-                        maximum  flow change = 0.5872 for Link p235
+              Trial  1: relative flow change = 0.002365
+                        maximum  flow change = 0.5785 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      2:55:00: Balanced after 1 trials
    
      3:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003029
-                        maximum  flow change = 0.5475 for Link p235
+              Trial  1: relative flow change = 0.002171
+                        maximum  flow change = 0.5394 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      3:00:00: Balanced after 1 trials
    
      3:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002697
-                        maximum  flow change = 0.4999 for Link p235
+              Trial  1: relative flow change = 0.001932
+                        maximum  flow change = 0.4926 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      3:05:00: Balanced after 1 trials
    
      3:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002329
-                        maximum  flow change = 0.4427 for Link p235
+              Trial  1: relative flow change = 0.001667
+                        maximum  flow change = 0.4363 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      3:10:00: Balanced after 1 trials
    
      3:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001966
-                        maximum  flow change = 0.3792 for Link p235
+              Trial  1: relative flow change = 0.001407
+                        maximum  flow change = 0.3737 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      3:15:00: Balanced after 1 trials
    
      3:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001639
-                        maximum  flow change = 0.3200 for Link p235
+              Trial  1: relative flow change = 0.001173
+                        maximum  flow change = 0.3156 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      3:20:00: Balanced after 1 trials
    
      3:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001448
-                        maximum  flow change = 0.2667 for Link p235
+              Trial  1: relative flow change = 0.001036
+                        maximum  flow change = 0.2631 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      3:25:00: Balanced after 1 trials
    
      3:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001342
-                        maximum  flow change = 0.2375 for Link p235
+              Trial  1: relative flow change = 0.000961
+                        maximum  flow change = 0.2344 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      3:30:00: Balanced after 1 trials
    
      3:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001324
-                        maximum  flow change = 0.2213 for Link p235
+              Trial  1: relative flow change = 0.000948
+                        maximum  flow change = 0.2184 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      3:35:00: Balanced after 1 trials
    
      3:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001423
-                        maximum  flow change = 0.2330 for Link p110
+              Trial  1: relative flow change = 0.001018
+                        maximum  flow change = 0.2301 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      3:40:00: Balanced after 1 trials
    
      3:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001510
-                        maximum  flow change = 0.2444 for Link p110
+              Trial  1: relative flow change = 0.001080
+                        maximum  flow change = 0.2414 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      3:45:00: Balanced after 1 trials
    
      3:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001588
-                        maximum  flow change = 0.2552 for Link p110
+              Trial  1: relative flow change = 0.001135
+                        maximum  flow change = 0.2521 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      3:50:00: Balanced after 1 trials
    
      3:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001572
-                        maximum  flow change = 0.2585 for Link p235
+              Trial  1: relative flow change = 0.001123
+                        maximum  flow change = 0.2555 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      3:55:00: Balanced after 1 trials
    
      4:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001480
-                        maximum  flow change = 0.2526 for Link p235
+              Trial  1: relative flow change = 0.001057
+                        maximum  flow change = 0.2497 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      4:00:00: Balanced after 1 trials
    
      4:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001237
-                        maximum  flow change = 0.2360 for Link p235
+              Trial  1: relative flow change = 0.000884
+                        maximum  flow change = 0.2333 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      4:05:00: Balanced after 1 trials
    
      4:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000915
-                        maximum  flow change = 0.1941 for Link p235
+              Trial  1: relative flow change = 0.000655
+                        maximum  flow change = 0.1920 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      4:10:00: Balanced after 1 trials
    
      4:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000568
-                        maximum  flow change = 0.1435 for Link p235
+              Trial  1: relative flow change = 0.000408
+                        maximum  flow change = 0.1421 for Link p235
                         maximum  head error  = 0.0000 for Link p235
 
      4:15:00: Balanced after 1 trials
    
      4:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000240
-                        maximum  flow change = 0.0876 for Link p235
-                        maximum  head error  = 0.0000 for Link p235
+              Trial  1: relative flow change = 0.000181
+                        maximum  flow change = 0.0869 for Link p235
+                        maximum  head error  = 0.0000 for Link PUMP_1
 
      4:20:00: Balanced after 1 trials
    
      4:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000172
+              Trial  1: relative flow change = 0.000123
                         maximum  flow change = 0.0364 for Link PRV-2
-                        maximum  head error  = 0.0000 for Link p319
+                        maximum  head error  = 0.0000 for Link PUMP_1
 
      4:25:00: Balanced after 1 trials
    
      4:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000323
-                        maximum  flow change = 0.0409 for Link p110
-                        maximum  head error  = 0.0000 for Link p164
+              Trial  1: relative flow change = 0.000228
+                        maximum  flow change = 0.0399 for Link p110
+                        maximum  head error  = 0.0000 for Link PUMP_1
 
      4:30:00: Balanced after 1 trials
    
      4:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000520
-                        maximum  flow change = 0.0761 for Link p110
-                        maximum  head error  = 0.0000 for Link p110
+              Trial  1: relative flow change = 0.000367
+                        maximum  flow change = 0.0746 for Link p110
+                        maximum  head error  = 0.0000 for Link PUMP_1
 
      4:35:00: Balanced after 1 trials
    
      4:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000690
-                        maximum  flow change = 0.1066 for Link p110
-                        maximum  head error  = 0.0000 for Link p110
+              Trial  1: relative flow change = 0.000487
+                        maximum  flow change = 0.1046 for Link p110
+                        maximum  head error  = 0.0000 for Link PUMP_1
 
      4:40:00: Balanced after 1 trials
    
      4:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000922
-                        maximum  flow change = 0.1482 for Link p110
+              Trial  1: relative flow change = 0.000652
+                        maximum  flow change = 0.1455 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      4:45:00: Balanced after 1 trials
    
      4:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001282
-                        maximum  flow change = 0.2101 for Link p110
+              Trial  1: relative flow change = 0.000909
+                        maximum  flow change = 0.2064 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      4:50:00: Balanced after 1 trials
    
      4:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001780
-                        maximum  flow change = 0.2935 for Link p110
+              Trial  1: relative flow change = 0.001263
+                        maximum  flow change = 0.2885 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      4:55:00: Balanced after 1 trials
    
      5:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002391
-                        maximum  flow change = 0.3931 for Link p110
+              Trial  1: relative flow change = 0.001700
+                        maximum  flow change = 0.3865 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      5:00:00: Balanced after 1 trials
    
+     5:01:28: Pump PUMP_1 changed by Tank T1 control
+     5:01:28: Balancing the network:
+
+              Trial  1: relative flow change = 0.232805
+              Trial  2: relative flow change = 0.025943
+              Trial  3: relative flow change = 0.001307
+                        maximum  flow change = 0.4424 for Link p57
+                        maximum  head error  = 0.0001 for Link p687
+
+     5:01:28: Balanced after 3 trials
+     5:01:28: Tank T1 is emptying at 3.90 m
+     5:01:28: Pump PUMP_1 changed from open to closed
+   
      5:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003132
-                        maximum  flow change = 0.5141 for Link p110
+              Trial  1: relative flow change = 0.002421
+                        maximum  flow change = 0.4999 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      5:05:00: Balanced after 1 trials
    
      5:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003924
-                        maximum  flow change = 0.6403 for Link p110
+              Trial  1: relative flow change = 0.003328
+                        maximum  flow change = 0.6378 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      5:10:00: Balanced after 1 trials
    
      5:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004773
-                        maximum  flow change = 0.7764 for Link p110
+              Trial  1: relative flow change = 0.004061
+                        maximum  flow change = 0.7734 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      5:15:00: Balanced after 1 trials
    
      5:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005696
-                        maximum  flow change = 0.9244 for Link p110
+              Trial  1: relative flow change = 0.004853
+                        maximum  flow change = 0.9210 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      5:20:00: Balanced after 1 trials
    
      5:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.006713
-                        maximum  flow change = 1.0884 for Link p110
+              Trial  1: relative flow change = 0.005729
+                        maximum  flow change = 1.0845 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      5:25:00: Balanced after 1 trials
    
      5:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.007942
-                        maximum  flow change = 1.2930 for Link p110
+              Trial  1: relative flow change = 0.006787
+                        maximum  flow change = 1.2884 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      5:30:00: Balanced after 1 trials
    
      5:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.009484
-                        maximum  flow change = 1.5523 for Link p110
+              Trial  1: relative flow change = 0.008116
+                        maximum  flow change = 1.5470 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      5:35:00: Balanced after 1 trials
    
      5:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.011328
-              Trial  2: relative flow change = 0.001224
-                        maximum  flow change = 1.8976 for Link p227
-                        maximum  head error  = 0.0000 for Link p235
+              Trial  1: relative flow change = 0.009707
+                        maximum  flow change = 1.8650 for Link p110
+                        maximum  head error  = 0.0001 for Link p110
 
-     5:40:00: Balanced after 2 trials
+     5:40:00: Balanced after 1 trials
    
      5:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.012342
-              Trial  2: relative flow change = 0.001429
-                        maximum  flow change = 2.2541 for Link p227
+              Trial  1: relative flow change = 0.011536
+              Trial  2: relative flow change = 0.001227
+                        maximum  flow change = 2.2376 for Link p235
                         maximum  head error  = 0.0001 for Link p235
 
      5:45:00: Balanced after 2 trials
    
      5:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.014382
-              Trial  2: relative flow change = 0.001671
-                        maximum  flow change = 2.6642 for Link PRV-1
+              Trial  1: relative flow change = 0.012360
+              Trial  2: relative flow change = 0.001429
+                        maximum  flow change = 2.6218 for Link PRV-2
                         maximum  head error  = 0.0001 for Link p235
 
      5:50:00: Balanced after 2 trials
    
      5:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.016285
-              Trial  2: relative flow change = 0.001921
-                        maximum  flow change = 3.0660 for Link p227
+              Trial  1: relative flow change = 0.014016
+              Trial  2: relative flow change = 0.001646
+                        maximum  flow change = 3.0196 for Link PRV-2
                         maximum  head error  = 0.0001 for Link p235
 
      5:55:00: Balanced after 2 trials
    
      6:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.017775
-              Trial  2: relative flow change = 0.002130
-                        maximum  flow change = 3.4072 for Link PRV-1
+              Trial  1: relative flow change = 0.015330
+              Trial  2: relative flow change = 0.001831
+                        maximum  flow change = 3.3604 for Link PRV-2
                         maximum  head error  = 0.0001 for Link p235
 
      6:00:00: Balanced after 2 trials
    
      6:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.018713
-              Trial  2: relative flow change = 0.002296
-                        maximum  flow change = 3.6503 for Link p227
+              Trial  1: relative flow change = 0.016148
+              Trial  2: relative flow change = 0.001970
+                        maximum  flow change = 3.6070 for Link PRV-2
                         maximum  head error  = 0.0001 for Link p235
 
      6:05:00: Balanced after 2 trials
    
      6:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.018895
-              Trial  2: relative flow change = 0.002373
-                        maximum  flow change = 3.7478 for Link p227
+              Trial  1: relative flow change = 0.016299
+              Trial  2: relative flow change = 0.002042
+                        maximum  flow change = 3.7128 for Link p235
                         maximum  head error  = 0.0001 for Link p235
 
      6:10:00: Balanced after 2 trials
    
      6:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.018338
-              Trial  2: relative flow change = 0.002372
-                        maximum  flow change = 3.6977 for Link p227
+              Trial  1: relative flow change = 0.015816
+              Trial  2: relative flow change = 0.002047
+                        maximum  flow change = 3.6751 for Link p235
                         maximum  head error  = 0.0001 for Link p235
 
      6:15:00: Balanced after 2 trials
    
      6:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.017133
-              Trial  2: relative flow change = 0.002288
-                        maximum  flow change = 3.5102 for Link p235
+              Trial  1: relative flow change = 0.014777
+              Trial  2: relative flow change = 0.001977
+                        maximum  flow change = 3.4995 for Link PRV-2
                         maximum  head error  = 0.0001 for Link p235
 
      6:20:00: Balanced after 2 trials
    
      6:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.015495
-              Trial  2: relative flow change = 0.002159
-                        maximum  flow change = 3.2352 for Link p235
+              Trial  1: relative flow change = 0.013365
+              Trial  2: relative flow change = 0.001867
+                        maximum  flow change = 3.2250 for Link p235
                         maximum  head error  = 0.0001 for Link p235
 
      6:25:00: Balanced after 2 trials
    
      6:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.013724
-              Trial  2: relative flow change = 0.001994
-                        maximum  flow change = 2.9157 for Link p235
+              Trial  1: relative flow change = 0.011838
+              Trial  2: relative flow change = 0.001727
+                        maximum  flow change = 2.9063 for Link PRV-2
                         maximum  head error  = 0.0001 for Link p235
 
      6:30:00: Balanced after 2 trials
    
      6:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.012100
-              Trial  2: relative flow change = 0.001849
-                        maximum  flow change = 2.6130 for Link p235
+              Trial  1: relative flow change = 0.010430
+              Trial  2: relative flow change = 0.001601
+                        maximum  flow change = 2.6045 for Link p235
                         maximum  head error  = 0.0001 for Link p235
 
      6:35:00: Balanced after 2 trials
    
      6:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.010844
-              Trial  2: relative flow change = 0.001728
-                        maximum  flow change = 2.3757 for Link PRV-2
-                        maximum  head error  = 0.0001 for Link p235
+              Trial  1: relative flow change = 0.009342
+                        maximum  flow change = 2.3680 for Link p110
+                        maximum  head error  = 0.0001 for Link p110
 
-     6:40:00: Balanced after 2 trials
+     6:40:00: Balanced after 1 trials
    
      6:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.010073
-              Trial  2: relative flow change = 0.001657
-                        maximum  flow change = 2.2351 for Link PRV-2
-                        maximum  head error  = 0.0000 for Link p235
+              Trial  1: relative flow change = 0.009929
+                        maximum  flow change = 2.3996 for Link p235
+                        maximum  head error  = 0.0001 for Link p110
 
-     6:45:00: Balanced after 2 trials
+     6:45:00: Balanced after 1 trials
    
      6:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.009808
-                        maximum  flow change = 2.2015 for Link p110
+              Trial  1: relative flow change = 0.009672
+                        maximum  flow change = 2.3232 for Link p235
                         maximum  head error  = 0.0001 for Link p110
 
      6:50:00: Balanced after 1 trials
    
      6:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.011258
-              Trial  2: relative flow change = 0.001708
-                        maximum  flow change = 2.3214 for Link PRV-2
-                        maximum  head error  = 0.0001 for Link p235
+              Trial  1: relative flow change = 0.009771
+                        maximum  flow change = 2.3112 for Link p110
+                        maximum  head error  = 0.0001 for Link p110
 
-     6:55:00: Balanced after 2 trials
+     6:55:00: Balanced after 1 trials
    
      7:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.010161
-              Trial  2: relative flow change = 0.001711
-                        maximum  flow change = 2.3289 for Link PRV-2
+              Trial  1: relative flow change = 0.010006
+              Trial  2: relative flow change = 0.001512
+                        maximum  flow change = 2.3888 for Link PRV-2
                         maximum  head error  = 0.0001 for Link p235
 
      7:00:00: Balanced after 2 trials
    
      7:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.010398
-              Trial  2: relative flow change = 0.001755
-                        maximum  flow change = 2.4098 for Link p235
-                        maximum  head error  = 0.0001 for Link p235
+              Trial  1: relative flow change = 0.008993
+                        maximum  flow change = 2.4003 for Link p110
+                        maximum  head error  = 0.0001 for Link p110
 
-     7:05:00: Balanced after 2 trials
+     7:05:00: Balanced after 1 trials
    
      7:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.010321
-              Trial  2: relative flow change = 0.001757
-                        maximum  flow change = 2.4202 for Link p235
+              Trial  1: relative flow change = 0.010200
+              Trial  2: relative flow change = 0.001557
+                        maximum  flow change = 2.4831 for Link PRV-2
                         maximum  head error  = 0.0001 for Link p235
 
      7:10:00: Balanced after 2 trials
    
      7:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.009858
-                        maximum  flow change = 2.3415 for Link p110
+              Trial  1: relative flow change = 0.008547
+                        maximum  flow change = 2.3310 for Link p110
                         maximum  head error  = 0.0001 for Link p110
 
      7:15:00: Balanced after 1 trials
    
      7:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.010353
-              Trial  2: relative flow change = 0.001658
-                        maximum  flow change = 2.2436 for Link PRV-2
-                        maximum  head error  = 0.0000 for Link p235
+              Trial  1: relative flow change = 0.009026
+                        maximum  flow change = 2.3611 for Link p235
+                        maximum  head error  = 0.0001 for Link p110
 
-     7:20:00: Balanced after 2 trials
+     7:20:00: Balanced after 1 trials
    
      7:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.007767
-                        maximum  flow change = 1.8995 for Link p110
+              Trial  1: relative flow change = 0.007924
+                        maximum  flow change = 2.2559 for Link p235
                         maximum  head error  = 0.0001 for Link p110
 
      7:25:00: Balanced after 1 trials
    
      7:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.007508
-                        maximum  flow change = 1.9207 for Link p235
-                        maximum  head error  = 0.0001 for Link p110
+              Trial  1: relative flow change = 0.006582
+                        maximum  flow change = 1.9854 for Link p235
+                        maximum  head error  = 0.0000 for Link p110
 
      7:30:00: Balanced after 1 trials
    
      7:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005998
-                        maximum  flow change = 1.6731 for Link p235
+              Trial  1: relative flow change = 0.005233
+                        maximum  flow change = 1.6609 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      7:35:00: Balanced after 1 trials
    
      7:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004580
-                        maximum  flow change = 1.3436 for Link p235
+              Trial  1: relative flow change = 0.003989
+                        maximum  flow change = 1.3328 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      7:40:00: Balanced after 1 trials
    
      7:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003423
-                        maximum  flow change = 1.0360 for Link p235
+              Trial  1: relative flow change = 0.002980
+                        maximum  flow change = 1.0266 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      7:45:00: Balanced after 1 trials
    
      7:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002637
-                        maximum  flow change = 0.7854 for Link p235
+              Trial  1: relative flow change = 0.002305
+                        maximum  flow change = 0.7774 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      7:50:00: Balanced after 1 trials
    
      7:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002162
-                        maximum  flow change = 0.6163 for Link p235
+              Trial  1: relative flow change = 0.001901
+                        maximum  flow change = 0.6094 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      7:55:00: Balanced after 1 trials
    
      8:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001979
-                        maximum  flow change = 0.5133 for Link p235
+              Trial  1: relative flow change = 0.001742
+                        maximum  flow change = 0.5070 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      8:00:00: Balanced after 1 trials
    
      8:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001934
-                        maximum  flow change = 0.4772 for Link p235
+              Trial  1: relative flow change = 0.001703
+                        maximum  flow change = 0.4712 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      8:05:00: Balanced after 1 trials
    
      8:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002000
-                        maximum  flow change = 0.4852 for Link p110
+              Trial  1: relative flow change = 0.001759
+                        maximum  flow change = 0.4793 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      8:10:00: Balanced after 1 trials
    
      8:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002085
-                        maximum  flow change = 0.5063 for Link p110
+              Trial  1: relative flow change = 0.001830
+                        maximum  flow change = 0.5003 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      8:15:00: Balanced after 1 trials
    
      8:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002124
-                        maximum  flow change = 0.5151 for Link p110
+              Trial  1: relative flow change = 0.001864
+                        maximum  flow change = 0.5089 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      8:20:00: Balanced after 1 trials
    
      8:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002098
-                        maximum  flow change = 0.5199 for Link p235
+              Trial  1: relative flow change = 0.001841
+                        maximum  flow change = 0.5138 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      8:25:00: Balanced after 1 trials
    
      8:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002039
-                        maximum  flow change = 0.5117 for Link p235
+              Trial  1: relative flow change = 0.001791
+                        maximum  flow change = 0.5056 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      8:30:00: Balanced after 1 trials
    
      8:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001929
-                        maximum  flow change = 0.4976 for Link p235
+              Trial  1: relative flow change = 0.001696
+                        maximum  flow change = 0.4917 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      8:35:00: Balanced after 1 trials
    
      8:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001777
-                        maximum  flow change = 0.4697 for Link p235
+              Trial  1: relative flow change = 0.001564
+                        maximum  flow change = 0.4640 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      8:40:00: Balanced after 1 trials
    
      8:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001627
-                        maximum  flow change = 0.4315 for Link p235
+              Trial  1: relative flow change = 0.001433
+                        maximum  flow change = 0.4262 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      8:45:00: Balanced after 1 trials
    
      8:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001458
-                        maximum  flow change = 0.3948 for Link p235
+              Trial  1: relative flow change = 0.001284
+                        maximum  flow change = 0.3899 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      8:50:00: Balanced after 1 trials
    
      8:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001250
-                        maximum  flow change = 0.3529 for Link p235
+              Trial  1: relative flow change = 0.001102
+                        maximum  flow change = 0.3485 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      8:55:00: Balanced after 1 trials
    
      9:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001100
-                        maximum  flow change = 0.3006 for Link p235
+              Trial  1: relative flow change = 0.000969
+                        maximum  flow change = 0.2968 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      9:00:00: Balanced after 1 trials
    
      9:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000939
-                        maximum  flow change = 0.2656 for Link p235
+              Trial  1: relative flow change = 0.000828
+                        maximum  flow change = 0.2623 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      9:05:00: Balanced after 1 trials
    
      9:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000829
-                        maximum  flow change = 0.2262 for Link p235
+              Trial  1: relative flow change = 0.000730
+                        maximum  flow change = 0.2234 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      9:10:00: Balanced after 1 trials
    
      9:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000803
-                        maximum  flow change = 0.2011 for Link p235
+              Trial  1: relative flow change = 0.000704
+                        maximum  flow change = 0.1986 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      9:15:00: Balanced after 1 trials
    
      9:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000786
-                        maximum  flow change = 0.1962 for Link p235
+              Trial  1: relative flow change = 0.000689
+                        maximum  flow change = 0.1939 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      9:20:00: Balanced after 1 trials
    
      9:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000837
-                        maximum  flow change = 0.2025 for Link p110
+              Trial  1: relative flow change = 0.000730
+                        maximum  flow change = 0.2003 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
      9:25:00: Balanced after 1 trials
    
      9:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000849
-                        maximum  flow change = 0.2048 for Link p235
+              Trial  1: relative flow change = 0.000740
+                        maximum  flow change = 0.2026 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      9:30:00: Balanced after 1 trials
    
      9:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000841
-                        maximum  flow change = 0.2064 for Link p235
+              Trial  1: relative flow change = 0.000734
+                        maximum  flow change = 0.2041 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      9:35:00: Balanced after 1 trials
    
      9:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000751
-                        maximum  flow change = 0.2035 for Link p235
+              Trial  1: relative flow change = 0.000656
+                        maximum  flow change = 0.2014 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      9:40:00: Balanced after 1 trials
    
      9:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000564
-                        maximum  flow change = 0.1799 for Link p235
+              Trial  1: relative flow change = 0.000496
+                        maximum  flow change = 0.1779 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
      9:45:00: Balanced after 1 trials
    
      9:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000321
-                        maximum  flow change = 0.1338 for Link p235
+              Trial  1: relative flow change = 0.000296
+                        maximum  flow change = 0.1322 for Link p235
                         maximum  head error  = 0.0000 for Link p235
 
      9:50:00: Balanced after 1 trials
    
      9:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000203
-                        maximum  flow change = 0.0717 for Link PRV-2
-                        maximum  head error  = 0.0000 for Link p235
+              Trial  1: relative flow change = 0.000188
+                        maximum  flow change = 0.0705 for Link PRV-2
+                        maximum  head error  = 0.0000 for Link p319
 
      9:55:00: Balanced after 1 trials
    
     10:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000403
-                        maximum  flow change = 0.0696 for Link p110
+              Trial  1: relative flow change = 0.000366
+                        maximum  flow change = 0.0699 for Link p110
                         maximum  head error  = 0.0000 for Link p319
 
     10:00:00: Balanced after 1 trials
    
     10:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000635
-                        maximum  flow change = 0.1224 for Link p110
-                        maximum  head error  = 0.0000 for Link p110
+              Trial  1: relative flow change = 0.000573
+                        maximum  flow change = 0.1223 for Link p110
+                        maximum  head error  = 0.0000 for Link p319
 
     10:05:00: Balanced after 1 trials
    
     10:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000745
-                        maximum  flow change = 0.1457 for Link p227
+              Trial  1: relative flow change = 0.000670
+                        maximum  flow change = 0.1423 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     10:10:00: Balanced after 1 trials
    
     10:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000736
-                        maximum  flow change = 0.1684 for Link p227
-                        maximum  head error  = 0.0000 for Link p164
+              Trial  1: relative flow change = 0.000662
+                        maximum  flow change = 0.1635 for Link PRV-1
+                        maximum  head error  = 0.0000 for Link p319
 
     10:15:00: Balanced after 1 trials
    
     10:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000602
-                        maximum  flow change = 0.1626 for Link p227
+              Trial  1: relative flow change = 0.000542
+                        maximum  flow change = 0.1578 for Link p227
                         maximum  head error  = 0.0000 for Link p319
 
     10:20:00: Balanced after 1 trials
    
     10:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000407
-                        maximum  flow change = 0.1266 for Link PRV-1
+              Trial  1: relative flow change = 0.000369
+                        maximum  flow change = 0.1225 for Link PRV-1
                         maximum  head error  = 0.0000 for Link p319
 
     10:25:00: Balanced after 1 trials
    
     10:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000233
-                        maximum  flow change = 0.0748 for Link p227
+              Trial  1: relative flow change = 0.000216
+                        maximum  flow change = 0.0719 for Link p227
                         maximum  head error  = 0.0000 for Link p111
 
     10:30:00: Balanced after 1 trials
    
     10:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000243
-                        maximum  flow change = 0.0478 for Link p110
+              Trial  1: relative flow change = 0.000227
+                        maximum  flow change = 0.0466 for Link p110
                         maximum  head error  = 0.0000 for Link p111
 
     10:35:00: Balanced after 1 trials
    
     10:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000303
-                        maximum  flow change = 0.0722 for Link p110
+              Trial  1: relative flow change = 0.000282
+                        maximum  flow change = 0.0708 for Link p110
                         maximum  head error  = 0.0000 for Link p111
 
     10:40:00: Balanced after 1 trials
    
     10:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000263
-                        maximum  flow change = 0.0725 for Link PRV-2
+              Trial  1: relative flow change = 0.000246
+                        maximum  flow change = 0.0712 for Link PRV-2
                         maximum  head error  = 0.0000 for Link p111
 
     10:45:00: Balanced after 1 trials
    
     10:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000168
-                        maximum  flow change = 0.0562 for Link PRV-2
-                        maximum  head error  = 0.0000 for Link p111
+              Trial  1: relative flow change = 0.000161
+                        maximum  flow change = 0.0550 for Link PRV-2
+                        maximum  head error  = 0.0000 for Link p153
 
     10:50:00: Balanced after 1 trials
    
     10:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000176
-                        maximum  flow change = 0.0239 for Link p239
+              Trial  1: relative flow change = 0.000166
+                        maximum  flow change = 0.0296 for Link p239
                         maximum  head error  = 0.0000 for Link p319
 
     10:55:00: Balanced after 1 trials
    
     11:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000325
-                        maximum  flow change = 0.0579 for Link p110
+              Trial  1: relative flow change = 0.000297
+                        maximum  flow change = 0.0580 for Link p110
                         maximum  head error  = 0.0000 for Link p319
 
     11:00:00: Balanced after 1 trials
    
     11:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000422
+              Trial  1: relative flow change = 0.000383
                         maximum  flow change = 0.0817 for Link p110
-                        maximum  head error  = 0.0000 for Link p110
+                        maximum  head error  = 0.0000 for Link p319
 
     11:05:00: Balanced after 1 trials
    
     11:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000477
-                        maximum  flow change = 0.0956 for Link p227
+              Trial  1: relative flow change = 0.000432
+                        maximum  flow change = 0.0944 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     11:10:00: Balanced after 1 trials
    
     11:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000430
-                        maximum  flow change = 0.1084 for Link p227
-                        maximum  head error  = 0.0000 for Link p110
+              Trial  1: relative flow change = 0.000390
+                        maximum  flow change = 0.1054 for Link PRV-1
+                        maximum  head error  = 0.0000 for Link p319
 
     11:15:00: Balanced after 1 trials
    
     11:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000320
-                        maximum  flow change = 0.0953 for Link p227
-                        maximum  head error  = 0.0000 for Link p235
+              Trial  1: relative flow change = 0.000293
+                        maximum  flow change = 0.0926 for Link PRV-1
+                        maximum  head error  = 0.0000 for Link p319
 
     11:20:00: Balanced after 1 trials
    
     11:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000223
-                        maximum  flow change = 0.0678 for Link PRV-1
+              Trial  1: relative flow change = 0.000206
+                        maximum  flow change = 0.0657 for Link p227
                         maximum  head error  = 0.0000 for Link p319
 
     11:25:00: Balanced after 1 trials
    
     11:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000143
-                        maximum  flow change = 0.0442 for Link PRV-1
+              Trial  1: relative flow change = 0.000136
+                        maximum  flow change = 0.0426 for Link PRV-1
                         maximum  head error  = 0.0000 for Link p319
 
     11:30:00: Balanced after 1 trials
    
     11:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000126
-                        maximum  flow change = 0.0235 for Link p227
+              Trial  1: relative flow change = 0.000121
+                        maximum  flow change = 0.0225 for Link p227
                         maximum  head error  = 0.0000 for Link p319
 
     11:35:00: Balanced after 1 trials
    
     11:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000160
-                        maximum  flow change = 0.0231 for Link p110
+              Trial  1: relative flow change = 0.000151
+                        maximum  flow change = 0.0243 for Link p239
                         maximum  head error  = 0.0000 for Link p319
 
     11:40:00: Balanced after 1 trials
    
     11:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000296
-                        maximum  flow change = 0.0596 for Link p110
-                        maximum  head error  = 0.0000 for Link p110
+              Trial  1: relative flow change = 0.000271
+                        maximum  flow change = 0.0595 for Link p110
+                        maximum  head error  = 0.0000 for Link p319
 
     11:45:00: Balanced after 1 trials
    
     11:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000464
-                        maximum  flow change = 0.1023 for Link p110
+              Trial  1: relative flow change = 0.000419
+                        maximum  flow change = 0.1020 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     11:50:00: Balanced after 1 trials
    
     11:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000641
-                        maximum  flow change = 0.1458 for Link p110
+              Trial  1: relative flow change = 0.000576
+                        maximum  flow change = 0.1450 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     11:55:00: Balanced after 1 trials
    
     12:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000808
-                        maximum  flow change = 0.1849 for Link p110
+              Trial  1: relative flow change = 0.000724
+                        maximum  flow change = 0.1838 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     12:00:00: Balanced after 1 trials
    
     12:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000914
-                        maximum  flow change = 0.2097 for Link p110
+              Trial  1: relative flow change = 0.000816
+                        maximum  flow change = 0.2083 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     12:05:00: Balanced after 1 trials
    
     12:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000977
-                        maximum  flow change = 0.2242 for Link p110
+              Trial  1: relative flow change = 0.000872
+                        maximum  flow change = 0.2226 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     12:10:00: Balanced after 1 trials
    
     12:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000961
-                        maximum  flow change = 0.2272 for Link p235
+              Trial  1: relative flow change = 0.000857
+                        maximum  flow change = 0.2256 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     12:15:00: Balanced after 1 trials
    
     12:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000870
-                        maximum  flow change = 0.2232 for Link p235
+              Trial  1: relative flow change = 0.000776
+                        maximum  flow change = 0.2215 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     12:20:00: Balanced after 1 trials
    
     12:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000758
-                        maximum  flow change = 0.2011 for Link p235
+              Trial  1: relative flow change = 0.000677
+                        maximum  flow change = 0.1995 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     12:25:00: Balanced after 1 trials
    
     12:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000642
-                        maximum  flow change = 0.1767 for Link p235
+              Trial  1: relative flow change = 0.000574
+                        maximum  flow change = 0.1751 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     12:30:00: Balanced after 1 trials
    
+    12:31:11: Pump PUMP_1 changed by Tank T1 control
+    12:31:11: Balancing the network:
+
+              Trial  1: relative flow change = 0.936768
+              PRV PRV-3 switched from active to open
+              Trial  2: relative flow change = 0.931329
+              Trial  3: relative flow change = 0.804516
+              PRV PRV-3 switched from open to active
+              Trial  4: relative flow change = 0.590575
+              Trial  5: relative flow change = 0.439593
+              Trial  6: relative flow change = 0.326140
+              Trial  7: relative flow change = 0.168284
+              Trial  8: relative flow change = 0.065310
+              Trial  9: relative flow change = 0.013625
+              Trial 10: relative flow change = 0.000853
+                        maximum  flow change = 1.6524 for Link PRV-1
+                        maximum  head error  = 0.0004 for Link PUMP_1
+
+    12:31:11: Balanced after 10 trials
+    12:31:11: Tank T1 is filling at 2.40 m
+    12:31:11: Pump PUMP_1 changed from closed to open
+   
     12:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000517
-                        maximum  flow change = 0.1489 for Link p235
+              Trial  1: relative flow change = 0.000333
+                        maximum  flow change = 0.1093 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     12:35:00: Balanced after 1 trials
    
     12:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000423
-                        maximum  flow change = 0.1199 for Link p235
+              Trial  1: relative flow change = 0.000325
+                        maximum  flow change = 0.1105 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     12:40:00: Balanced after 1 trials
    
     12:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000347
-                        maximum  flow change = 0.0978 for Link p235
+              Trial  1: relative flow change = 0.000268
+                        maximum  flow change = 0.0953 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     12:45:00: Balanced after 1 trials
    
     12:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000315
-                        maximum  flow change = 0.0796 for Link p235
+              Trial  1: relative flow change = 0.000244
+                        maximum  flow change = 0.0776 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     12:50:00: Balanced after 1 trials
    
     12:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000326
-                        maximum  flow change = 0.0725 for Link p110
+              Trial  1: relative flow change = 0.000251
+                        maximum  flow change = 0.0711 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     12:55:00: Balanced after 1 trials
    
     13:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000402
-                        maximum  flow change = 0.0902 for Link p110
+              Trial  1: relative flow change = 0.000309
+                        maximum  flow change = 0.0886 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     13:00:00: Balanced after 1 trials
    
     13:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000480
-                        maximum  flow change = 0.1073 for Link p110
+              Trial  1: relative flow change = 0.000369
+                        maximum  flow change = 0.1056 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     13:05:00: Balanced after 1 trials
    
     13:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000627
-                        maximum  flow change = 0.1428 for Link p110
+              Trial  1: relative flow change = 0.000482
+                        maximum  flow change = 0.1405 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     13:10:00: Balanced after 1 trials
    
     13:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000791
-                        maximum  flow change = 0.1813 for Link p110
+              Trial  1: relative flow change = 0.000607
+                        maximum  flow change = 0.1781 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     13:15:00: Balanced after 1 trials
    
     13:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000962
-                        maximum  flow change = 0.2222 for Link p110
+              Trial  1: relative flow change = 0.000739
+                        maximum  flow change = 0.2181 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     13:20:00: Balanced after 1 trials
    
     13:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001109
-                        maximum  flow change = 0.2545 for Link p110
+              Trial  1: relative flow change = 0.000852
+                        maximum  flow change = 0.2496 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     13:25:00: Balanced after 1 trials
    
     13:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001219
-                        maximum  flow change = 0.2802 for Link p110
+              Trial  1: relative flow change = 0.000938
+                        maximum  flow change = 0.2747 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     13:30:00: Balanced after 1 trials
    
     13:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001335
-                        maximum  flow change = 0.3056 for Link p110
+              Trial  1: relative flow change = 0.001027
+                        maximum  flow change = 0.2994 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     13:35:00: Balanced after 1 trials
    
     13:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001377
-                        maximum  flow change = 0.3119 for Link p110
+              Trial  1: relative flow change = 0.001060
+                        maximum  flow change = 0.3056 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     13:40:00: Balanced after 1 trials
    
     13:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001393
-                        maximum  flow change = 0.3162 for Link p235
+              Trial  1: relative flow change = 0.001071
+                        maximum  flow change = 0.3100 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     13:45:00: Balanced after 1 trials
    
     13:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001398
-                        maximum  flow change = 0.3166 for Link p235
+              Trial  1: relative flow change = 0.001075
+                        maximum  flow change = 0.3105 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     13:50:00: Balanced after 1 trials
    
     13:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001378
-                        maximum  flow change = 0.3141 for Link p235
+              Trial  1: relative flow change = 0.001057
+                        maximum  flow change = 0.3083 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     13:55:00: Balanced after 1 trials
    
     14:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001351
-                        maximum  flow change = 0.3065 for Link PRV-1
+              Trial  1: relative flow change = 0.001035
+                        maximum  flow change = 0.2994 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     14:00:00: Balanced after 1 trials
    
     14:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001383
-                        maximum  flow change = 0.3021 for Link p227
+              Trial  1: relative flow change = 0.001058
+                        maximum  flow change = 0.2933 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     14:05:00: Balanced after 1 trials
    
     14:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001392
-                        maximum  flow change = 0.3116 for Link p227
+              Trial  1: relative flow change = 0.001064
+                        maximum  flow change = 0.3020 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     14:10:00: Balanced after 1 trials
    
     14:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001439
-                        maximum  flow change = 0.3130 for Link p227
+              Trial  1: relative flow change = 0.001099
+                        maximum  flow change = 0.3029 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     14:15:00: Balanced after 1 trials
    
     14:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001526
-                        maximum  flow change = 0.3238 for Link PRV-1
+              Trial  1: relative flow change = 0.001165
+                        maximum  flow change = 0.3151 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     14:20:00: Balanced after 1 trials
    
     14:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001636
-                        maximum  flow change = 0.3437 for Link p110
+              Trial  1: relative flow change = 0.001248
+                        maximum  flow change = 0.3394 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     14:25:00: Balanced after 1 trials
    
     14:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001789
-                        maximum  flow change = 0.3796 for Link p110
+              Trial  1: relative flow change = 0.001365
+                        maximum  flow change = 0.3747 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     14:30:00: Balanced after 1 trials
    
     14:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001988
-                        maximum  flow change = 0.4249 for Link p110
+              Trial  1: relative flow change = 0.001517
+                        maximum  flow change = 0.4192 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     14:35:00: Balanced after 1 trials
    
     14:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002233
-                        maximum  flow change = 0.4789 for Link p110
+              Trial  1: relative flow change = 0.001704
+                        maximum  flow change = 0.4723 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     14:40:00: Balanced after 1 trials
    
     14:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002542
-                        maximum  flow change = 0.5479 for Link p110
+              Trial  1: relative flow change = 0.001940
+                        maximum  flow change = 0.5401 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     14:45:00: Balanced after 1 trials
    
     14:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002836
-                        maximum  flow change = 0.6103 for Link p110
+              Trial  1: relative flow change = 0.002164
+                        maximum  flow change = 0.6013 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     14:50:00: Balanced after 1 trials
    
     14:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003080
-                        maximum  flow change = 0.6604 for Link p110
+              Trial  1: relative flow change = 0.002349
+                        maximum  flow change = 0.6505 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     14:55:00: Balanced after 1 trials
    
     15:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003312
-                        maximum  flow change = 0.7107 for Link p110
+              Trial  1: relative flow change = 0.002526
+                        maximum  flow change = 0.7000 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     15:00:00: Balanced after 1 trials
    
     15:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003428
-                        maximum  flow change = 0.7328 for Link p110
+              Trial  1: relative flow change = 0.002613
+                        maximum  flow change = 0.7215 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     15:05:00: Balanced after 1 trials
    
     15:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003378
-                        maximum  flow change = 0.7490 for Link PRV-1
+              Trial  1: relative flow change = 0.002575
+                        maximum  flow change = 0.7322 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     15:10:00: Balanced after 1 trials
    
     15:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003210
-                        maximum  flow change = 0.7315 for Link PRV-1
+              Trial  1: relative flow change = 0.002446
+                        maximum  flow change = 0.7183 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     15:15:00: Balanced after 1 trials
    
     15:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002967
-                        maximum  flow change = 0.6924 for Link p235
+              Trial  1: relative flow change = 0.002260
+                        maximum  flow change = 0.6814 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     15:20:00: Balanced after 1 trials
    
     15:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002590
-                        maximum  flow change = 0.6407 for Link p235
+              Trial  1: relative flow change = 0.001974
+                        maximum  flow change = 0.6300 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     15:25:00: Balanced after 1 trials
    
     15:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002222
-                        maximum  flow change = 0.5582 for Link p235
+              Trial  1: relative flow change = 0.001693
+                        maximum  flow change = 0.5484 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     15:30:00: Balanced after 1 trials
    
     15:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001813
-                        maximum  flow change = 0.4818 for Link p235
+              Trial  1: relative flow change = 0.001382
+                        maximum  flow change = 0.4730 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     15:35:00: Balanced after 1 trials
    
     15:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001468
-                        maximum  flow change = 0.3937 for Link p235
+              Trial  1: relative flow change = 0.001118
+                        maximum  flow change = 0.3859 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     15:40:00: Balanced after 1 trials
    
     15:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001153
-                        maximum  flow change = 0.3217 for Link p235
+              Trial  1: relative flow change = 0.000878
+                        maximum  flow change = 0.3149 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     15:45:00: Balanced after 1 trials
    
     15:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000875
-                        maximum  flow change = 0.2537 for Link p235
+              Trial  1: relative flow change = 0.000668
+                        maximum  flow change = 0.2478 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     15:50:00: Balanced after 1 trials
    
     15:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000629
-                        maximum  flow change = 0.1930 for Link p235
+              Trial  1: relative flow change = 0.000481
+                        maximum  flow change = 0.1881 for Link p235
                         maximum  head error  = 0.0000 for Link p235
 
     15:55:00: Balanced after 1 trials
    
     16:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000415
-                        maximum  flow change = 0.1382 for Link p235
-                        maximum  head error  = 0.0000 for Link p235
+              Trial  1: relative flow change = 0.000320
+                        maximum  flow change = 0.1344 for Link p235
+                        maximum  head error  = 0.0000 for Link p153
 
     16:00:00: Balanced after 1 trials
    
     16:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000189
-                        maximum  flow change = 0.0902 for Link PRV-2
-                        maximum  head error  = 0.0000 for Link p235
+              Trial  1: relative flow change = 0.000150
+                        maximum  flow change = 0.0874 for Link PRV-2
+                        maximum  head error  = 0.0000 for Link p153
 
     16:05:00: Balanced after 1 trials
    
     16:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000191
-                        maximum  flow change = 0.0279 for Link PRV-2
-                        maximum  head error  = 0.0000 for Link p319
+              Trial  1: relative flow change = 0.000145
+                        maximum  flow change = 0.0264 for Link PRV-2
+                        maximum  head error  = 0.0000 for Link p153
 
     16:10:00: Balanced after 1 trials
    
     16:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000372
-                        maximum  flow change = 0.0721 for Link p110
+              Trial  1: relative flow change = 0.000280
+                        maximum  flow change = 0.0716 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     16:15:00: Balanced after 1 trials
    
     16:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000577
-                        maximum  flow change = 0.1162 for Link p110
+              Trial  1: relative flow change = 0.000436
+                        maximum  flow change = 0.1149 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     16:20:00: Balanced after 1 trials
    
     16:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000758
-                        maximum  flow change = 0.1547 for Link p110
+              Trial  1: relative flow change = 0.000574
+                        maximum  flow change = 0.1528 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     16:25:00: Balanced after 1 trials
    
     16:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000861
-                        maximum  flow change = 0.1739 for Link p110
+              Trial  1: relative flow change = 0.000652
+                        maximum  flow change = 0.1716 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     16:30:00: Balanced after 1 trials
    
     16:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000886
-                        maximum  flow change = 0.1875 for Link PRV-1
+              Trial  1: relative flow change = 0.000671
+                        maximum  flow change = 0.1810 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     16:35:00: Balanced after 1 trials
    
     16:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000891
-                        maximum  flow change = 0.1911 for Link p227
+              Trial  1: relative flow change = 0.000674
+                        maximum  flow change = 0.1845 for Link PRV-1
                         maximum  head error  = 0.0000 for Link p110
 
     16:40:00: Balanced after 1 trials
    
     16:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000899
-                        maximum  flow change = 0.1916 for Link p227
+              Trial  1: relative flow change = 0.000680
+                        maximum  flow change = 0.1848 for Link PRV-1
                         maximum  head error  = 0.0000 for Link p110
 
     16:45:00: Balanced after 1 trials
    
     16:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000879
-                        maximum  flow change = 0.1933 for Link PRV-1
+              Trial  1: relative flow change = 0.000665
+                        maximum  flow change = 0.1864 for Link PRV-1
                         maximum  head error  = 0.0000 for Link p110
 
     16:50:00: Balanced after 1 trials
    
     16:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000876
-                        maximum  flow change = 0.1884 for Link p227
+              Trial  1: relative flow change = 0.000663
+                        maximum  flow change = 0.1816 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     16:55:00: Balanced after 1 trials
    
     17:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000907
-                        maximum  flow change = 0.1886 for Link p227
+              Trial  1: relative flow change = 0.000686
+                        maximum  flow change = 0.1819 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     17:00:00: Balanced after 1 trials
    
     17:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000971
-                        maximum  flow change = 0.2001 for Link p110
+              Trial  1: relative flow change = 0.000735
+                        maximum  flow change = 0.1975 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     17:05:00: Balanced after 1 trials
    
     17:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001012
-                        maximum  flow change = 0.2121 for Link p227
+              Trial  1: relative flow change = 0.000767
+                        maximum  flow change = 0.2079 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     17:10:00: Balanced after 1 trials
    
     17:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001031
-                        maximum  flow change = 0.2211 for Link PRV-1
+              Trial  1: relative flow change = 0.000783
+                        maximum  flow change = 0.2139 for Link PRV-1
                         maximum  head error  = 0.0000 for Link p110
 
     17:15:00: Balanced after 1 trials
    
     17:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001015
-                        maximum  flow change = 0.2247 for Link p227
+              Trial  1: relative flow change = 0.000771
+                        maximum  flow change = 0.2175 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     17:20:00: Balanced after 1 trials
    
     17:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000973
-                        maximum  flow change = 0.2206 for Link p227
+              Trial  1: relative flow change = 0.000738
+                        maximum  flow change = 0.2136 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     17:25:00: Balanced after 1 trials
    
-    17:25:09: Pump PUMP_1 changed by Tank T1 control
-    17:25:09: Balancing the network:
-
-              Trial  1: relative flow change = 0.954537
-              PRV PRV-3 switched from active to open
-              Trial  2: relative flow change = 0.954499
-              Pump PUMP_1 switched from open to closed
-              Trial  3: relative flow change = 2.654903
-              PRV PRV-3 switched from open to active
-              Trial  4: relative flow change = 0.765745
-              Pump PUMP_1 switched from closed to open
-              Trial  5: relative flow change = 0.880550
-              PRV PRV-3 switched from active to open
-              Trial  6: relative flow change = 0.835026
-              PRV PRV-3 switched from open to active
-              Trial  7: relative flow change = 0.696282
-              Trial  8: relative flow change = 0.545515
-              Trial  9: relative flow change = 0.375999
-              Trial 10: relative flow change = 0.222107
-              Trial 11: relative flow change = 0.103539
-              Trial 12: relative flow change = 0.029024
-              Trial 13: relative flow change = 0.002736
-                        maximum  flow change = 2.9422 for Link PRV-2
-                        maximum  head error  = 0.0083 for Link PUMP_1
-
-    17:25:09: Balanced after 13 trials
-    17:25:09: Tank T1 is filling at 2.40 m
-    17:25:09: Pump PUMP_1 changed from closed to open
-   
     17:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000769
-                        maximum  flow change = 0.1990 for Link PRV-1
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000687
+                        maximum  flow change = 0.2044 for Link p227
+                        maximum  head error  = 0.0000 for Link p110
 
     17:30:00: Balanced after 1 trials
    
     17:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000704
-                        maximum  flow change = 0.1930 for Link PRV-1
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000621
+                        maximum  flow change = 0.1900 for Link PRV-1
+                        maximum  head error  = 0.0000 for Link p110
 
     17:35:00: Balanced after 1 trials
    
     17:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000627
-                        maximum  flow change = 0.1744 for Link PRV-1
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000553
+                        maximum  flow change = 0.1709 for Link p227
+                        maximum  head error  = 0.0000 for Link p110
 
     17:40:00: Balanced after 1 trials
    
     17:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000593
-                        maximum  flow change = 0.1545 for Link PRV-1
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000523
+                        maximum  flow change = 0.1512 for Link p227
+                        maximum  head error  = 0.0000 for Link p110
 
     17:45:00: Balanced after 1 trials
    
     17:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000597
-                        maximum  flow change = 0.1466 for Link PRV-1
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000526
+                        maximum  flow change = 0.1434 for Link PRV-1
+                        maximum  head error  = 0.0000 for Link p110
 
     17:50:00: Balanced after 1 trials
    
     17:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000640
-                        maximum  flow change = 0.1490 for Link p110
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000564
+                        maximum  flow change = 0.1489 for Link p110
+                        maximum  head error  = 0.0000 for Link p110
 
     17:55:00: Balanced after 1 trials
    
     18:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000688
-                        maximum  flow change = 0.1638 for Link p110
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000606
+                        maximum  flow change = 0.1633 for Link p110
+                        maximum  head error  = 0.0000 for Link p110
 
     18:00:00: Balanced after 1 trials
    
     18:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000745
-                        maximum  flow change = 0.1797 for Link p110
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000657
+                        maximum  flow change = 0.1788 for Link p110
+                        maximum  head error  = 0.0000 for Link p110
 
     18:05:00: Balanced after 1 trials
    
     18:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000804
-                        maximum  flow change = 0.1953 for Link p110
+              Trial  1: relative flow change = 0.000709
+                        maximum  flow change = 0.1942 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     18:10:00: Balanced after 1 trials
    
     18:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000853
-                        maximum  flow change = 0.2059 for Link p110
+              Trial  1: relative flow change = 0.000752
+                        maximum  flow change = 0.2046 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     18:15:00: Balanced after 1 trials
    
     18:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000878
-                        maximum  flow change = 0.2151 for Link PRV-1
+              Trial  1: relative flow change = 0.000773
+                        maximum  flow change = 0.2111 for Link PRV-1
                         maximum  head error  = 0.0000 for Link p110
 
     18:20:00: Balanced after 1 trials
    
     18:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000906
-                        maximum  flow change = 0.2211 for Link p227
+              Trial  1: relative flow change = 0.000797
+                        maximum  flow change = 0.2168 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     18:25:00: Balanced after 1 trials
    
     18:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000943
-                        maximum  flow change = 0.2284 for Link PRV-1
+              Trial  1: relative flow change = 0.000829
+                        maximum  flow change = 0.2237 for Link PRV-1
                         maximum  head error  = 0.0000 for Link p110
 
     18:30:00: Balanced after 1 trials
    
     18:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000948
-                        maximum  flow change = 0.2374 for Link PRV-1
+              Trial  1: relative flow change = 0.000833
+                        maximum  flow change = 0.2322 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     18:35:00: Balanced after 1 trials
    
     18:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000950
-                        maximum  flow change = 0.2371 for Link p227
+              Trial  1: relative flow change = 0.000835
+                        maximum  flow change = 0.2315 for Link PRV-1
                         maximum  head error  = 0.0000 for Link p110
 
     18:40:00: Balanced after 1 trials
    
     18:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000889
-                        maximum  flow change = 0.2369 for Link p227
+              Trial  1: relative flow change = 0.000781
+                        maximum  flow change = 0.2311 for Link PRV-1
                         maximum  head error  = 0.0000 for Link p110
 
     18:45:00: Balanced after 1 trials
    
     18:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000809
-                        maximum  flow change = 0.2198 for Link PRV-1
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000711
+                        maximum  flow change = 0.2142 for Link PRV-1
+                        maximum  head error  = 0.0000 for Link p110
 
     18:50:00: Balanced after 1 trials
    
     18:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000673
-                        maximum  flow change = 0.1993 for Link p227
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000593
+                        maximum  flow change = 0.1941 for Link p227
+                        maximum  head error  = 0.0000 for Link p110
 
     18:55:00: Balanced after 1 trials
    
     19:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000461
-                        maximum  flow change = 0.1638 for Link PRV-1
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000408
+                        maximum  flow change = 0.1596 for Link p227
+                        maximum  head error  = 0.0000 for Link p235
 
     19:00:00: Balanced after 1 trials
    
     19:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000284
-                        maximum  flow change = 0.1088 for Link PRV-1
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000253
+                        maximum  flow change = 0.1059 for Link p227
+                        maximum  head error  = 0.0000 for Link p235
 
     19:05:00: Balanced after 1 trials
    
     19:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000139
-                        maximum  flow change = 0.0652 for Link p227
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000126
+                        maximum  flow change = 0.0635 for Link p227
+                        maximum  head error  = 0.0000 for Link p235
 
     19:10:00: Balanced after 1 trials
    
     19:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000061
-                        maximum  flow change = 0.0289 for Link p227
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000057
+                        maximum  flow change = 0.0282 for Link PRV-1
+                        maximum  head error  = 0.0000 for Link p153
 
     19:15:00: Balanced after 1 trials
    
     19:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000091
-                        maximum  flow change = 0.0172 for Link p110
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000084
+                        maximum  flow change = 0.0183 for Link p110
+                        maximum  head error  = 0.0000 for Link p319
 
     19:20:00: Balanced after 1 trials
    
     19:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000231
-                        maximum  flow change = 0.0554 for Link p110
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000207
+                        maximum  flow change = 0.0560 for Link p110
+                        maximum  head error  = 0.0000 for Link p110
 
     19:25:00: Balanced after 1 trials
    
     19:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000440
-                        maximum  flow change = 0.1080 for Link p110
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000390
+                        maximum  flow change = 0.1079 for Link p110
+                        maximum  head error  = 0.0000 for Link p110
 
     19:30:00: Balanced after 1 trials
    
     19:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000661
-                        maximum  flow change = 0.1614 for Link p110
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000583
+                        maximum  flow change = 0.1609 for Link p110
+                        maximum  head error  = 0.0000 for Link p110
 
     19:35:00: Balanced after 1 trials
    
     19:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000792
-                        maximum  flow change = 0.1898 for Link p110
+              Trial  1: relative flow change = 0.000698
+                        maximum  flow change = 0.1890 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     19:40:00: Balanced after 1 trials
    
     19:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000791
-                        maximum  flow change = 0.2032 for Link p227
+              Trial  1: relative flow change = 0.000697
+                        maximum  flow change = 0.1990 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     19:45:00: Balanced after 1 trials
    
     19:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000616
-                        maximum  flow change = 0.1999 for Link p227
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000544
+                        maximum  flow change = 0.1956 for Link p227
+                        maximum  head error  = 0.0000 for Link p110
 
     19:50:00: Balanced after 1 trials
    
     19:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000280
-                        maximum  flow change = 0.1512 for Link PRV-1
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000249
+                        maximum  flow change = 0.1477 for Link PRV-1
+                        maximum  head error  = 0.0000 for Link p235
 
     19:55:00: Balanced after 1 trials
    
     20:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000228
-                        maximum  flow change = 0.0651 for Link p110
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000202
+                        maximum  flow change = 0.0623 for Link p110
+                        maximum  head error  = 0.0000 for Link p111
 
     20:00:00: Balanced after 1 trials
    
     20:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000599
-                        maximum  flow change = 0.1676 for Link p110
+              Trial  1: relative flow change = 0.000528
+                        maximum  flow change = 0.1634 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     20:05:00: Balanced after 1 trials
    
     20:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000878
-                        maximum  flow change = 0.2328 for Link p110
+              Trial  1: relative flow change = 0.000773
+                        maximum  flow change = 0.2278 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     20:10:00: Balanced after 1 trials
    
     20:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000953
-                        maximum  flow change = 0.2464 for Link p110
+              Trial  1: relative flow change = 0.000839
+                        maximum  flow change = 0.2413 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     20:15:00: Balanced after 1 trials
    
     20:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000710
-                        maximum  flow change = 0.2487 for Link p235
+              Trial  1: relative flow change = 0.000625
+                        maximum  flow change = 0.2435 for Link p235
                         maximum  head error  = 0.0000 for Link p235
 
     20:20:00: Balanced after 1 trials
    
     20:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000222
-                        maximum  flow change = 0.1779 for Link p235
+              Trial  1: relative flow change = 0.000196
+                        maximum  flow change = 0.1736 for Link p235
                         maximum  head error  = 0.0000 for Link p235
 
     20:25:00: Balanced after 1 trials
    
     20:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000488
-                        maximum  flow change = 0.1176 for Link p110
-                        maximum  head error  = 0.0000 for Link PUMP_1
+              Trial  1: relative flow change = 0.000429
+                        maximum  flow change = 0.1180 for Link p110
+                        maximum  head error  = 0.0000 for Link p110
 
     20:30:00: Balanced after 1 trials
    
     20:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001142
-                        maximum  flow change = 0.2930 for Link p110
+              Trial  1: relative flow change = 0.001004
+                        maximum  flow change = 0.2909 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     20:35:00: Balanced after 1 trials
    
     20:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001674
-                        maximum  flow change = 0.4233 for Link p110
+              Trial  1: relative flow change = 0.001473
+                        maximum  flow change = 0.4195 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     20:40:00: Balanced after 1 trials
    
     20:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001959
-                        maximum  flow change = 0.4903 for Link p110
+              Trial  1: relative flow change = 0.001725
+                        maximum  flow change = 0.4854 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     20:45:00: Balanced after 1 trials
    
     20:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001963
-                        maximum  flow change = 0.5005 for Link p227
+              Trial  1: relative flow change = 0.001730
+                        maximum  flow change = 0.4927 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     20:50:00: Balanced after 1 trials
    
     20:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001600
-                        maximum  flow change = 0.4959 for Link PRV-1
+              Trial  1: relative flow change = 0.001412
+                        maximum  flow change = 0.4870 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     20:55:00: Balanced after 1 trials
    
     21:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001033
-                        maximum  flow change = 0.3970 for Link p227
+              Trial  1: relative flow change = 0.000913
+                        maximum  flow change = 0.3899 for Link p227
                         maximum  head error  = 0.0000 for Link p235
 
     21:00:00: Balanced after 1 trials
    
     21:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000331
-                        maximum  flow change = 0.2505 for Link p227
+              Trial  1: relative flow change = 0.000295
+                        maximum  flow change = 0.2461 for Link p227
                         maximum  head error  = 0.0000 for Link p235
 
     21:05:00: Balanced after 1 trials
    
     21:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.000431
-                        maximum  flow change = 0.1204 for Link p110
+              Trial  1: relative flow change = 0.000377
+                        maximum  flow change = 0.1174 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     21:10:00: Balanced after 1 trials
    
     21:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001001
-                        maximum  flow change = 0.2715 for Link p110
+              Trial  1: relative flow change = 0.000879
+                        maximum  flow change = 0.2664 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     21:15:00: Balanced after 1 trials
    
     21:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001463
-                        maximum  flow change = 0.3841 for Link p110
+              Trial  1: relative flow change = 0.001287
+                        maximum  flow change = 0.3774 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     21:20:00: Balanced after 1 trials
    
     21:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001812
-                        maximum  flow change = 0.4684 for Link p110
+              Trial  1: relative flow change = 0.001594
+                        maximum  flow change = 0.4604 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     21:25:00: Balanced after 1 trials
    
     21:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002125
-                        maximum  flow change = 0.5444 for Link p110
+              Trial  1: relative flow change = 0.001869
+                        maximum  flow change = 0.5355 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     21:30:00: Balanced after 1 trials
    
     21:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002458
-                        maximum  flow change = 0.6257 for Link p110
+              Trial  1: relative flow change = 0.002161
+                        maximum  flow change = 0.6158 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     21:35:00: Balanced after 1 trials
    
     21:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002900
-                        maximum  flow change = 0.7340 for Link p110
+              Trial  1: relative flow change = 0.002548
+                        maximum  flow change = 0.7228 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     21:40:00: Balanced after 1 trials
    
     21:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003462
-                        maximum  flow change = 0.8712 for Link p110
+              Trial  1: relative flow change = 0.003039
+                        maximum  flow change = 0.8586 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     21:45:00: Balanced after 1 trials
    
     21:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004135
-                        maximum  flow change = 1.0337 for Link p110
+              Trial  1: relative flow change = 0.003627
+                        maximum  flow change = 1.0193 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     21:50:00: Balanced after 1 trials
    
     21:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004743
-                        maximum  flow change = 1.1732 for Link p110
+              Trial  1: relative flow change = 0.004156
+                        maximum  flow change = 1.1573 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     21:55:00: Balanced after 1 trials
    
     22:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005230
-                        maximum  flow change = 1.2815 for Link p110
+              Trial  1: relative flow change = 0.004579
+                        maximum  flow change = 1.2646 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     22:00:00: Balanced after 1 trials
    
     22:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005449
-                        maximum  flow change = 1.3197 for Link p110
+              Trial  1: relative flow change = 0.004767
+                        maximum  flow change = 1.3026 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     22:05:00: Balanced after 1 trials
    
     22:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005317
-                        maximum  flow change = 1.3385 for Link p235
+              Trial  1: relative flow change = 0.004647
+                        maximum  flow change = 1.3214 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     22:10:00: Balanced after 1 trials
    
     22:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004854
-                        maximum  flow change = 1.2892 for Link p235
+              Trial  1: relative flow change = 0.004239
+                        maximum  flow change = 1.2729 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     22:15:00: Balanced after 1 trials
    
     22:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004108
-                        maximum  flow change = 1.1613 for Link PRV-1
+              Trial  1: relative flow change = 0.003584
+                        maximum  flow change = 1.1458 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     22:20:00: Balanced after 1 trials
    
     22:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003250
-                        maximum  flow change = 0.9723 for Link p227
+              Trial  1: relative flow change = 0.002833
+                        maximum  flow change = 0.9567 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     22:25:00: Balanced after 1 trials
    
     22:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002492
-                        maximum  flow change = 0.7624 for Link PRV-1
+              Trial  1: relative flow change = 0.002169
+                        maximum  flow change = 0.7467 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     22:30:00: Balanced after 1 trials
    
     22:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001945
-                        maximum  flow change = 0.5827 for Link PRV-1
+              Trial  1: relative flow change = 0.001689
+                        maximum  flow change = 0.5702 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     22:35:00: Balanced after 1 trials
    
     22:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001759
-                        maximum  flow change = 0.4560 for Link p227
+              Trial  1: relative flow change = 0.001525
+                        maximum  flow change = 0.4457 for Link p227
                         maximum  head error  = 0.0000 for Link p110
 
     22:40:00: Balanced after 1 trials
    
     22:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.001941
-                        maximum  flow change = 0.4516 for Link p110
+              Trial  1: relative flow change = 0.001683
+                        maximum  flow change = 0.4466 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     22:45:00: Balanced after 1 trials
    
     22:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.002391
-                        maximum  flow change = 0.5615 for Link p110
+              Trial  1: relative flow change = 0.002074
+                        maximum  flow change = 0.5554 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     22:50:00: Balanced after 1 trials
    
     22:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003031
-                        maximum  flow change = 0.7152 for Link p110
+              Trial  1: relative flow change = 0.002631
+                        maximum  flow change = 0.7073 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     22:55:00: Balanced after 1 trials
    
     23:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.003711
-                        maximum  flow change = 0.8735 for Link p110
+              Trial  1: relative flow change = 0.003223
+                        maximum  flow change = 0.8636 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     23:00:00: Balanced after 1 trials
    
     23:05:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004262
-                        maximum  flow change = 0.9974 for Link p110
+              Trial  1: relative flow change = 0.003703
+                        maximum  flow change = 0.9860 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     23:05:00: Balanced after 1 trials
    
     23:10:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004597
-                        maximum  flow change = 1.0691 for Link p110
+              Trial  1: relative flow change = 0.003993
+                        maximum  flow change = 1.0565 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     23:10:00: Balanced after 1 trials
    
     23:15:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004747
-                        maximum  flow change = 1.0984 for Link p110
+              Trial  1: relative flow change = 0.004123
+                        maximum  flow change = 1.0851 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     23:15:00: Balanced after 1 trials
    
     23:20:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004711
-                        maximum  flow change = 1.1142 for Link p235
+              Trial  1: relative flow change = 0.004092
+                        maximum  flow change = 1.1010 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     23:20:00: Balanced after 1 trials
    
     23:25:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004577
-                        maximum  flow change = 1.1001 for Link p235
+              Trial  1: relative flow change = 0.003975
+                        maximum  flow change = 1.0867 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     23:25:00: Balanced after 1 trials
    
     23:30:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004496
-                        maximum  flow change = 1.0671 for Link p235
+              Trial  1: relative flow change = 0.003905
+                        maximum  flow change = 1.0536 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     23:30:00: Balanced after 1 trials
    
     23:35:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004483
-                        maximum  flow change = 1.0488 for Link p235
+              Trial  1: relative flow change = 0.003892
+                        maximum  flow change = 1.0352 for Link p235
                         maximum  head error  = 0.0000 for Link p110
 
     23:35:00: Balanced after 1 trials
    
     23:40:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004641
-                        maximum  flow change = 1.0694 for Link p110
+              Trial  1: relative flow change = 0.004028
+                        maximum  flow change = 1.0547 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     23:40:00: Balanced after 1 trials
    
     23:45:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.004899
-                        maximum  flow change = 1.1275 for Link p110
+              Trial  1: relative flow change = 0.004250
+                        maximum  flow change = 1.1119 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     23:45:00: Balanced after 1 trials
    
     23:50:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005213
-                        maximum  flow change = 1.1940 for Link p110
+              Trial  1: relative flow change = 0.004521
+                        maximum  flow change = 1.1775 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     23:50:00: Balanced after 1 trials
    
     23:55:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005522
-                        maximum  flow change = 1.2584 for Link p110
+              Trial  1: relative flow change = 0.004785
+                        maximum  flow change = 1.2411 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     23:55:00: Balanced after 1 trials
    
     24:00:00: Balancing the network:
 
-              Trial  1: relative flow change = 0.005790
-                        maximum  flow change = 1.3113 for Link p110
+              Trial  1: relative flow change = 0.005014
+                        maximum  flow change = 1.2933 for Link p110
                         maximum  head error  = 0.0000 for Link p110
 
     24:00:00: Balanced after 1 trials
    
-  Analysis ended Wed Jan 14 01:29:28 2026
+  Analysis ended Thu Jan 15 20:54:19 2026

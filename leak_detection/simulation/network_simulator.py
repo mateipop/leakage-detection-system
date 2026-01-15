@@ -328,26 +328,37 @@ class NetworkSimulator:
         flows = {}
         demands = {}
 
+        node_flows = {}
+
         for node_id in self.junction_names:
+            pressure_m = 0.0
             try:
                 pressure_m = results.node['pressure'].loc[actual_time, node_id]
                 pressures[node_id] = pressure_m * 1.422
             except KeyError:
                 pressures[node_id] = 0.0
 
-        for link_id in self.pipe_names:
+            demand_lps = 0.0
             try:
-                flows[link_id] = results.link['flowrate'].loc[actual_time, link_id] * 1000
+                demand_lps = results.node['demand'].loc[actual_time, node_id] * 1000
             except KeyError:
-                flows[link_id] = 0.0
-
-        for node_id in self.junction_names:
-            try:
-                demands[node_id] = results.node['demand'].loc[actual_time, node_id] * 1000
-            except KeyError:
-                demands[node_id] = 0.0
-
-        node_flows = dict(demands)  # Flow at junction = demand at junction
+                demand_lps = 0.0
+            demands[node_id] = demand_lps
+            
+            # Add leakage to node_flow if present
+            # WNTR 'demand' does not include emitter leakage
+            leak_flow = 0.0
+            if node_id in self._leak_nodes and pressure_m > 0 and self.wn:
+                try:
+                    node = self.wn.get_node(node_id)
+                    if hasattr(node, 'emitter_coefficient') and node.emitter_coefficient:
+                        # Q = C * P^0.5 (SI units: m3/s, m)
+                        q_cms = node.emitter_coefficient * (pressure_m ** 0.5)
+                        leak_flow = q_cms * 1000.0
+                except Exception:
+                    pass
+            
+            node_flows[node_id] = demand_lps + leak_flow
 
         return SimulationState(
             time_seconds=actual_time,

@@ -270,10 +270,10 @@ class SystemOrchestrator:
         )
         
         if confirmed:
-            self._emit_event(f"[cyan]✓ Leak at {node_id} confirmed and masked (Matched Ground Truth)[/cyan]")
+            self._emit_event(f"[cyan][CONFIRMED] Leak at {node_id} confirmed and masked (Matched Ground Truth)[/cyan]")
             return True
         else:
-            self._emit_event(f"[yellow]⚠ Leak at {node_id} masked (Missed Ground Truth)[/yellow]")
+            self._emit_event(f"[yellow][MISSED] Leak at {node_id} masked (Missed Ground Truth)[/yellow]")
             return False
     
     def auto_confirm_detections(self, min_cycles: int = 5):
@@ -340,7 +340,8 @@ class SystemOrchestrator:
                         loc = inv["localization"]
                         node = loc.get("probable_location", "unknown")
                         conf = loc.get("confidence", 0)
-                        self._emit_event(f"[yellow]🔍 Multi-Agent: Leak localized at {node} ({conf:.0%} confidence)[/yellow]")
+                        if conf > 0.8:
+                            self._emit_event(f"[yellow][LOCALIZED] Multi-Agent: Leak localized at {node} ({conf:.0%} confidence)[/yellow]")
 
         metrics = {}
         for node_id in self._fleet.monitored_nodes:

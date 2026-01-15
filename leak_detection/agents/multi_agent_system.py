@@ -138,23 +138,27 @@ class MultiAgentSystem:
                 "confidence": st.get("confidence", 0.0),
                 "mode": st.get("mode")
             }
+            
+        coord_status = {}
+        active_invs_list = []
+        if self.coordinator:
+            coord_status = self.coordinator.get_status()
+            active_invs_list = [
+                {
+                    "id": k, 
+                    "status": v.status,
+                    "localization": v.localization_result
+                }
+                for k, v in self.coordinator._active_investigations.items()
+            ]
 
         return {
             "step": self._step_count, 
+            "agent_count": len(self.sensor_agents) + (2 if self.coordinator else 0),
             "sensor_count": len(self.sensor_agents),
             "sensors": sensor_status,
-            "coordinator": {
-                "system_mode": self.coordinator._system_mode,
-                "recent_anomalies": len(self.coordinator._recent_anomalies),
-                "active_investigations": [
-                    {
-                        "id": k, 
-                        "status": v.status,
-                        "localization": v.localization_result
-                    }
-                    for k, v in self.coordinator._active_investigations.items()
-                ]
-            }
+            "coordinator": coord_status,
+            "active_investigations": active_invs_list
         }
 
     def get_detected_leaks(self) -> List[Dict[str, Any]]:

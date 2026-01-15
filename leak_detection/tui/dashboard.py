@@ -53,7 +53,13 @@ class MetricsPanel(Static):
 
         sorted_metrics = sorted(
             self._metrics.items(),
-            key=lambda x: (x[1].get('confidence', 0), abs(x[1].get('pressure_zscore') or 0)),
+            key=lambda x: (
+                x[1].get('confidence', 0),
+                max(
+                    abs(x[1].get('pressure_zscore') or 0),
+                    abs(x[1].get('flow_zscore') or 0)
+                )
+            ),
             reverse=True
         )
 
@@ -68,7 +74,7 @@ class MetricsPanel(Static):
                 status = Text("!! ALERT", style="bold red")
             elif confidence >= 0.2:
                 status = Text("? WATCH", style="yellow")
-            elif p_zscore is not None and abs(p_zscore) > 2.0:
+            elif (p_zscore is not None and abs(p_zscore) > 2.0) or (f_zscore is not None and abs(f_zscore) > 2.0):
                 status = Text("! ANOMALY", style="magenta")
             else:
                 status = Text("OK", style="green")
@@ -80,6 +86,12 @@ class MetricsPanel(Static):
                 p_zscore_str = f"[red]{p_zscore_str}[/red]"
             elif p_zscore is not None and abs(p_zscore) > 1.5:
                 p_zscore_str = f"[yellow]{p_zscore_str}[/yellow]"
+            
+            # Highlight flow spikes
+            if f_zscore is not None and abs(f_zscore) > 2.0:
+                 f_zscore_str = f"[red]{f_zscore_str}[/red]"
+            elif f_zscore is not None and abs(f_zscore) > 1.5:
+                 f_zscore_str = f"[yellow]{f_zscore_str}[/yellow]"
 
             table.add_row(
                 node_id,
@@ -164,7 +176,7 @@ class SystemStatusPanel(Static):
 
         status_colors = {
             "NORMAL": ("green", "●"),
-            "ALERT": ("yellow", "⚠"),
+            "ALERT": ("yellow", "!"),
             "INVESTIGATING": ("yellow", "◉"),
             "LEAK_CONFIRMED": ("red", "⬤"),
         }
@@ -202,7 +214,7 @@ class SystemStatusPanel(Static):
             if active_invs:
                 lines.append(f"[bold yellow]Active Investigations ({len(active_invs)}):[/bold yellow]")
                 for inv in active_invs[:3]:
-                    status_icon = "🔍" if inv["status"] == "active" else "✓" if inv["status"] == "localized" else "○"
+                    status_icon = "*" if inv["status"] == "active" else "+" if inv["status"] == "localized" else "○"
                     loc_str = ""
                     if inv.get("localization"):
                         loc = inv["localization"]
@@ -271,7 +283,7 @@ class AnomalyPanel(Static):
             conf_color = "green"
 
         lines = [
-            f"[bold red]⚠ ANOMALY DETECTED[/bold red]",
+            f"[bold red]! ANOMALY DETECTED[/bold red]",
             "",
             f"[bold]Node:[/bold] {node_id}",
             f"[bold]Type:[/bold] Network Anomaly",
@@ -340,9 +352,9 @@ class DetectionHistoryPanel(Static):
                 dist_str = f"[red]{distance}+ hops[/red]"
             
             if actual in self._confirmed_leaks:
-                status_str = "[cyan]✓ CONFIRMED[/cyan]"
+                status_str = "[cyan]+ CONFIRMED[/cyan]"
             else:
-                status_str = "[yellow]⏳ NEW[/yellow]"
+                status_str = "[yellow]* NEW[/yellow]"
 
             table.add_row(str(i), actual, estimated, dist_str, status_str)
 
