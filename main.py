@@ -79,7 +79,7 @@ class LeakDetectionApp:
                     multi_leak_results = []
                     if result.detected_leaks:
                         multi_leak_results = [
-                            (d.get('location'), d.get('confidence', 0))
+                            (d.get('location'), d.get('confidence', 0), d.get('evaluation'))
                             for d in result.detected_leaks
                         ]
                     
@@ -105,14 +105,14 @@ class LeakDetectionApp:
                             estimated_location=result.estimated_location,
                             multi_leak_results=multi_leak_results,
                             agent_summary=result.agent_summary,
-                            detection_count=current_count
+                            detection_count=current_count,
+                            tp_count=result.tp_count,
+                            fp_count=result.fp_count
                         )
                         self._dashboard.update_anomaly(result.anomaly)
                         
                         confirmed_leaks = self._orchestrator.get_confirmed_leaks()
                         self._dashboard.update_history(detection_history, confirmed_leaks)
-                        
-                        self._orchestrator.auto_confirm_detections(min_cycles=3)
 
                 await asyncio.sleep(0.2)
 

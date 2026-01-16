@@ -101,6 +101,7 @@ class NetworkSimulator:
         self._results_cache: Optional[object] = None
         self._is_mock = False
         self._undirected_graph = None  # Cached undirected graph for topology
+        self._weighted_graph = None # Cached weighted graph for distance
 
         self._load_network()
 
@@ -239,6 +240,33 @@ class NetworkSimulator:
             logger.error(f"Unexpected error calculating path {node_start}->{node_end}: {e}")
             return 99
 
+    def calculate_topological_distance(self, node_start: str, node_end: str) -> float:
+        """Calculates physical distance in meters between two nodes."""
+        if node_start == node_end:
+            return 0.0
+            
+        if self._is_mock:
+            # Mock has no lengths, assume 100m per hop
+            hops = self.calculate_shortest_path_distance(node_start, node_end)
+            return float(hops * 100.0)
+
+        if self._weighted_graph is None:
+            G = self.wn.to_graph()
+            # Add weights based on pipe length
+            for u, v, key, data in G.edges(keys=True, data=True):
+                try:
+                    link = self.wn.get_link(key)
+                    # Use length or default 50m
+                    data['weight'] = max(getattr(link, 'length', 50.0), 0.1)
+                except:
+                    data['weight'] = 50.0
+            self._weighted_graph = G.to_undirected()
+        
+        try:
+            return nx.shortest_path_length(self._weighted_graph, source=node_start, target=node_end, weight='weight')
+        except:
+             return 9999.0
+
     def inject_leak(self, node_id: str, leak_rate: float = 5.0) -> bool:
         if self._is_mock:
             if node_id in self._mock_network.junction_names:
@@ -255,13 +283,9 @@ class NetworkSimulator:
             junction = self.wn.get_node(node_id)
             nominal_pressure_psi = 50.0
             
-            # WNTR uses SI units (m, m^3/s) internally, regardless of .inp file units.
-            # We must convert our input (L/s, psi) to SI for the emitter coefficient calculation.
+            leak_rate_cms = leak_rate / 1000.0
+            nominal_pressure_m = nominal_pressure_psi * 0.70307
             
-            leak_rate_cms = leak_rate / 1000.0  # L/s -> m^3/s
-            nominal_pressure_m = nominal_pressure_psi * 0.70307  # psi -> m H2O
-            
-            # Q = C * sqrt(P)  =>  C = Q / sqrt(P)
             emitter_coeff = leak_rate_cms / (nominal_pressure_m ** 0.5)
             
             junction.emitter_coefficient = emitter_coeff

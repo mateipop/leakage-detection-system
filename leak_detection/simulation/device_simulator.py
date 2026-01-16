@@ -57,7 +57,7 @@ class DeviceSimulator:
         self._battery_mwh = self.BATTERY_CAPACITY
         self._samples_collected = 0
         self._last_sample_time: Optional[float] = None
-        self._last_state_change: float = time.time()
+        self._last_state_change: float = 0.0
 
         if reading_type == 'pressure':
             self._noise_std = self.config.noise_std_pressure
@@ -85,6 +85,10 @@ class DeviceSimulator:
         if self._sampling_mode == SamplingMode.ECO:
             return self.config.eco_sampling_interval
         return self.config.highres_sampling_interval
+
+    @property
+    def is_dead(self) -> bool:
+        return self._battery_mwh <= 0
 
     def get_status(self) -> DeviceStatus:
         power = {
@@ -119,14 +123,14 @@ class DeviceSimulator:
         consumed = power_mw * (duration_seconds / 3600.0)
         self._battery_mwh = max(0.0, self._battery_mwh - consumed)
 
-    def _transition_state(self, new_state: DeviceState):
-        now = time.time()
-        duration = now - self._last_state_change
+    def _transition_state(self, new_state: DeviceState, current_time: float):
+        duration = current_time - self._last_state_change
+        if duration < 0: duration = 0
+        
         self._consume_power(duration)
 
-        logger.debug(f"Device {self.device_id}: {self._state.name} -> {new_state.name}")
         self._state = new_state
-        self._last_state_change = now
+        self._last_state_change = current_time
 
     def sample(
         self,
@@ -134,12 +138,19 @@ class DeviceSimulator:
         sim_time: float,
         add_noise: bool = True,
         corrupt_probability: float = 0.0  # Disabled - set > 0 to test error handling
-    ) -> SensorReading:
-        if self._state == DeviceState.IDLE:
-            self._transition_state(DeviceState.CALCULATING)
+    ) -> Optional[SensorReading]:
+        if self.is_dead:
+            return None
 
-        if self._state == DeviceState.CALCULATING:
-            self._transition_state(DeviceState.SAMPLING)
+        # Account for IDLE time since last sample/change
+        if self._state == DeviceState.IDLE:
+            self._transition_state(DeviceState.SAMPLING, sim_time)
+
+        # Explicitly consume energy for the sampling/transmission action
+        # Simulating ~2 seconds of high-power activity (sensor warm-up + measurement + radio TX)
+        # 500mW * 2s
+        active_energy_mwh = 500.0 * (2.0 / 3600.0)
+        self._battery_mwh = max(0.0, self._battery_mwh - active_energy_mwh)
 
         is_corrupted = corrupt_probability > 0 and np.random.random() < corrupt_probability
 
@@ -172,7 +183,8 @@ class DeviceSimulator:
         self._samples_collected += 1
         self._last_sample_time = sim_time
 
-        self._transition_state(DeviceState.IDLE)
+        # Return to IDLE state
+        self._transition_state(DeviceState.IDLE, sim_time)
 
         return reading
 
@@ -189,7 +201,7 @@ class DeviceSimulator:
         self._battery_mwh = self.BATTERY_CAPACITY
         self._samples_collected = 0
         self._last_sample_time = None
-        self._last_state_change = time.time()
+        self._last_state_change = 0.0
 
 class DeviceFleet:
 

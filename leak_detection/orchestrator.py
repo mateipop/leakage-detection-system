@@ -13,6 +13,15 @@ from .agents import MultiAgentSystem, AgentSystemConfig
 logger = logging.getLogger(__name__)
 
 @dataclass
+class DetectionEvaluation:
+    detected_node: str
+    confidence: float
+    nearest_actual_leak: Optional[str] = None
+    distance_hops: Optional[int] = None
+    is_true_positive: bool = False  # Within acceptable distance
+    is_false_positive: bool = False  # No nearby leak
+
+@dataclass
 class OrchestrationResult:
     sim_time: float
     metrics: Dict[str, Dict]
@@ -22,6 +31,9 @@ class OrchestrationResult:
     anomaly: Any
     agent_summary: Optional[Dict] = None
     detected_leaks: Optional[List[Dict]] = None
+    detection_evaluations: Optional[List[DetectionEvaluation]] = None
+    tp_count: int = 0
+    fp_count: int = 0
 
 class SystemOrchestrator:
 
@@ -29,7 +41,7 @@ class SystemOrchestrator:
         self,
         config: SystemConfig = None,
         event_callback: Callable[[str], None] = None,
-        use_multi_agent: bool = True  # Kept for compatibility, but ignored (always True)
+        use_multi_agent: bool = True
     ):
         self.config = config or DEFAULT_CONFIG
         self._event_callback = event_callback
@@ -49,6 +61,11 @@ class SystemOrchestrator:
         self._setup_multi_agent_system()
             
         self._masking_offsets: Dict[str, Dict[str, float]] = {}
+        self._last_estimated_location: Optional[str] = None
+        self._detection_counts: Dict[str, int] = {}
+        self._tp_count: int = 0
+        self._fp_count: int = 0
+        self._evaluated_detections: set = set()
         
         self._sim_time = 0.0
         self._time_step = self.config.simulation.hydraulic_timestep_seconds
@@ -73,22 +90,27 @@ class SystemOrchestrator:
             try:
                 import networkx as nx
                 G = self._network.wn.to_graph()
+                
+                for u, v, key, data in G.edges(keys=True, data=True):
+                    try:
+                        link = self._network.wn.get_link(key)
+                        data['weight'] = max(getattr(link, 'length', 10.0), 0.1) 
+                    except:
+                        data['weight'] = 10.0
+
                 G_un = G.to_undirected()
                 
-                # Check coverage
-                logger.info(f"Computing distances from {len(sensors)} sensors to {len(all_nodes)} candidates...")
+                logger.info(f"Computing distances from {len(sensors)} sensors to {len(all_nodes)} candidates using topology...")
                 
-                # Initialize dicts
                 for node in all_nodes:
                     distances[node] = {}
 
                 for sensor in sensors:
                     if sensor in G_un:
-                        # Get hop count to all nodes
-                        lengths = nx.single_source_shortest_path_length(G_un, sensor)
-                        for target, hops in lengths.items():
+                        lengths = nx.single_source_dijkstra_path_length(G_un, sensor, weight='weight')
+                        for target, dist in lengths.items():
                             if target in distances:
-                                distances[target][sensor] = float(hops * 100.0) # Approx 100m per pipe
+                                distances[target][sensor] = float(dist)
             except Exception as e:
                 logger.warning(f"Could not compute candidate distances: {e}")
         
@@ -106,13 +128,22 @@ class SystemOrchestrator:
                 sensor_config[node] = 'flow'
 
         sensor_nodes = list(sensor_config.keys())
-        
-        # FAIRNESS UPDATE: Allow searching all nodes
         candidate_nodes = self._network.junction_names
         
         distances = self._compute_sensor_distances()
         candidate_dists = self._compute_candidate_distances(sensor_nodes)
         
+        # Compute sensor neighbors based on topological distance
+        sensor_neighbors = {}
+        for s in sensor_nodes:
+            if s in distances:
+                others = [(n, d) for n, d in distances[s].items() if n != s]
+                others.sort(key=lambda x: x[1])
+                sensor_neighbors[s] = [n for n, d in others[:4]]
+
+        # Get node coordinates for geometric localization
+        node_coordinates = self._get_node_coordinates(candidate_nodes)
+
         mas_config = AgentSystemConfig(
             sensor_buffer_size=30,
             coordinator_aggregation_window=10.0,
@@ -123,9 +154,11 @@ class SystemOrchestrator:
             sensor_nodes=sensor_nodes,
             network_distances=distances,
             config=mas_config,
+            sensor_neighbors=sensor_neighbors,
             sensor_types=sensor_config,
             candidate_nodes=candidate_nodes,
-            candidate_distances=candidate_dists
+            candidate_distances=candidate_dists,
+            node_coordinates=node_coordinates
         )
         self._multi_agent_system.initialize()
         
@@ -135,24 +168,48 @@ class SystemOrchestrator:
         distances = {}
         nodes = list(self._fleet.monitored_nodes)
         
-        if hasattr(self._network, '_wn') and self._network._wn is not None:
+        if hasattr(self._network, 'wn') and self._network.wn is not None:
             try:
                 import networkx as nx
-                G = self._network._wn.to_graph()
+                G = self._network.wn.to_graph()
+                
+                for u, v, key, data in G.edges(keys=True, data=True):
+                    try:
+                        link = self._network.wn.get_link(key)
+                        data['weight'] = max(getattr(link, 'length', 10.0), 0.1)
+                    except:
+                        data['weight'] = 10.0
+
+                G_weighted = G.to_undirected()
                 
                 for i, node_a in enumerate(nodes):
                     distances[node_a] = {}
                     for node_b in nodes:
                         if node_a != node_b:
                             try:
-                                path_len = nx.shortest_path_length(G.to_undirected(), node_a, node_b)
-                                distances[node_a][node_b] = float(path_len * 100)  # Scale to meters
+                                path_len = nx.shortest_path_length(G_weighted, node_a, node_b, weight='weight')
+                                distances[node_a][node_b] = float(path_len)
                             except (nx.NetworkXNoPath, nx.NodeNotFound):
-                                distances[node_a][node_b] = 1000.0  # Default far distance
+                                distances[node_a][node_b] = 1000.0
             except Exception as e:
                 logger.warning(f"Could not compute network distances: {e}")
         
         return distances
+
+    def _get_node_coordinates(self, node_ids: List[str]) -> Dict[str, tuple]:
+        coordinates = {}
+        
+        if hasattr(self._network, 'wn') and self._network.wn is not None:
+            for node_id in node_ids:
+                try:
+                    node = self._network.wn.get_node(node_id)
+                    if hasattr(node, 'coordinates') and node.coordinates:
+                        coordinates[node_id] = node.coordinates
+                except Exception as e:
+                    pass  # Node not found
+        
+        logger.info(f"Extracted coordinates for {len(coordinates)}/{len(node_ids)} nodes")
+        return coordinates
 
     def _setup_devices(self):
         pressure_sensor_nodes, amr_nodes = self._network.get_sensor_locations()
@@ -243,7 +300,7 @@ class SystemOrchestrator:
         for actual_node in ground_truth:
             active_leaks = self._leak_injector.get_active_leaks()
             if actual_node in active_leaks and active_leaks[actual_node].detected:
-                continue  # Skip already-detected leaks
+                continue
             
             dist = self._calculate_detection_distance(actual_node, estimated_node)
             if dist < best_distance:
@@ -257,31 +314,40 @@ class SystemOrchestrator:
                 self._sim_time
             )
     
-    def confirm_leak(self, node_id: str) -> bool:
-        pressure_signature = {}
-        
-        if self._multi_agent_system:
-            self._multi_agent_system.recalibrate()
-
-        confirmed = self._leak_injector.confirm_leak(
-            node_id, 
-            pressure_signature, 
-            self._sim_time
-        )
-        
-        if confirmed:
-            self._emit_event(f"[cyan][CONFIRMED] Leak at {node_id} confirmed and masked (Matched Ground Truth)[/cyan]")
-            return True
-        else:
-            self._emit_event(f"[yellow][MISSED] Leak at {node_id} masked (Missed Ground Truth)[/yellow]")
-            return False
-    
-    def auto_confirm_detections(self, min_cycles: int = 5):
+    def evaluate_detection(self, node_id: str, confidence: float) -> DetectionEvaluation:
         active_leaks = self._leak_injector.get_active_leaks()
         
-        for node_id, event in active_leaks.items():
-            if event.detected and not event.confirmed:
-                self.confirm_leak(node_id)
+        best_match = None
+        min_dist = float('inf')
+        
+        for actual_node, event in active_leaks.items():
+            dist = self._calculate_detection_distance(actual_node, node_id)
+            if dist < min_dist:
+                min_dist = dist
+                best_match = actual_node
+        
+        evaluation = DetectionEvaluation(
+            detected_node=node_id,
+            confidence=confidence
+        )
+        
+        if best_match is not None and min_dist <= 25:
+            evaluation.nearest_actual_leak = best_match
+            evaluation.distance_hops = int(min_dist)
+            evaluation.is_true_positive = True
+            self._emit_event(f"[green][EVAL] Detection at {node_id} matches leak at {best_match} ({min_dist} hops)[/green]")
+            # Record for statistics
+            self._leak_injector.record_detection(best_match, node_id, self._sim_time)
+        elif best_match is not None:
+            evaluation.nearest_actual_leak = best_match
+            evaluation.distance_hops = int(min_dist)
+            evaluation.is_false_positive = True
+            self._emit_event(f"[yellow][EVAL] Detection at {node_id} too far from nearest leak {best_match} ({min_dist} hops)[/yellow]")
+        else:
+            evaluation.is_false_positive = True
+            self._emit_event(f"[red][EVAL] Detection at {node_id} - NO ACTIVE LEAKS (false positive)[/red]")
+        
+        return evaluation
     
     def get_confirmed_leaks(self) -> List[str]:
         return self._leak_injector.get_confirmed_leaks()
@@ -294,53 +360,67 @@ class SystemOrchestrator:
         ]
     
     def _calculate_detection_distance(self, actual_node: str, estimated_node: str) -> int:
-        if actual_node == estimated_node:
-            return 0
-        
-        for depth in range(1, 10):
-            neighbors = self._network.get_node_neighbors(actual_node, depth=depth)
-            if estimated_node in neighbors:
-                return depth
-        
-        return 99
+        return self._network.calculate_shortest_path_distance(actual_node, estimated_node)
 
     def step(self) -> OrchestrationResult:
         self._sim_time += self._time_step
 
         state = self._network.get_state_at_time(self._sim_time)
 
-        # Raw readings from "physical" simulation
-        raw_readings = {}
+        sensor_readings = []
         for node_id in self._fleet.monitored_nodes:
-            node_data = {}
-            # Retrieve devices to know what to measure
             devices = self._fleet.get_devices_at_node(node_id)
             for d in devices:
+                true_value = 0.0
                 if d.reading_type == 'pressure':
-                    node_data['pressure'] = state.pressures.get(node_id, 0)
+                    true_value = state.pressures.get(node_id, 0)
                 elif d.reading_type == 'flow':
-                    node_data['flow'] = state.node_flows.get(node_id, 0)
-            
-            if node_data:
-                raw_readings[node_id] = node_data
+                    true_value = state.node_flows.get(node_id, 0)
+                
+                # Sample the device (handles noise, battery, corruption)
+                reading = d.sample(true_value, self._sim_time)
+                if reading:
+                    sensor_readings.append(reading)
         
-        # Ingest and process through Pipeline/Redis/Buffer
-        # This transforms Sim Data -> Telemetry Data
-        environment = self._process_via_pipeline(raw_readings, self._sim_time)
+        environment = self._process_via_pipeline(sensor_readings, self._sim_time)
+        
+        detection_evaluations = []
         
         if self._multi_agent_system:
             agent_summary = self._multi_agent_system.step(environment)
             detected_leaks = self._multi_agent_system.get_detected_leaks()
             
-            coord_status = agent_summary.get("coordinator", {})
-            if coord_status.get("system_mode") == "INVESTIGATING":
+            for detection in detected_leaks:
+                node_id = detection.get("location")
+                confidence = detection.get("confidence", 0)
+                inv_id = detection.get("investigation_id", "unknown")
+                
+                if node_id and confidence > 0.5:
+                    evaluation = self.evaluate_detection(node_id, confidence)
+                    detection_evaluations.append(evaluation)
+                    
+                    if inv_id not in self._evaluated_detections:
+                        self._evaluated_detections.add(inv_id)
+                        if evaluation.is_true_positive:
+                            self._tp_count += 1
+                        elif evaluation.is_false_positive:
+                            self._fp_count += 1
+                    
+                    detection["evaluation"] = {
+                        "is_true_positive": evaluation.is_true_positive,
+                        "is_false_positive": evaluation.is_false_positive,
+                        "nearest_leak": evaluation.nearest_actual_leak,
+                        "distance": evaluation.distance_hops
+                    }
+
+            if agent_summary.get("coordinator", {}).get("system_mode") == "INVESTIGATING":
                 active_invs = agent_summary.get("active_investigations", [])
                 for inv in active_invs:
                     if inv["status"] == "localized" and inv.get("localization"):
                         loc = inv["localization"]
                         node = loc.get("probable_location", "unknown")
                         conf = loc.get("confidence", 0)
-                        if conf > 0.8:
+                        if conf > 0.5:
                             self._emit_event(f"[yellow][LOCALIZED] Multi-Agent: Leak localized at {node} ({conf:.0%} confidence)[/yellow]")
 
         metrics = {}
@@ -356,22 +436,30 @@ class SystemOrchestrator:
                     zscore = sensor_data.get("zscore")
                     confidence = sensor_data.get("confidence", 0.0)
 
+            devices = self._fleet.get_devices_at_node(node_id)
+            battery = 1.0
+            if devices:
+                battery = min(d.battery_level for d in devices)
+
             metrics[node_id] = {
                 'pressure': pressure,
                 'flow': flow,
                 'pressure_zscore': None,
                 'flow_zscore': None,
-                'confidence': confidence
+                'confidence': confidence,
+                'battery': battery
             }
             
             if zscore is not None:
-                # Determine if this is a pressure or flow z-score based on what the agent monitors
-                # Logic: If node has pressure sensor, agent monitors pressure. Else flow.
-                devices = self._fleet.get_devices_at_node(node_id)
-                if any(d.reading_type == 'pressure' for d in devices):
-                     metrics[node_id]['pressure_zscore'] = zscore
+                has_pressure = any(d.reading_type == 'pressure' for d in devices)
+                
+                if has_pressure:
+                    metrics[node_id]['pressure_zscore'] = zscore
+                    offset = self._data_pipeline.get_baseline_offset(node_id, 'pressure')
+                    if abs(offset) > 0.1:
+                        metrics[node_id]['pressure_offset'] = offset
                 else:
-                     metrics[node_id]['flow_zscore'] = zscore
+                    metrics[node_id]['flow_zscore'] = zscore
 
         estimated_location = None
         if detected_leaks:
@@ -380,17 +468,13 @@ class SystemOrchestrator:
                 estimated_location = best_leak['location']
                 self.record_detection(estimated_location)
         
-        # Inject Pipeline Stats into agent_summary so dashboard can see them
+        self._last_estimated_location = estimated_location
+        
         if agent_summary is None:
             agent_summary = {}
         
         pipeline_stats = self._data_pipeline.statistics
-        # Merge stats directly or add as sub-dict. 
-        # Dashboard looks for samples_processed in self._status which comes from ... STATUS?
-        # Wait, the dashboard code says: samples_processed = self._status.samples_processed
-        # self._status is OrchestrationResult.status which is None in current step()
         
-        # Let's populate status in OrchestrationResult with a dummy object or dictionary that has these attributes
         @dataclass
         class StepStatus:
             system_status: Any
@@ -405,7 +489,7 @@ class SystemOrchestrator:
         if agent_summary.get("coordinator", {}).get("system_mode") == "INVESTIGATING":
             current_sys_status = SysStatus.INVESTIGATING
             
-        current_mode = SampMode.ECO # Default
+        current_mode = SampMode.ECO
         if current_sys_status == SysStatus.INVESTIGATING:
             current_mode = SampMode.HIGH_RES
             
@@ -425,43 +509,17 @@ class SystemOrchestrator:
             status=status_obj, 
             anomaly=None, 
             agent_summary=agent_summary,
-            detected_leaks=detected_leaks
+            detected_leaks=detected_leaks,
+            detection_evaluations=detection_evaluations,
+            tp_count=self._tp_count,
+            fp_count=self._fp_count
         )
 
-    def _process_via_pipeline(self, raw_readings: Dict[str, Dict[str, float]], sim_time: float) -> Dict[str, Any]:
-        """
-        Pass readings through DataPipeline -> Redis -> Buffer -> return filtered env
-        """
-        from .simulation.device_simulator import SensorReading
-        
-        sensor_readings = []
-        for node_id, data in raw_readings.items():
-            if 'pressure' in data:
-                sensor_readings.append(SensorReading(
-                    device_id=f"P_{node_id}",
-                    node_id=node_id,
-                    reading_type="pressure",
-                    value=data['pressure'],
-                    timestamp=sim_time,
-                    unit="m"
-                ))
-            if 'flow' in data:
-                sensor_readings.append(SensorReading(
-                    device_id=f"F_{node_id}",
-                    node_id=node_id,
-                    reading_type="flow",
-                    value=data['flow'],
-                    timestamp=sim_time,
-                    unit="L/s"
-                ))
-        
-        # 1. Ingest into Pipeline (validates, cleans, pushes to Redis)
+    def _process_via_pipeline(self, sensor_readings: List[Any], sim_time: float) -> Dict[str, Any]:
         processed_records = self._data_pipeline.process_batch(sensor_readings)
         
-        # 2. Re-construct environment from Pipeline output (this mimics agents reading from queue)
         pipeline_readings = {}
         for record in processed_records:
-             # Use filtered value if available (it came from buffer/pipeline)
              val = record.filtered_value if record.filtered_value is not None else record.raw_value
              if record.node_id not in pipeline_readings:
                  pipeline_readings[record.node_id] = {}

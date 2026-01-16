@@ -43,6 +43,10 @@ class DataPipeline:
         self._baseline_snapshot: Dict[tuple, Dict[str, float]] = {}
         self._baseline_locked = False
         self._baseline_samples_needed = 20  # Samples before locking baseline
+        
+        # Differential memory to store offsets from original baseline
+        # Key: (node_id, reading_type) -> offset_value
+        self._baseline_offsets: Dict[tuple, float] = {}
 
         self._redis = RedisManager()
         self._redis.connect()
@@ -134,6 +138,19 @@ class DataPipeline:
         self._filter_windows.clear()
         self._buffer.clear()
         
+        # Differential Memory: Retain offsets
+        if self._baseline_locked and self._baseline_snapshot:
+             for node_id, readings in current_state.items():
+                for reading_type, state in readings.items():
+                    key = (node_id, reading_type)
+                    if key in self._baseline_snapshot:
+                        original_mean = self._baseline_snapshot[key]['mean']
+                        new_mean = state['mean']
+                        # Calculate drift/offset from original baseline
+                        current_offset = self._baseline_offsets.get(key, 0.0)
+                        additional_offset = original_mean - new_mean
+                        self._baseline_offsets[key] = current_offset + additional_offset
+
         seed_count = self.config.moving_average_window
         
         for node_id, readings in current_state.items():
@@ -165,6 +182,10 @@ class DataPipeline:
 
         self._baseline_locked = True # Force lock usage of new snapshot
         logger.info(f"Baseline recalibrated for {recalibrated_count} sensors. System re-zeroed.")
+
+    def get_baseline_offset(self, node_id: str, reading_type: str) -> float:
+        """Returns the cumulative baseline offset (drift) for this sensor due to recalibrations."""
+        return self._baseline_offsets.get((node_id, reading_type), 0.0)
 
     def _calculate_zscore(
         self,

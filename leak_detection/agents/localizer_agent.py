@@ -12,9 +12,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class LocalizationResult:
     investigation_id: str
-    probable_location: str  # Most likely node
+    probable_location: str
     confidence: float
-    candidate_nodes: List[Dict[str, Any]]  # Ranked candidates
+    candidate_nodes: List[Dict[str, Any]]
     cluster_info: Dict[str, Any]
 
 class LocalizerAgent(Agent):
@@ -26,7 +26,8 @@ class LocalizerAgent(Agent):
         sensor_nodes: List[str],
         network_distances: Optional[Dict[str, Dict[str, float]]] = None,
         candidate_nodes: Optional[List[str]] = None,
-        candidate_distances: Optional[Dict[str, Dict[str, float]]] = None
+        candidate_distances: Optional[Dict[str, Dict[str, float]]] = None,
+        node_coordinates: Optional[Dict[str, tuple]] = None
     ):
         super().__init__(agent_id, message_bus)
         
@@ -34,6 +35,7 @@ class LocalizerAgent(Agent):
         self.candidate_nodes = candidate_nodes or sensor_nodes
         
         self._distances = network_distances or {}
+        self._node_coordinates = node_coordinates or {}
         
         self._candidate_distances = candidate_distances or {}
         
@@ -164,62 +166,44 @@ class LocalizerAgent(Agent):
     def _triangulate_with_distances(self, anomaly_weights: Dict[str, float]) -> List[Dict]:
         candidates = []
         
-        search_space = self.candidate_nodes
         alerting_sensors = set(anomaly_weights.keys())
         silent_sensors = [s for s in self.sensor_nodes if s not in alerting_sensors]
         
-        for node in search_space:
-            
+        for node in self.candidate_nodes:
             score = 0.0
             weights_sum = 0.0
+            valid_distances_found = False
             
             dists = self._candidate_distances.get(node, {})
             
-            valid_distances_found = False
-            
-            # Positive evidence from alerting sensors
             for anom_sensor, weight in anomaly_weights.items():
                 used_dist = 9999.0
                 if node == anom_sensor:
-                     used_dist = 0.0
-                     valid_distances_found = True
+                    used_dist = 0.0
+                    valid_distances_found = True
                 elif anom_sensor in dists:
                     used_dist = dists[anom_sensor]
                     valid_distances_found = True
-                else:
-                    used_dist = 9999.0
-                    
-                if used_dist < 5000: # Only consider reasonably close sensors
-                    # Use a larger smoothing factor (200.0) to avoid over-biasing towards sensor nodes
-                    # 1 hop is approx 100m. 200m smoothing means 2 hops.
-                    score += weight / (200.0 + used_dist) 
+                
+                if used_dist < 5000:
+                    score += weight / (100.0 + used_dist)
                     weights_sum += weight
             
-            # Negative evidence from silent sensors
-            # If a candidate is very close to a silent sensor, it's unlikely to be the leak
             penalty_score = 0.0
             for silent_s in silent_sensors:
-                s_dist = 9999.0
-                if node == silent_s:
-                    s_dist = 0.0
-                elif silent_s in dists:
-                    s_dist = dists[silent_s]
+                s_dist = dists.get(silent_s, 9999.0) if node != silent_s else 0.0
                 
-                # If within ~4 hops (400m) of a silent sensor, penalize heavily
                 if s_dist < 400.0:
-                    # Decay: At 0m -> 1/50. At 400m -> 1/450.
-                    penalty_factor = 1.0 / (50.0 + s_dist)
-                    penalty_score += penalty_factor * 20.0 # Weight of negative evidence
-
+                    penalty_factor = 1.0 / (100.0 + s_dist)
+                    penalty_score += penalty_factor * 1.0
+            
             final_score = score - penalty_score
             
             if weights_sum > 0 and valid_distances_found and final_score > 0:
-                avg_score = final_score
-                confidence = min(1.0, avg_score * 20000) 
-                
+                confidence = min(1.0, final_score * 2000.0)
                 candidates.append({
                     "node_id": node,
-                    "score": avg_score,
+                    "score": final_score,
                     "confidence": confidence,
                 })
         
@@ -228,7 +212,7 @@ class LocalizerAgent(Agent):
     
     def _compute_separation_depth(self) -> float:
         if not self._distances:
-            return 500.0  # Default 500m
+            return 500.0
         
         all_distances = []
         for node_a, neighbors in self._distances.items():

@@ -20,15 +20,14 @@ class LocalReading:
 @dataclass
 class AdaptiveThreshold:
     mean: float = 0.0
-    std_dev: float = 0.5  # Start with a relaxed threshold to avoid startup false positives
-    alpha: float = 0.05   # Faster learning rate initially (was 0.01)
+    std_dev: float = 0.5
+    alpha: float = 0.05
     min_std: float = 0.02 
     initialized: bool = False
     
     def update(self, value: float):
         if not self.initialized:
             self.mean = value
-            # maintain the initial relaxed std_dev
             self.initialized = True
             return
 
@@ -47,7 +46,7 @@ class AdaptiveThreshold:
 
 class SensorAgent(Agent):
     
-    ALERT_COOLDOWN = 1  # Min steps between alerts (allow rapid alerting)
+    ALERT_COOLDOWN = 0
     
     def __init__(
         self,
@@ -56,7 +55,7 @@ class SensorAgent(Agent):
         message_bus: MessageBus,
         reading_type: str = "pressure",
         buffer_size: int = 30,
-        neighbor_ids: List[str] = None  # NEW: Know thy neighbors
+        neighbor_ids: List[str] = None
     ):
         super().__init__(agent_id, message_bus)
         
@@ -111,7 +110,7 @@ class SensorAgent(Agent):
         self._volatility = 0.0
         self.last_val = None
         self._readings_collected = 0
-        self._model = AdaptiveThreshold() # Reset learned model
+        self._model = AdaptiveThreshold()
         self._peer_confirmations.clear()
         self._gossip_replies = []
         self._pending_alert = False
@@ -126,12 +125,10 @@ class SensorAgent(Agent):
         self._steps_since_reset += 1
         
         if reading_val is not None:
-            # Warmup Phase: aggressive learning, no alerts
             if self._steps_since_reset <= 10:
                  self._model.update(reading_val)
                  self._anomaly_confidence = 0.0
                  
-                 # Populate buffer for trend analysis
                  reading = LocalReading(
                     timestamp=current_time,
                     value=reading_val,
@@ -145,16 +142,12 @@ class SensorAgent(Agent):
                     "anomaly_detected": False
                  }
 
-            # Normal Phase
-            # Calculate Z-score BEFORE updating model to detect deviations from established baseline
             zscore = self._model.get_zscore(reading_val)
 
-            # Only update baseline if the reading is relatively normal (Z < 2.0)
-            # This prevents "learning" the leak as normal behavior
             if self._learning_enabled and not self._pending_alert and abs(zscore) < 2.0:
                 self._model.update(reading_val)
 
-            predicted = reading_val # Default to persistence
+            predicted = reading_val
             if len(self._buffer) >= 5:
                 recent = list(self._buffer)[-5:]
                 y = np.array([r.value for r in recent])
@@ -178,10 +171,9 @@ class SensorAgent(Agent):
             self._buffer.append(reading)
             self._readings_collected += 1
             
-            # Lowered detection threshold for remote leaks
-            if abs(zscore) > 2.5: 
-                # Confidence scales: Z=2.5->0.25, Z=3.0->0.5, Z=4.0->1.0
-                self._anomaly_confidence = min(1.0, (abs(zscore) - 2.0) / 2.0)
+            if abs(zscore) > 3.0: 
+                base_conf = 0.3
+                self._anomaly_confidence = min(1.0, base_conf + (abs(zscore) - 3.0) / 2.0)
             else:
                 self._anomaly_confidence = 0.0
         
@@ -275,8 +267,7 @@ class SensorAgent(Agent):
                 })
             self._gossip_replies.clear()
         
-        # Lowered confidence threshold to trigger actions
-        if self._anomaly_confidence > 0.4:
+        if self._anomaly_confidence > 0.25:
             if self._current_step - self._last_alert_step > self.ALERT_COOLDOWN:
                 
                 if self.neighbors:
@@ -312,10 +303,10 @@ class SensorAgent(Agent):
         return {
             "alerts_sent": self._alerts_sent,
             "confidence": self._anomaly_confidence,
-            "anomaly_confidence": self._anomaly_confidence, # Legacy support
+            "anomaly_confidence": self._anomaly_confidence,
             "readings_count": self._readings_collected,
             "mode": self._sampling_mode.name,
-            "sampling_mode": self._sampling_mode.name,      # Legacy support
+            "sampling_mode": self._sampling_mode.name,
             "last_reading": last_val,
             "last_zscore": last_z
         }
@@ -344,7 +335,7 @@ class SensorAgent(Agent):
             confirmed = False
             if self._buffer:
                 last_z = abs(self._buffer[-1].zscore)
-                if last_z > 1.5: # Corroborate if we see something suspicious too (lower threshold)
+                if last_z > 1.5:
                     confirmed = True
             
             if not hasattr(self, "_gossip_replies"):

@@ -49,6 +49,7 @@ class MetricsPanel(Static):
         table.add_column("P-Z", justify="right", width=8, no_wrap=True)
         table.add_column("Flow", justify="right", width=10, no_wrap=True)
         table.add_column("F-Z", justify="right", width=8, no_wrap=True)
+        table.add_column("Batt", justify="right", width=6, no_wrap=True)
         table.add_column("Status", justify="center", width=8, no_wrap=True)
 
         sorted_metrics = sorted(
@@ -93,12 +94,20 @@ class MetricsPanel(Static):
             elif f_zscore is not None and abs(f_zscore) > 1.5:
                  f_zscore_str = f"[yellow]{f_zscore_str}[/yellow]"
 
+            battery = data.get('battery', 1.0)
+            batt_str = f"{battery*100:.0f}%"
+            if battery < 0.2:
+                batt_str = f"[red]{batt_str}[/red]"
+            elif battery < 0.5:
+                batt_str = f"[yellow]{batt_str}[/yellow]"
+
             table.add_row(
                 node_id,
                 f"{pressure:.1f} psi",
                 p_zscore_str,
                 f"{flow:.1f} L/s",
                 f_zscore_str,
+                batt_str,
                 status
             )
 
@@ -116,6 +125,8 @@ class SystemStatusPanel(Static):
         self._multi_leak_results: List[tuple] = []  # [(node, confidence), ...]
         self._agent_summary: Optional[Dict] = None  # Multi-agent system summary
         self._detection_count: int = 0  # Actual detection count from leak_injector
+        self._tp_count: int = 0  # Session true positive count
+        self._fp_count: int = 0  # Session false positive count
 
     def update_status(
         self,
@@ -125,7 +136,9 @@ class SystemStatusPanel(Static):
         estimated_location: str = None,
         multi_leak_results: List[tuple] = None,
         agent_summary: Dict = None,
-        detection_count: int = None
+        detection_count: int = None,
+        tp_count: int = 0,
+        fp_count: int = 0
     ):
         self._status = status
         self._sim_time = sim_time
@@ -133,6 +146,8 @@ class SystemStatusPanel(Static):
         self._estimated_location = estimated_location
         self._multi_leak_results = multi_leak_results or []
         self._agent_summary = agent_summary
+        self._tp_count = tp_count
+        self._fp_count = fp_count
         
         if detection_count is not None:
              self._detection_count = detection_count
@@ -199,6 +214,11 @@ class SystemStatusPanel(Static):
             f"[bold]Alerts Triggered:[/bold] {alerts_triggered}",
             f"[bold]Leaks Detected:[/bold] {self._detection_count}",
         ]
+        
+        total_evaluated = self._tp_count + self._fp_count
+        if total_evaluated > 0:
+            accuracy = self._tp_count / total_evaluated * 100
+            lines.append(f"[bold]Score:[/bold] [green]✓{self._tp_count}[/green] / [red]✗{self._fp_count}[/red] ({accuracy:.0f}% accuracy)")
 
         if self._agent_summary:
             lines.append("")
@@ -230,12 +250,31 @@ class SystemStatusPanel(Static):
             lines.append("[bold]Active Leaks:[/bold] [green]None[/green]")
 
         if self._multi_leak_results:
-            lines.append(f"[bold]AI Detected ({len(self._multi_leak_results)}):[/bold]")
-            for node, confidence in self._multi_leak_results[:5]:  # Show top 5
+            lines.append(f"[bold]Agent Detections ({len(self._multi_leak_results)}):[/bold]")
+            for item in self._multi_leak_results[:5]:
+                if len(item) >= 3:
+                    node, confidence, evaluation = item[0], item[1], item[2]
+                else:
+                    node, confidence = item[0], item[1]
+                    evaluation = None
+                    
                 bar_len = int(confidence * 10)
                 bar = "█" * bar_len + "░" * (10 - bar_len)
-                color = "red" if confidence >= 0.7 else "yellow" if confidence >= 0.5 else "dim"
-                lines.append(f"  [{color}]{node:6s} [{bar}] {confidence:.0%}[/{color}]")
+                
+                if evaluation:
+                    if evaluation.get("is_true_positive"):
+                        eval_str = f"✓ {evaluation.get('distance', '?')} hops"
+                        color = "green"
+                    elif evaluation.get("is_false_positive"):
+                        eval_str = "✗ FALSE"
+                        color = "red"
+                    else:
+                        eval_str = "?"
+                        color = "yellow"
+                    lines.append(f"  [{color}]{node:6s} [{bar}] {confidence:.0%} {eval_str}[/{color}]")
+                else:
+                    color = "yellow" if confidence >= 0.5 else "dim"
+                    lines.append(f"  [{color}]{node:6s} [{bar}] {confidence:.0%}[/{color}]")
         elif self._estimated_location:
             lines.append(f"[bold]AI Estimate:[/bold] [yellow]{self._estimated_location}[/yellow]")
         else:
@@ -338,15 +377,15 @@ class DetectionHistoryPanel(Static):
         for i, det in enumerate(self._history, 1):
             actual = det.get('actual', '?')
             estimated = det.get('estimated', '?')
-            distance = det.get('distance', 99)
+            distance = det.get('distance', 9999)
             
             if distance == 0:
-                dist_str = "[green]0 (exact)[/green]"
-            elif distance == 1:
-                dist_str = "[cyan]1 hop[/cyan]"
-            elif distance == 2:
-                dist_str = "[yellow]2 hops[/yellow]"
-            elif distance <= 4:
+                dist_str = "[green]0 (exact!)[/green]"
+            elif distance <= 5:
+                dist_str = f"[green]{distance} hops[/green]"
+            elif distance <= 15:
+                dist_str = f"[cyan]{distance} hops[/cyan]"
+            elif distance <= 25:
                 dist_str = f"[yellow]{distance} hops[/yellow]"
             else:
                 dist_str = f"[red]{distance}+ hops[/red]"
@@ -359,11 +398,11 @@ class DetectionHistoryPanel(Static):
             table.add_row(str(i), actual, estimated, dist_str, status_str)
 
         total = len(self._history)
-        exact = sum(1 for d in self._history if d.get('distance', 99) == 0)
-        within_2 = sum(1 for d in self._history if d.get('distance', 99) <= 2)
+        exact = sum(1 for d in self._history if d.get('distance', 9999) == 0)
+        within_25 = sum(1 for d in self._history if d.get('distance', 9999) <= 25)
         confirmed = len(self._confirmed_leaks)
         
-        stats = f"\nExact: {exact}/{total} | Within 2 hops: {within_2}/{total} | Confirmed: {confirmed}"
+        stats = f"\nExact: {exact}/{total} | Within 25 hops: {within_25}/{total} | Confirmed: {confirmed}"
 
         from rich.console import Group
         content = Group(table, stats)
@@ -515,7 +554,6 @@ class LeakDetectionDashboard(App):
             except Exception:
                 pass
         
-        # If on the main thread, run directly. If on a background thread, schedule it.
         if hasattr(self, '_thread_id') and self._thread_id == threading.get_ident():
             _write()
         else:
@@ -537,10 +575,12 @@ class LeakDetectionDashboard(App):
         estimated_location: str = None,
         multi_leak_results: List[tuple] = None,
         agent_summary: Dict = None,
-        detection_count: int = None
+        detection_count: int = None,
+        tp_count: int = 0,
+        fp_count: int = 0
     ) -> None:
         panel = self.query_one("#status-panel", SystemStatusPanel)
-        panel.update_status(status, sim_time, ground_truth, estimated_location, multi_leak_results, agent_summary, detection_count)
+        panel.update_status(status, sim_time, ground_truth, estimated_location, multi_leak_results, agent_summary, detection_count, tp_count, fp_count)
 
     def update_anomaly(self, anomaly: Any) -> None:
         panel = self.query_one("#anomaly-panel", AnomalyPanel)

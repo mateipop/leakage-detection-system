@@ -24,14 +24,16 @@ class Investigation:
     triggered_at: float
     sensor_ids: Set[str] = field(default_factory=set)
     anomalies: List[AnomalyRecord] = field(default_factory=list)
-    status: str = "active"  # active, localized, resolved
+    status: str = "active"
     localization_result: Optional[Dict] = None
+    localized_at: Optional[float] = None
 
 class CoordinatorAgent(Agent):
     
-    ANOMALY_AGGREGATION_WINDOW = 600.0  # seconds (simulation uses 300s timesteps)
-    MIN_ALERTS_FOR_INVESTIGATION = 1   # Need 1+ sensors alerting to start investigation. Reduced from 2 to catch smaller leaks.
-    CONFIDENCE_THRESHOLD = 0.3         # Min average confidence
+    ANOMALY_AGGREGATION_WINDOW = 3600.0
+    MIN_ALERTS_FOR_INVESTIGATION = 3
+    MIN_SENSORS_FOR_LOCALIZATION = 10
+    CONFIDENCE_THRESHOLD = 0.6
     
     def __init__(self, agent_id: str, message_bus: MessageBus, sensor_ids: List[str]):
         super().__init__(agent_id, message_bus)
@@ -42,10 +44,10 @@ class CoordinatorAgent(Agent):
         self._active_investigations: Dict[str, Investigation] = {}
         self._investigation_counter = 0
         
-        self._sensor_states: Dict[str, Dict] = {}  # Last known state per sensor
+        self._sensor_states: Dict[str, Dict] = {}
         self._sensors_in_high_res: Set[str] = set()
         
-        self._system_mode = "NORMAL"  # NORMAL, INVESTIGATING, ALERT
+        self._system_mode = "NORMAL"
         self._current_time = 0.0
         
         self._total_alerts_received = 0
@@ -128,28 +130,60 @@ class CoordinatorAgent(Agent):
                 inv = self._active_investigations[inv_id]
                 inv.localization_result = result
                 inv.status = "localized"
+                if inv.localized_at is None:
+                    inv.localized_at = self._current_time
                 self._leaks_localized += 1
                 logger.info(f"Coordinator: Investigation {inv_id} - Leak localized!")
         
-        if observations["unique_alerting_sensors"] >= self.MIN_ALERTS_FOR_INVESTIGATION:
-            avg_confidence = sum(a.confidence for a in self._recent_anomalies) / len(self._recent_anomalies)
+        alerting_nodes = set()
+        should_investigate = False
+        
+        # Gather stats per sensor
+        sensor_stats = {}
+        for a in self._recent_anomalies:
+            if a.node_id not in sensor_stats:
+                sensor_stats[a.node_id] = {'count': 0, 'max_conf': 0.0}
+            sensor_stats[a.node_id]['count'] += 1
+            sensor_stats[a.node_id]['max_conf'] = max(sensor_stats[a.node_id]['max_conf'], a.confidence)
             
-            if avg_confidence >= self.CONFIDENCE_THRESHOLD:
-                alerting_nodes = {a.node_id for a in self._recent_anomalies}
-                already_investigating = any(
-                    len(alerting_nodes & inv.sensor_ids) > 0
-                    for inv in self._active_investigations.values()
-                    if inv.status == "active"
-                )
-                
-                if not already_investigating:
-                    actions["open_investigation"] = True
-                    actions["investigation_sensors"] = list(alerting_nodes)
+        unique_sensors = len(sensor_stats)
+
+        if unique_sensors >= self.MIN_ALERTS_FOR_INVESTIGATION:
+            avg_max_conf = sum(s['max_conf'] for s in sensor_stats.values()) / unique_sensors
+            if avg_max_conf >= self.CONFIDENCE_THRESHOLD:
+                alerting_nodes = set(sensor_stats.keys())
+                should_investigate = True
+
+        elif unique_sensors == 1:
+            node_id = list(sensor_stats.keys())[0]
+            stats = sensor_stats[node_id]
+            if stats['count'] >= 5 and stats['max_conf'] >= 0.7:
+                alerting_nodes = {node_id}
+                should_investigate = True
+
+        if should_investigate:
+            is_redundant = False
+            for inv in self._active_investigations.values():
+                if inv.status in ["active", "localized"]:
+                    overlap = len(alerting_nodes & inv.sensor_ids)
+                    if overlap > 0 and (overlap / len(alerting_nodes) > 0.5):
+                        is_redundant = True
+                        inv.sensor_ids.update(alerting_nodes)
+                        existing_ids = {(a.node_id, a.timestamp) for a in inv.anomalies}
+                        for a in self._recent_anomalies:
+                            if (a.node_id, a.timestamp) not in existing_ids:
+                                inv.anomalies.append(a)
+                        break
+            
+            if not is_redundant:
+                actions["open_investigation"] = True
+                actions["investigation_sensors"] = list(alerting_nodes)
         
         for inv_id, inv in self._active_investigations.items():
-            if inv.status == "active" and len(inv.anomalies) >= self.MIN_ALERTS_FOR_INVESTIGATION:
+            unique_sensors = len(inv.sensor_ids)
+            if inv.status == "active" and unique_sensors >= self.MIN_SENSORS_FOR_LOCALIZATION:
                 actions["request_localization"] = inv_id
-                break  # One at a time
+                break
         
         if observations["recent_anomaly_count"] > 0:
             alerting_nodes = {a.node_id for a in self._recent_anomalies}
@@ -204,6 +238,8 @@ class CoordinatorAgent(Agent):
             inv_id = actions["request_localization"]
             inv = self._active_investigations[inv_id]
             
+            all_anomalies = list(self._recent_anomalies)
+            
             self.send_message(
                 MessageType.LOCALIZE_REQUEST,
                 "localizer",
@@ -216,7 +252,7 @@ class CoordinatorAgent(Agent):
                             "confidence": a.confidence,
                             "timestamp": a.timestamp
                         }
-                        for a in inv.anomalies
+                        for a in all_anomalies
                     ]
                 },
                 priority=5

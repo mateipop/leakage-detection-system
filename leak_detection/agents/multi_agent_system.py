@@ -26,7 +26,8 @@ class MultiAgentSystem:
         sensor_neighbors: Dict[str, List[str]] = None, # NEW: Neighbor map
         candidate_nodes: List[str] = None,
         candidate_distances: Dict[str, Dict[str, float]] = None,
-        sensor_types: Dict[str, str] = None
+        sensor_types: Dict[str, str] = None,
+        node_coordinates: Dict[str, tuple] = None
     ):
         self.config = config or AgentSystemConfig()
         self.sensor_nodes = sensor_nodes
@@ -35,6 +36,7 @@ class MultiAgentSystem:
         self.candidate_nodes = candidate_nodes or sensor_nodes
         self.candidate_distances = candidate_distances or {}
         self.sensor_types = sensor_types or {}
+        self.node_coordinates = node_coordinates or {}
         
         self.message_bus = MessageBus()
         
@@ -80,7 +82,8 @@ class MultiAgentSystem:
             sensor_nodes=self.sensor_nodes,
             network_distances=self.network_distances,
             candidate_nodes=self.candidate_nodes,
-            candidate_distances=self.candidate_distances
+            candidate_distances=self.candidate_distances,
+            node_coordinates=self.node_coordinates
         )
         
         self._initialized = True
