@@ -14676,3 +14676,1594 @@ textual.css.query.NoMatches: No nodes match '#status-panel' on Screen(id='_defau
 2026-01-16 14:07:13,062 - leak_detection - INFO - Step completed. Time: 5100.0. Meters: 112
 2026-01-16 14:07:13,347 - leak_detection - INFO - Step completed. Time: 5400.0. Meters: 112
 2026-01-16 14:07:13,639 - leak_detection - INFO - Step completed. Time: 5700.0. Meters: 112
+2026-01-16 18:06:13,766 - leak_detection.orchestrator - INFO - Initializing system components...
+2026-01-16 18:06:13,787 - leak_detection.simulation.network_simulator - INFO - Loaded network from: C:\Users\mihai\Documents\leaking\leak_detection\simulation\..\..\data\L-TOWN.inp
+2026-01-16 18:06:13,789 - leak_detection.simulation.network_simulator - INFO - Found 33 pressure sensors, 82 AMR nodes
+2026-01-16 18:06:13,790 - leak_detection.orchestrator - INFO - Created 115 sensor devices
+2026-01-16 18:06:13,790 - leak_detection.orchestrator - INFO -   - 33 pressure sensors
+2026-01-16 18:06:13,790 - leak_detection.orchestrator - INFO -   - 82 AMR flow meters
+2026-01-16 18:06:13,825 - leak_detection.data_layer.redis_manager - INFO - Connected to Redis at localhost:6379
+2026-01-16 18:06:13,825 - leak_detection.data_layer.data_pipeline - INFO - DataPipeline initialized
+2026-01-16 18:06:17,297 - leak_detection.orchestrator - INFO - Computing distances from 112 sensors to 782 candidates using topology...
+2026-01-16 18:06:17,411 - leak_detection.orchestrator - INFO - Extracted coordinates for 782/782 nodes
+2026-01-16 18:06:17,411 - leak_detection.agents.multi_agent_system - INFO - MultiAgentSystem created for 112 sensor nodes
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n1' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n1' monitoring pressure at node n1
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n4' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n4' monitoring pressure at node n4
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n31' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n31' monitoring pressure at node n31
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n54' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n54' monitoring pressure at node n54
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n105' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n105' monitoring pressure at node n105
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n114' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n114' monitoring pressure at node n114
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n163' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n163' monitoring pressure at node n163
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n188' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n188' monitoring pressure at node n188
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n215' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n215' monitoring pressure at node n215
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n229' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n229' monitoring pressure at node n229
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n288' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n288' monitoring pressure at node n288
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n296' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n296' monitoring pressure at node n296
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n332' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n332' monitoring pressure at node n332
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n342' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n342' monitoring pressure at node n342
+2026-01-16 18:06:17,411 - leak_detection.agents.base - INFO - Agent 'sensor_n410' initialized
+2026-01-16 18:06:17,411 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n410' monitoring pressure at node n410
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n415' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n415' monitoring pressure at node n415
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n429' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n429' monitoring pressure at node n429
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n458' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n458' monitoring pressure at node n458
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n469' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n469' monitoring pressure at node n469
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n495' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n495' monitoring pressure at node n495
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n506' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n506' monitoring pressure at node n506
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n516' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n516' monitoring pressure at node n516
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n519' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n519' monitoring pressure at node n519
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n549' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n549' monitoring pressure at node n549
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n613' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n613' monitoring pressure at node n613
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n636' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n636' monitoring pressure at node n636
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n644' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n644' monitoring pressure at node n644
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n679' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n679' monitoring pressure at node n679
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n722' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n722' monitoring pressure at node n722
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n726' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n726' monitoring pressure at node n726
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n740' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n740' monitoring pressure at node n740
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n752' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n752' monitoring pressure at node n752
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n769' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n769' monitoring pressure at node n769
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n2' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n2' monitoring flow at node n2
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n3' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n3' monitoring flow at node n3
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n6' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n6' monitoring flow at node n6
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n7' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n7' monitoring flow at node n7
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n8' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n8' monitoring flow at node n8
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n9' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n9' monitoring flow at node n9
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n10' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n10' monitoring flow at node n10
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n11' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n11' monitoring flow at node n11
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n13' initialized
+2026-01-16 18:06:17,412 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n13' monitoring flow at node n13
+2026-01-16 18:06:17,412 - leak_detection.agents.base - INFO - Agent 'sensor_n16' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n16' monitoring flow at node n16
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n17' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n17' monitoring flow at node n17
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n18' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n18' monitoring flow at node n18
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n19' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n19' monitoring flow at node n19
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n20' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n20' monitoring flow at node n20
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n21' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n21' monitoring flow at node n21
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n22' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n22' monitoring flow at node n22
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n23' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n23' monitoring flow at node n23
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n24' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n24' monitoring flow at node n24
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n25' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n25' monitoring flow at node n25
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n26' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n26' monitoring flow at node n26
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n27' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n27' monitoring flow at node n27
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n28' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n28' monitoring flow at node n28
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n29' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n29' monitoring flow at node n29
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n30' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n30' monitoring flow at node n30
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n32' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n32' monitoring flow at node n32
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n33' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n33' monitoring flow at node n33
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n34' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n34' monitoring flow at node n34
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n35' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n35' monitoring flow at node n35
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n36' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n36' monitoring flow at node n36
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n39' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n39' monitoring flow at node n39
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n40' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n40' monitoring flow at node n40
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n41' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n41' monitoring flow at node n41
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n42' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n42' monitoring flow at node n42
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n43' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n43' monitoring flow at node n43
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n44' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n44' monitoring flow at node n44
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n45' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n45' monitoring flow at node n45
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n343' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n343' monitoring flow at node n343
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n344' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n344' monitoring flow at node n344
+2026-01-16 18:06:17,413 - leak_detection.agents.base - INFO - Agent 'sensor_n345' initialized
+2026-01-16 18:06:17,413 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n345' monitoring flow at node n345
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n346' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n346' monitoring flow at node n346
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n347' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n347' monitoring flow at node n347
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n349' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n349' monitoring flow at node n349
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n350' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n350' monitoring flow at node n350
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n351' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n351' monitoring flow at node n351
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n352' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n352' monitoring flow at node n352
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n353' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n353' monitoring flow at node n353
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n354' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n354' monitoring flow at node n354
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n355' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n355' monitoring flow at node n355
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n356' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n356' monitoring flow at node n356
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n357' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n357' monitoring flow at node n357
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n358' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n358' monitoring flow at node n358
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n360' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n360' monitoring flow at node n360
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n361' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n361' monitoring flow at node n361
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n362' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n362' monitoring flow at node n362
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n364' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n364' monitoring flow at node n364
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n365' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n365' monitoring flow at node n365
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n366' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n366' monitoring flow at node n366
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n367' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n367' monitoring flow at node n367
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n368' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n368' monitoring flow at node n368
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n369' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n369' monitoring flow at node n369
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n370' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n370' monitoring flow at node n370
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n371' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n371' monitoring flow at node n371
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n372' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n372' monitoring flow at node n372
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n373' initialized
+2026-01-16 18:06:17,414 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n373' monitoring flow at node n373
+2026-01-16 18:06:17,414 - leak_detection.agents.base - INFO - Agent 'sensor_n374' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n374' monitoring flow at node n374
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n375' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n375' monitoring flow at node n375
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n376' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n376' monitoring flow at node n376
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n377' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n377' monitoring flow at node n377
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n378' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n378' monitoring flow at node n378
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n379' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n379' monitoring flow at node n379
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n381' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n381' monitoring flow at node n381
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n382' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n382' monitoring flow at node n382
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n383' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n383' monitoring flow at node n383
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n384' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n384' monitoring flow at node n384
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n385' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n385' monitoring flow at node n385
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n386' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n386' monitoring flow at node n386
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n387' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n387' monitoring flow at node n387
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n388' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n388' monitoring flow at node n388
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'sensor_n389' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.sensor_agent - INFO - SensorAgent 'sensor_n389' monitoring flow at node n389
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'coordinator' initialized
+2026-01-16 18:06:17,415 - leak_detection.agents.coordinator_agent - INFO - CoordinatorAgent 'coordinator' managing 112 sensors
+2026-01-16 18:06:17,415 - leak_detection.agents.base - INFO - Agent 'localizer' initialized
+2026-01-16 18:06:17,418 - leak_detection.agents.localizer_agent - INFO - LocalizerAgent 'localizer' initialized with 112 sensor nodes
+2026-01-16 18:06:17,418 - leak_detection.agents.multi_agent_system - INFO - MultiAgentSystem initialized: 112 sensors, 1 coordinator, 1 localizer
+2026-01-16 18:06:17,573 - leak_detection.simulation.network_simulator - INFO - Hydraulic simulation completed
+2026-01-16 18:06:17,573 - leak_detection.orchestrator - INFO - System initialized with 115 devices
+2026-01-16 18:06:17,573 - leak_detection.orchestrator - INFO - Network: WNTR
+2026-01-16 18:06:17,573 - leak_detection.orchestrator - INFO - Multi-Agent System: ENABLED (112 sensors + coordinator + localizer)
+2026-01-16 18:06:18,251 - leak_detection - INFO - Step completed. Time: 300.0. Meters: 112
+2026-01-16 18:06:18,576 - leak_detection - INFO - Step completed. Time: 600.0. Meters: 112
+2026-01-16 18:06:18,855 - leak_detection - INFO - Step completed. Time: 900.0. Meters: 112
+2026-01-16 18:06:19,126 - leak_detection - INFO - Step completed. Time: 1200.0. Meters: 112
+2026-01-16 18:06:19,422 - leak_detection - INFO - Step completed. Time: 1500.0. Meters: 112
+2026-01-16 18:06:19,692 - leak_detection - INFO - Step completed. Time: 1800.0. Meters: 112
+2026-01-16 18:06:19,967 - leak_detection - INFO - Step completed. Time: 2100.0. Meters: 112
+2026-01-16 18:06:20,243 - leak_detection - INFO - Step completed. Time: 2400.0. Meters: 112
+2026-01-16 18:06:20,508 - leak_detection - INFO - Step completed. Time: 2700.0. Meters: 112
+2026-01-16 18:06:20,777 - leak_detection - INFO - Step completed. Time: 3000.0. Meters: 112
+2026-01-16 18:06:21,055 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n4 | HIGH_RES | Util:0.24 | Err:0.1478
+2026-01-16 18:06:21,055 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n114 | HIGH_RES | Util:0.87 | Err:0.2744
+2026-01-16 18:06:21,056 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n332 | HIGH_RES | Util:0.35 | Err:0.1699
+2026-01-16 18:06:21,056 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n429 | HIGH_RES | Util:0.26 | Err:0.1527
+2026-01-16 18:06:21,056 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n495 | HIGH_RES | Util:0.45 | Err:0.1907
+2026-01-16 18:06:21,056 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n549 | HIGH_RES | Util:0.36 | Err:0.1720
+2026-01-16 18:06:21,056 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n679 | HIGH_RES | Util:0.20 | Err:0.1404
+2026-01-16 18:06:21,056 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n740 | HIGH_RES | Util:0.43 | Err:0.1860
+2026-01-16 18:06:21,060 - leak_detection - INFO - Step completed. Time: 3300.0. Meters: 112
+2026-01-16 18:06:21,335 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n288 | HIGH_RES | Util:0.57 | Err:0.1809
+2026-01-16 18:06:21,335 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n342 | HIGH_RES | Util:1.39 | Err:0.3507
+2026-01-16 18:06:21,335 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n458 | HIGH_RES | Util:0.94 | Err:0.2485
+2026-01-16 18:06:21,335 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n506 | HIGH_RES | Util:0.42 | Err:0.1678
+2026-01-16 18:06:21,336 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n644 | HIGH_RES | Util:0.28 | Err:0.1559
+2026-01-16 18:06:21,339 - leak_detection - INFO - Step completed. Time: 3600.0. Meters: 112
+2026-01-16 18:06:21,610 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n31 | HIGH_RES | Util:0.62 | Err:0.1945
+2026-01-16 18:06:21,610 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n54 | HIGH_RES | Util:0.44 | Err:0.1670
+2026-01-16 18:06:21,610 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n105 | HIGH_RES | Util:0.30 | Err:0.1378
+2026-01-16 18:06:21,610 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n163 | HIGH_RES | Util:1.10 | Err:0.2630
+2026-01-16 18:06:21,610 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n188 | HIGH_RES | Util:1.26 | Err:0.3060
+2026-01-16 18:06:21,610 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n215 | HIGH_RES | Util:0.44 | Err:0.1592
+2026-01-16 18:06:21,611 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n410 | HIGH_RES | Util:0.41 | Err:0.1594
+2026-01-16 18:06:21,611 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n415 | HIGH_RES | Util:0.25 | Err:0.1336
+2026-01-16 18:06:21,611 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n636 | HIGH_RES | Util:0.48 | Err:0.1675
+2026-01-16 18:06:21,611 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n752 | HIGH_RES | Util:0.38 | Err:0.1540
+2026-01-16 18:06:21,611 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n769 | HIGH_RES | Util:0.68 | Err:0.1814
+2026-01-16 18:06:21,614 - leak_detection - INFO - Step completed. Time: 3900.0. Meters: 112
+2026-01-16 18:06:21,896 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n296 | HIGH_RES | Util:0.63 | Err:0.1809
+2026-01-16 18:06:21,897 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n469 | HIGH_RES | Util:0.56 | Err:0.1715
+2026-01-16 18:06:21,897 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n516 | HIGH_RES | Util:0.33 | Err:0.1259
+2026-01-16 18:06:21,897 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n613 | HIGH_RES | Util:0.57 | Err:0.1793
+2026-01-16 18:06:21,897 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n722 | HIGH_RES | Util:0.34 | Err:0.1356
+2026-01-16 18:06:21,897 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n726 | HIGH_RES | Util:0.36 | Err:0.1437
+2026-01-16 18:06:21,900 - leak_detection - INFO - Step completed. Time: 4200.0. Meters: 112
+2026-01-16 18:06:22,175 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n1 | HIGH_RES | Util:0.36 | Err:0.1375
+2026-01-16 18:06:22,176 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n519 | HIGH_RES | Util:0.36 | Err:0.1347
+2026-01-16 18:06:22,179 - leak_detection - INFO - Step completed. Time: 4500.0. Meters: 112
+2026-01-16 18:06:22,452 - leak_detection - INFO - Step completed. Time: 4800.0. Meters: 112
+2026-01-16 18:06:22,736 - leak_detection - INFO - Step completed. Time: 5100.0. Meters: 112
+2026-01-16 18:06:23,008 - leak_detection - INFO - Step completed. Time: 5400.0. Meters: 112
+2026-01-16 18:06:23,287 - leak_detection - INFO - Step completed. Time: 5700.0. Meters: 112
+2026-01-16 18:06:23,656 - leak_detection - INFO - Step completed. Time: 6000.0. Meters: 112
+2026-01-16 18:06:23,971 - leak_detection - INFO - Step completed. Time: 6300.0. Meters: 112
+2026-01-16 18:06:24,284 - leak_detection - INFO - Step completed. Time: 6600.0. Meters: 112
+2026-01-16 18:06:24,591 - leak_detection - INFO - Step completed. Time: 6900.0. Meters: 112
+2026-01-16 18:06:24,913 - leak_detection - INFO - Step completed. Time: 7200.0. Meters: 112
+2026-01-16 18:06:25,216 - leak_detection.agents.sensor_agent - INFO - Agent sensor_n229 | HIGH_RES | Util:0.27 | Err:0.1197
+2026-01-16 18:06:25,226 - leak_detection - INFO - Step completed. Time: 7500.0. Meters: 112
+2026-01-16 18:06:25,547 - leak_detection - INFO - Step completed. Time: 7800.0. Meters: 112
+2026-01-16 18:06:25,907 - leak_detection - INFO - Step completed. Time: 8100.0. Meters: 112
+2026-01-16 18:06:26,233 - leak_detection - INFO - Step completed. Time: 8400.0. Meters: 112
+2026-01-16 18:06:26,552 - leak_detection - INFO - Step completed. Time: 8700.0. Meters: 112
+2026-01-16 18:06:26,883 - leak_detection - INFO - Step completed. Time: 9000.0. Meters: 112
+2026-01-16 18:06:27,230 - leak_detection - INFO - Step completed. Time: 9300.0. Meters: 112
+2026-01-16 18:06:27,563 - leak_detection - INFO - Step completed. Time: 9600.0. Meters: 112
+2026-01-16 18:06:27,879 - leak_detection - INFO - Step completed. Time: 9900.0. Meters: 112
+2026-01-16 18:06:28,212 - leak_detection - INFO - Step completed. Time: 10200.0. Meters: 112
+2026-01-16 18:06:28,528 - leak_detection - INFO - Step completed. Time: 10500.0. Meters: 112
+2026-01-16 18:06:28,860 - leak_detection - INFO - Step completed. Time: 10800.0. Meters: 112
+2026-01-16 18:06:29,193 - leak_detection - INFO - Step completed. Time: 11100.0. Meters: 112
+2026-01-16 18:06:29,516 - leak_detection - INFO - Step completed. Time: 11400.0. Meters: 112
+2026-01-16 18:06:29,786 - leak_detection - INFO - Step completed. Time: 11700.0. Meters: 112
+2026-01-16 18:06:30,069 - leak_detection.agents.coordinator_agent - INFO - Coordinator: Opened investigation INV-0001 for sensors: {'n415', 'n229', 'n410', 'n458'}
+2026-01-16 18:06:30,070 - leak_detection - INFO - Step completed. Time: 12000.0. Meters: 112
+2026-01-16 18:06:30,383 - leak_detection - INFO - Step completed. Time: 12300.0. Meters: 112
+2026-01-16 18:06:30,656 - leak_detection - INFO - Step completed. Time: 12600.0. Meters: 112
+2026-01-16 18:06:30,932 - leak_detection - INFO - Step completed. Time: 12900.0. Meters: 112
+2026-01-16 18:06:31,206 - leak_detection - INFO - Step completed. Time: 13200.0. Meters: 112
+2026-01-16 18:06:31,488 - leak_detection - INFO - Step completed. Time: 13500.0. Meters: 112
+2026-01-16 18:06:31,788 - leak_detection - INFO - Step completed. Time: 13800.0. Meters: 112
+2026-01-16 18:06:32,072 - leak_detection - INFO - Step completed. Time: 14100.0. Meters: 112
+2026-01-16 18:06:32,359 - leak_detection - INFO - Step completed. Time: 14400.0. Meters: 112
+2026-01-16 18:06:32,657 - leak_detection - INFO - Step completed. Time: 14700.0. Meters: 112
+2026-01-16 18:06:32,948 - leak_detection - INFO - Step completed. Time: 15000.0. Meters: 112
+2026-01-16 18:06:33,246 - leak_detection - INFO - Step completed. Time: 15300.0. Meters: 112
+2026-01-16 18:06:33,530 - leak_detection - INFO - Step completed. Time: 15600.0. Meters: 112
+2026-01-16 18:06:33,831 - leak_detection - INFO - Step completed. Time: 15900.0. Meters: 112
+2026-01-16 18:06:34,145 - leak_detection - INFO - Step completed. Time: 16200.0. Meters: 112
+2026-01-16 18:06:34,438 - leak_detection - INFO - Step completed. Time: 16500.0. Meters: 112
+2026-01-16 18:06:34,727 - leak_detection - INFO - Step completed. Time: 16800.0. Meters: 112
+2026-01-16 18:06:35,030 - leak_detection - INFO - Step completed. Time: 17100.0. Meters: 112
+2026-01-16 18:06:35,322 - leak_detection - INFO - Step completed. Time: 17400.0. Meters: 112
+2026-01-16 18:06:35,606 - leak_detection - INFO - Step completed. Time: 17700.0. Meters: 112
+2026-01-16 18:06:35,914 - leak_detection - INFO - Step completed. Time: 18000.0. Meters: 112
+2026-01-16 18:06:36,190 - leak_detection - INFO - Step completed. Time: 18300.0. Meters: 112
+2026-01-16 18:06:36,475 - leak_detection - INFO - Step completed. Time: 18600.0. Meters: 112
+2026-01-16 18:06:36,770 - leak_detection - INFO - Step completed. Time: 18900.0. Meters: 112
+2026-01-16 18:06:37,071 - leak_detection - INFO - Step completed. Time: 19200.0. Meters: 112
+2026-01-16 18:06:37,363 - leak_detection - INFO - Step completed. Time: 19500.0. Meters: 112
+2026-01-16 18:06:37,654 - leak_detection - INFO - Step completed. Time: 19800.0. Meters: 112
+2026-01-16 18:06:37,949 - leak_detection - INFO - Step completed. Time: 20100.0. Meters: 112
+2026-01-16 18:06:38,244 - leak_detection - INFO - Step completed. Time: 20400.0. Meters: 112
+2026-01-16 18:06:38,544 - leak_detection - INFO - Step completed. Time: 20700.0. Meters: 112
+2026-01-16 18:06:38,845 - leak_detection - INFO - Step completed. Time: 21000.0. Meters: 112
+2026-01-16 18:06:39,130 - leak_detection - INFO - Step completed. Time: 21300.0. Meters: 112
+2026-01-16 18:06:39,432 - leak_detection - INFO - Step completed. Time: 21600.0. Meters: 112
+2026-01-16 18:06:39,724 - leak_detection - INFO - Step completed. Time: 21900.0. Meters: 112
+2026-01-16 18:06:40,016 - leak_detection - INFO - Step completed. Time: 22200.0. Meters: 112
+2026-01-16 18:06:40,302 - leak_detection - INFO - Step completed. Time: 22500.0. Meters: 112
+2026-01-16 18:06:40,573 - leak_detection - INFO - Step completed. Time: 22800.0. Meters: 112
+2026-01-16 18:06:40,865 - leak_detection - INFO - Step completed. Time: 23100.0. Meters: 112
+2026-01-16 18:06:41,162 - leak_detection - INFO - Step completed. Time: 23400.0. Meters: 112
+2026-01-16 18:06:41,447 - leak_detection - INFO - Step completed. Time: 23700.0. Meters: 112
+2026-01-16 18:06:41,740 - leak_detection - INFO - Step completed. Time: 24000.0. Meters: 112
+2026-01-16 18:06:42,026 - leak_detection - INFO - Step completed. Time: 24300.0. Meters: 112
+2026-01-16 18:06:42,331 - leak_detection - INFO - Step completed. Time: 24600.0. Meters: 112
+2026-01-16 18:06:42,626 - leak_detection - INFO - Step completed. Time: 24900.0. Meters: 112
+2026-01-16 18:06:42,912 - leak_detection - INFO - Step completed. Time: 25200.0. Meters: 112
+2026-01-16 18:06:43,212 - leak_detection - INFO - Step completed. Time: 25500.0. Meters: 112
+2026-01-16 18:06:43,491 - leak_detection - INFO - Step completed. Time: 25800.0. Meters: 112
+2026-01-16 18:06:43,777 - leak_detection - INFO - Step completed. Time: 26100.0. Meters: 112
+2026-01-16 18:06:44,084 - leak_detection - INFO - Step completed. Time: 26400.0. Meters: 112
+2026-01-16 18:06:44,371 - leak_detection - INFO - Step completed. Time: 26700.0. Meters: 112
+2026-01-16 18:06:44,666 - leak_detection - INFO - Step completed. Time: 27000.0. Meters: 112
+2026-01-16 18:06:44,965 - leak_detection - INFO - Step completed. Time: 27300.0. Meters: 112
+2026-01-16 18:06:45,248 - leak_detection - INFO - Step completed. Time: 27600.0. Meters: 112
+2026-01-16 18:06:45,531 - leak_detection - INFO - Step completed. Time: 27900.0. Meters: 112
+2026-01-16 18:06:45,833 - leak_detection - INFO - Step completed. Time: 28200.0. Meters: 112
+2026-01-16 18:06:46,121 - leak_detection.agents.coordinator_agent - INFO - Coordinator: Opened investigation INV-0002 for sensors: {'n296', 'n769', 'n229'}
+2026-01-16 18:06:46,122 - leak_detection - INFO - Step completed. Time: 28500.0. Meters: 112
+2026-01-16 18:06:46,404 - leak_detection - INFO - Step completed. Time: 28800.0. Meters: 112
+2026-01-16 18:06:46,696 - leak_detection - INFO - Step completed. Time: 29100.0. Meters: 112
+2026-01-16 18:06:46,992 - leak_detection - INFO - Step completed. Time: 29400.0. Meters: 112
+2026-01-16 18:06:47,275 - leak_detection - INFO - Step completed. Time: 29700.0. Meters: 112
+2026-01-16 18:06:47,567 - leak_detection - INFO - Step completed. Time: 30000.0. Meters: 112
+2026-01-16 18:06:47,865 - leak_detection - INFO - Step completed. Time: 30300.0. Meters: 112
+2026-01-16 18:06:48,162 - leak_detection - INFO - Step completed. Time: 30600.0. Meters: 112
+2026-01-16 18:06:48,441 - leak_detection - INFO - Step completed. Time: 30900.0. Meters: 112
+2026-01-16 18:06:48,730 - leak_detection - INFO - Step completed. Time: 31200.0. Meters: 112
+2026-01-16 18:06:49,019 - leak_detection - INFO - Step completed. Time: 31500.0. Meters: 112
+2026-01-16 18:06:49,304 - leak_detection - INFO - Step completed. Time: 31800.0. Meters: 112
+2026-01-16 18:06:49,594 - leak_detection - INFO - Step completed. Time: 32100.0. Meters: 112
+2026-01-16 18:06:49,867 - leak_detection - INFO - Step completed. Time: 32400.0. Meters: 112
+2026-01-16 18:06:50,169 - leak_detection - INFO - Step completed. Time: 32700.0. Meters: 112
+2026-01-16 18:06:50,457 - leak_detection - INFO - Step completed. Time: 33000.0. Meters: 112
+2026-01-16 18:06:50,741 - leak_detection - INFO - Step completed. Time: 33300.0. Meters: 112
+2026-01-16 18:06:51,015 - leak_detection - INFO - Step completed. Time: 33600.0. Meters: 112
+2026-01-16 18:06:51,298 - leak_detection - INFO - Step completed. Time: 33900.0. Meters: 112
+2026-01-16 18:06:51,577 - leak_detection - INFO - Step completed. Time: 34200.0. Meters: 112
+2026-01-16 18:06:51,896 - leak_detection - INFO - Step completed. Time: 34500.0. Meters: 112
+2026-01-16 18:06:52,229 - leak_detection - INFO - Step completed. Time: 34800.0. Meters: 112
+2026-01-16 18:06:52,512 - leak_detection - INFO - Step completed. Time: 35100.0. Meters: 112
+2026-01-16 18:06:52,806 - leak_detection - INFO - Step completed. Time: 35400.0. Meters: 112
+2026-01-16 18:06:53,080 - leak_detection - INFO - Step completed. Time: 35700.0. Meters: 112
+2026-01-16 18:06:53,360 - leak_detection - INFO - Step completed. Time: 36000.0. Meters: 112
+2026-01-16 18:06:53,642 - leak_detection - INFO - Step completed. Time: 36300.0. Meters: 112
+2026-01-16 18:06:53,931 - leak_detection - INFO - Step completed. Time: 36600.0. Meters: 112
+2026-01-16 18:06:54,216 - leak_detection - INFO - Step completed. Time: 36900.0. Meters: 112
+2026-01-16 18:06:54,511 - leak_detection - INFO - Step completed. Time: 37200.0. Meters: 112
+2026-01-16 18:06:54,796 - leak_detection - INFO - Step completed. Time: 37500.0. Meters: 112
+2026-01-16 18:06:55,086 - leak_detection - INFO - Step completed. Time: 37800.0. Meters: 112
+2026-01-16 18:06:55,368 - leak_detection - INFO - Step completed. Time: 38100.0. Meters: 112
+2026-01-16 18:06:55,658 - leak_detection - INFO - Step completed. Time: 38400.0. Meters: 112
+2026-01-16 18:06:55,939 - leak_detection - INFO - Step completed. Time: 38700.0. Meters: 112
+2026-01-16 18:06:56,219 - leak_detection - INFO - Step completed. Time: 39000.0. Meters: 112
+2026-01-16 18:06:56,671 - leak_detection - INFO - Step completed. Time: 39300.0. Meters: 112
+2026-01-16 18:06:56,989 - leak_detection - INFO - Step completed. Time: 39600.0. Meters: 112
+2026-01-16 18:06:57,279 - leak_detection - INFO - Step completed. Time: 39900.0. Meters: 112
+2026-01-16 18:06:57,578 - leak_detection - INFO - Step completed. Time: 40200.0. Meters: 112
+2026-01-16 18:06:57,861 - leak_detection - INFO - Step completed. Time: 40500.0. Meters: 112
+2026-01-16 18:06:58,155 - leak_detection - INFO - Step completed. Time: 40800.0. Meters: 112
+2026-01-16 18:06:58,445 - leak_detection - INFO - Step completed. Time: 41100.0. Meters: 112
+2026-01-16 18:06:58,758 - leak_detection - INFO - Step completed. Time: 41400.0. Meters: 112
+2026-01-16 18:06:59,192 - leak_detection - INFO - Step completed. Time: 41700.0. Meters: 112
+2026-01-16 18:06:59,549 - leak_detection - INFO - Step completed. Time: 42000.0. Meters: 112
+2026-01-16 18:06:59,895 - leak_detection - INFO - Step completed. Time: 42300.0. Meters: 112
+2026-01-16 18:07:00,235 - leak_detection - INFO - Step completed. Time: 42600.0. Meters: 112
+2026-01-16 18:07:00,599 - leak_detection - INFO - Step completed. Time: 42900.0. Meters: 112
+2026-01-16 18:07:00,940 - leak_detection - INFO - Step completed. Time: 43200.0. Meters: 112
+2026-01-16 18:07:01,259 - leak_detection.agents.localizer_agent - INFO - LocalizerAgent: Localized leak at n613 (confidence: 100.00%)
+2026-01-16 18:07:01,259 - leak_detection.agents.coordinator_agent - INFO - Coordinator: Investigation INV-0002 - Leak localized!
+2026-01-16 18:07:01,265 - leak_detection - INFO - Step completed. Time: 43500.0. Meters: 112
+2026-01-16 18:07:01,599 - leak_detection - INFO - Step completed. Time: 43800.0. Meters: 112
+2026-01-16 18:07:01,916 - leak_detection - INFO - Step completed. Time: 44100.0. Meters: 112
+2026-01-16 18:07:02,213 - leak_detection - INFO - Step completed. Time: 44400.0. Meters: 112
+2026-01-16 18:07:02,517 - leak_detection - INFO - Step completed. Time: 44700.0. Meters: 112
+2026-01-16 18:07:02,806 - leak_detection - INFO - Step completed. Time: 45000.0. Meters: 112
+2026-01-16 18:07:03,100 - leak_detection - INFO - Step completed. Time: 45300.0. Meters: 112
+2026-01-16 18:07:03,388 - leak_detection - INFO - Step completed. Time: 45600.0. Meters: 112
+2026-01-16 18:07:03,687 - leak_detection - INFO - Step completed. Time: 45900.0. Meters: 112
+2026-01-16 18:07:03,985 - leak_detection - INFO - Step completed. Time: 46200.0. Meters: 112
+2026-01-16 18:07:04,281 - leak_detection - INFO - Step completed. Time: 46500.0. Meters: 112
+2026-01-16 18:07:04,580 - leak_detection - INFO - Step completed. Time: 46800.0. Meters: 112
+2026-01-16 18:07:04,864 - leak_detection - INFO - Step completed. Time: 47100.0. Meters: 112
+2026-01-16 18:07:05,165 - leak_detection - INFO - Step completed. Time: 47400.0. Meters: 112
+2026-01-16 18:07:05,458 - leak_detection - INFO - Step completed. Time: 47700.0. Meters: 112
+2026-01-16 18:07:05,749 - leak_detection - INFO - Step completed. Time: 48000.0. Meters: 112
+2026-01-16 18:07:06,039 - leak_detection - INFO - Step completed. Time: 48300.0. Meters: 112
+2026-01-16 18:07:06,333 - leak_detection - INFO - Step completed. Time: 48600.0. Meters: 112
+2026-01-16 18:07:06,635 - leak_detection - INFO - Step completed. Time: 48900.0. Meters: 112
+2026-01-16 18:07:06,929 - leak_detection - INFO - Step completed. Time: 49200.0. Meters: 112
+2026-01-16 18:07:07,224 - leak_detection - INFO - Step completed. Time: 49500.0. Meters: 112
+2026-01-16 18:07:07,513 - leak_detection - INFO - Step completed. Time: 49800.0. Meters: 112
+2026-01-16 18:07:07,807 - leak_detection - INFO - Step completed. Time: 50100.0. Meters: 112
+2026-01-16 18:07:08,102 - leak_detection - INFO - Step completed. Time: 50400.0. Meters: 112
+2026-01-16 18:07:08,412 - leak_detection - INFO - Step completed. Time: 50700.0. Meters: 112
+2026-01-16 18:07:08,699 - leak_detection - INFO - Step completed. Time: 51000.0. Meters: 112
+2026-01-16 18:07:08,985 - leak_detection - INFO - Step completed. Time: 51300.0. Meters: 112
+2026-01-16 18:07:09,318 - leak_detection - INFO - Step completed. Time: 51600.0. Meters: 112
+2026-01-16 18:07:09,637 - leak_detection - INFO - Step completed. Time: 51900.0. Meters: 112
+2026-01-16 18:07:09,952 - leak_detection - INFO - Step completed. Time: 52200.0. Meters: 112
+2026-01-16 18:07:10,280 - leak_detection - INFO - Step completed. Time: 52500.0. Meters: 112
+2026-01-16 18:07:10,602 - leak_detection - INFO - Step completed. Time: 52800.0. Meters: 112
+2026-01-16 18:07:10,965 - leak_detection - INFO - Step completed. Time: 53100.0. Meters: 112
+2026-01-16 18:07:11,276 - leak_detection - INFO - Step completed. Time: 53400.0. Meters: 112
+2026-01-16 18:07:11,588 - leak_detection - INFO - Step completed. Time: 53700.0. Meters: 112
+2026-01-16 18:07:11,899 - leak_detection - INFO - Step completed. Time: 54000.0. Meters: 112
+2026-01-16 18:07:12,221 - leak_detection - INFO - Step completed. Time: 54300.0. Meters: 112
+2026-01-16 18:07:12,534 - leak_detection - INFO - Step completed. Time: 54600.0. Meters: 112
+2026-01-16 18:07:12,843 - leak_detection - INFO - Step completed. Time: 54900.0. Meters: 112
+2026-01-16 18:07:13,155 - leak_detection - INFO - Step completed. Time: 55200.0. Meters: 112
+2026-01-16 18:07:13,473 - leak_detection - INFO - Step completed. Time: 55500.0. Meters: 112
+2026-01-16 18:07:13,804 - leak_detection - INFO - Step completed. Time: 55800.0. Meters: 112
+2026-01-16 18:07:14,144 - leak_detection - INFO - Step completed. Time: 56100.0. Meters: 112
+2026-01-16 18:07:14,455 - leak_detection - INFO - Step completed. Time: 56400.0. Meters: 112
+2026-01-16 18:07:14,764 - leak_detection - INFO - Step completed. Time: 56700.0. Meters: 112
+2026-01-16 18:07:15,077 - leak_detection - INFO - Step completed. Time: 57000.0. Meters: 112
+2026-01-16 18:07:15,384 - leak_detection - INFO - Step completed. Time: 57300.0. Meters: 112
+2026-01-16 18:07:15,698 - leak_detection - INFO - Step completed. Time: 57600.0. Meters: 112
+2026-01-16 18:07:16,021 - leak_detection - INFO - Step completed. Time: 57900.0. Meters: 112
+2026-01-16 18:07:16,342 - leak_detection - INFO - Step completed. Time: 58200.0. Meters: 112
+2026-01-16 18:07:16,681 - leak_detection - INFO - Step completed. Time: 58500.0. Meters: 112
+2026-01-16 18:07:17,007 - leak_detection - INFO - Step completed. Time: 58800.0. Meters: 112
+2026-01-16 18:07:17,347 - leak_detection - INFO - Step completed. Time: 59100.0. Meters: 112
+2026-01-16 18:07:17,689 - leak_detection - INFO - Step completed. Time: 59400.0. Meters: 112
+2026-01-16 18:07:18,012 - leak_detection - INFO - Step completed. Time: 59700.0. Meters: 112
+2026-01-16 18:07:18,329 - leak_detection - INFO - Step completed. Time: 60000.0. Meters: 112
+2026-01-16 18:07:18,641 - leak_detection - INFO - Step completed. Time: 60300.0. Meters: 112
+2026-01-16 18:07:18,947 - leak_detection - INFO - Step completed. Time: 60600.0. Meters: 112
+2026-01-16 18:07:19,267 - leak_detection - INFO - Step completed. Time: 60900.0. Meters: 112
+2026-01-16 18:07:19,593 - leak_detection - INFO - Step completed. Time: 61200.0. Meters: 112
+2026-01-16 18:07:19,939 - leak_detection - INFO - Step completed. Time: 61500.0. Meters: 112
+2026-01-16 18:07:20,278 - leak_detection - INFO - Step completed. Time: 61800.0. Meters: 112
+2026-01-16 18:07:20,601 - leak_detection - INFO - Step completed. Time: 62100.0. Meters: 112
+2026-01-16 18:07:20,920 - leak_detection - INFO - Step completed. Time: 62400.0. Meters: 112
+2026-01-16 18:07:21,231 - leak_detection - INFO - Step completed. Time: 62700.0. Meters: 112
+2026-01-16 18:07:21,590 - leak_detection - INFO - Step completed. Time: 63000.0. Meters: 112
+2026-01-16 18:07:21,906 - leak_detection - INFO - Step completed. Time: 63300.0. Meters: 112
+2026-01-16 18:07:22,225 - leak_detection - INFO - Step completed. Time: 63600.0. Meters: 112
+2026-01-16 18:07:22,538 - leak_detection - INFO - Step completed. Time: 63900.0. Meters: 112
+2026-01-16 18:07:22,846 - leak_detection - INFO - Step completed. Time: 64200.0. Meters: 112
+2026-01-16 18:07:23,157 - leak_detection - INFO - Step completed. Time: 64500.0. Meters: 112
+2026-01-16 18:07:23,465 - leak_detection - INFO - Step completed. Time: 64800.0. Meters: 112
+2026-01-16 18:07:23,777 - leak_detection - INFO - Step completed. Time: 65100.0. Meters: 112
+2026-01-16 18:07:24,118 - leak_detection - INFO - Step completed. Time: 65400.0. Meters: 112
+2026-01-16 18:07:24,425 - leak_detection - INFO - Step completed. Time: 65700.0. Meters: 112
+2026-01-16 18:07:24,740 - leak_detection - INFO - Step completed. Time: 66000.0. Meters: 112
+2026-01-16 18:07:25,056 - leak_detection - INFO - Step completed. Time: 66300.0. Meters: 112
+2026-01-16 18:07:25,371 - leak_detection - INFO - Step completed. Time: 66600.0. Meters: 112
+2026-01-16 18:07:25,685 - leak_detection - INFO - Step completed. Time: 66900.0. Meters: 112
+2026-01-16 18:07:25,992 - leak_detection - INFO - Step completed. Time: 67200.0. Meters: 112
+2026-01-16 18:07:26,315 - leak_detection - INFO - Step completed. Time: 67500.0. Meters: 112
+2026-01-16 18:07:26,629 - leak_detection - INFO - Step completed. Time: 67800.0. Meters: 112
+2026-01-16 18:07:27,006 - leak_detection - INFO - Step completed. Time: 68100.0. Meters: 112
+2026-01-16 18:07:27,316 - leak_detection - INFO - Step completed. Time: 68400.0. Meters: 112
+2026-01-16 18:07:27,635 - leak_detection - INFO - Step completed. Time: 68700.0. Meters: 112
+2026-01-16 18:07:27,958 - leak_detection - INFO - Step completed. Time: 69000.0. Meters: 112
+2026-01-16 18:07:28,273 - leak_detection - INFO - Step completed. Time: 69300.0. Meters: 112
+2026-01-16 18:07:28,586 - leak_detection - INFO - Step completed. Time: 69600.0. Meters: 112
+2026-01-16 18:07:28,894 - leak_detection - INFO - Step completed. Time: 69900.0. Meters: 112
+2026-01-16 18:07:29,207 - leak_detection - INFO - Step completed. Time: 70200.0. Meters: 112
+2026-01-16 18:07:29,531 - leak_detection - INFO - Step completed. Time: 70500.0. Meters: 112
+2026-01-16 18:07:29,843 - leak_detection - INFO - Step completed. Time: 70800.0. Meters: 112
+2026-01-16 18:07:30,166 - leak_detection - INFO - Step completed. Time: 71100.0. Meters: 112
+2026-01-16 18:07:30,481 - leak_detection - INFO - Step completed. Time: 71400.0. Meters: 112
+2026-01-16 18:07:30,801 - leak_detection - INFO - Step completed. Time: 71700.0. Meters: 112
+2026-01-16 18:07:31,112 - leak_detection - INFO - Step completed. Time: 72000.0. Meters: 112
+2026-01-16 18:07:31,423 - leak_detection - INFO - Step completed. Time: 72300.0. Meters: 112
+2026-01-16 18:07:31,739 - leak_detection - INFO - Step completed. Time: 72600.0. Meters: 112
+2026-01-16 18:07:32,059 - leak_detection - INFO - Step completed. Time: 72900.0. Meters: 112
+2026-01-16 18:07:32,381 - leak_detection - INFO - Step completed. Time: 73200.0. Meters: 112
+2026-01-16 18:07:32,705 - leak_detection - INFO - Step completed. Time: 73500.0. Meters: 112
+2026-01-16 18:07:33,020 - leak_detection - INFO - Step completed. Time: 73800.0. Meters: 112
+2026-01-16 18:07:33,329 - leak_detection - INFO - Step completed. Time: 74100.0. Meters: 112
+2026-01-16 18:07:33,641 - leak_detection - INFO - Step completed. Time: 74400.0. Meters: 112
+2026-01-16 18:07:33,965 - leak_detection - INFO - Step completed. Time: 74700.0. Meters: 112
+2026-01-16 18:07:34,281 - leak_detection - INFO - Step completed. Time: 75000.0. Meters: 112
+2026-01-16 18:07:34,600 - leak_detection - INFO - Step completed. Time: 75300.0. Meters: 112
+2026-01-16 18:07:34,908 - leak_detection - INFO - Step completed. Time: 75600.0. Meters: 112
+2026-01-16 18:07:35,220 - leak_detection - INFO - Step completed. Time: 75900.0. Meters: 112
+2026-01-16 18:07:35,529 - leak_detection - INFO - Step completed. Time: 76200.0. Meters: 112
+2026-01-16 18:07:35,859 - leak_detection - INFO - Step completed. Time: 76500.0. Meters: 112
+2026-01-16 18:07:36,170 - leak_detection - INFO - Step completed. Time: 76800.0. Meters: 112
+2026-01-16 18:07:36,495 - leak_detection - INFO - Step completed. Time: 77100.0. Meters: 112
+2026-01-16 18:07:36,822 - leak_detection - INFO - Step completed. Time: 77400.0. Meters: 112
+2026-01-16 18:07:37,148 - leak_detection - INFO - Step completed. Time: 77700.0. Meters: 112
+2026-01-16 18:07:37,474 - leak_detection - INFO - Step completed. Time: 78000.0. Meters: 112
+2026-01-16 18:07:37,795 - leak_detection - INFO - Step completed. Time: 78300.0. Meters: 112
+2026-01-16 18:07:38,101 - leak_detection - INFO - Step completed. Time: 78600.0. Meters: 112
+2026-01-16 18:07:38,414 - leak_detection - INFO - Step completed. Time: 78900.0. Meters: 112
+2026-01-16 18:07:38,722 - leak_detection - INFO - Step completed. Time: 79200.0. Meters: 112
+2026-01-16 18:07:39,041 - leak_detection - INFO - Step completed. Time: 79500.0. Meters: 112
+2026-01-16 18:07:39,360 - leak_detection - INFO - Step completed. Time: 79800.0. Meters: 112
+2026-01-16 18:07:39,678 - leak_detection - INFO - Step completed. Time: 80100.0. Meters: 112
+2026-01-16 18:07:39,995 - leak_detection - INFO - Step completed. Time: 80400.0. Meters: 112
+2026-01-16 18:07:40,308 - leak_detection - INFO - Step completed. Time: 80700.0. Meters: 112
+2026-01-16 18:07:40,614 - leak_detection - INFO - Step completed. Time: 81000.0. Meters: 112
+2026-01-16 18:07:40,925 - leak_detection - INFO - Step completed. Time: 81300.0. Meters: 112
+2026-01-16 18:07:41,245 - leak_detection - INFO - Step completed. Time: 81600.0. Meters: 112
+2026-01-16 18:07:41,587 - leak_detection - INFO - Step completed. Time: 81900.0. Meters: 112
+2026-01-16 18:07:41,902 - leak_detection - INFO - Step completed. Time: 82200.0. Meters: 112
+2026-01-16 18:07:42,215 - leak_detection - INFO - Step completed. Time: 82500.0. Meters: 112
+2026-01-16 18:07:42,527 - leak_detection - INFO - Step completed. Time: 82800.0. Meters: 112
+2026-01-16 18:07:42,834 - leak_detection - INFO - Step completed. Time: 83100.0. Meters: 112
+2026-01-16 18:07:43,144 - leak_detection - INFO - Step completed. Time: 83400.0. Meters: 112
+2026-01-16 18:07:43,470 - leak_detection - INFO - Step completed. Time: 83700.0. Meters: 112
+2026-01-16 18:07:43,781 - leak_detection - INFO - Step completed. Time: 84000.0. Meters: 112
+2026-01-16 18:07:44,131 - leak_detection - INFO - Step completed. Time: 84300.0. Meters: 112
+2026-01-16 18:07:44,449 - leak_detection - INFO - Step completed. Time: 84600.0. Meters: 112
+2026-01-16 18:07:44,774 - leak_detection - INFO - Step completed. Time: 84900.0. Meters: 112
+2026-01-16 18:07:45,091 - leak_detection - INFO - Step completed. Time: 85200.0. Meters: 112
+2026-01-16 18:07:45,420 - leak_detection - INFO - Step completed. Time: 85500.0. Meters: 112
+2026-01-16 18:07:45,749 - leak_detection - INFO - Step completed. Time: 85800.0. Meters: 112
+2026-01-16 18:07:46,066 - leak_detection - INFO - Step completed. Time: 86100.0. Meters: 112
+2026-01-16 18:07:46,392 - leak_detection - INFO - Step completed. Time: 86400.0. Meters: 112
+2026-01-16 18:07:46,715 - leak_detection - INFO - Step completed. Time: 86700.0. Meters: 112
+2026-01-16 18:07:47,053 - leak_detection - INFO - Step completed. Time: 87000.0. Meters: 112
+2026-01-16 18:07:47,367 - leak_detection - INFO - Step completed. Time: 87300.0. Meters: 112
+2026-01-16 18:07:47,694 - leak_detection - INFO - Step completed. Time: 87600.0. Meters: 112
+2026-01-16 18:07:48,013 - leak_detection - INFO - Step completed. Time: 87900.0. Meters: 112
+2026-01-16 18:07:48,325 - leak_detection - INFO - Step completed. Time: 88200.0. Meters: 112
+2026-01-16 18:07:48,636 - leak_detection - INFO - Step completed. Time: 88500.0. Meters: 112
+2026-01-16 18:07:48,940 - leak_detection - INFO - Step completed. Time: 88800.0. Meters: 112
+2026-01-16 18:07:49,253 - leak_detection - INFO - Step completed. Time: 89100.0. Meters: 112
+2026-01-16 18:07:49,653 - leak_detection - INFO - Step completed. Time: 89400.0. Meters: 112
+2026-01-16 18:07:49,962 - leak_detection - INFO - Step completed. Time: 89700.0. Meters: 112
+2026-01-16 18:07:50,274 - leak_detection - INFO - Step completed. Time: 90000.0. Meters: 112
+2026-01-16 18:07:50,588 - leak_detection - INFO - Step completed. Time: 90300.0. Meters: 112
+2026-01-16 18:07:50,895 - leak_detection - INFO - Step completed. Time: 90600.0. Meters: 112
+2026-01-16 18:07:51,203 - leak_detection - INFO - Step completed. Time: 90900.0. Meters: 112
+2026-01-16 18:07:51,528 - leak_detection - INFO - Step completed. Time: 91200.0. Meters: 112
+2026-01-16 18:07:51,848 - leak_detection - INFO - Step completed. Time: 91500.0. Meters: 112
+2026-01-16 18:07:52,166 - leak_detection - INFO - Step completed. Time: 91800.0. Meters: 112
+2026-01-16 18:07:52,560 - leak_detection - INFO - Step completed. Time: 92100.0. Meters: 112
+2026-01-16 18:07:52,888 - leak_detection - INFO - Step completed. Time: 92400.0. Meters: 112
+2026-01-16 18:07:53,212 - leak_detection - INFO - Step completed. Time: 92700.0. Meters: 112
+2026-01-16 18:07:53,529 - leak_detection - INFO - Step completed. Time: 93000.0. Meters: 112
+2026-01-16 18:07:53,844 - leak_detection - INFO - Step completed. Time: 93300.0. Meters: 112
+2026-01-16 18:07:54,174 - leak_detection - INFO - Step completed. Time: 93600.0. Meters: 112
+2026-01-16 18:07:54,492 - leak_detection - INFO - Step completed. Time: 93900.0. Meters: 112
+2026-01-16 18:07:54,807 - leak_detection - INFO - Step completed. Time: 94200.0. Meters: 112
+2026-01-16 18:07:55,117 - leak_detection - INFO - Step completed. Time: 94500.0. Meters: 112
+2026-01-16 18:07:55,423 - leak_detection - INFO - Step completed. Time: 94800.0. Meters: 112
+2026-01-16 18:07:55,741 - leak_detection - INFO - Step completed. Time: 95100.0. Meters: 112
+2026-01-16 18:07:56,069 - leak_detection - INFO - Step completed. Time: 95400.0. Meters: 112
+2026-01-16 18:07:56,384 - leak_detection - INFO - Step completed. Time: 95700.0. Meters: 112
+2026-01-16 18:07:56,704 - leak_detection - INFO - Step completed. Time: 96000.0. Meters: 112
+2026-01-16 18:07:57,022 - leak_detection - INFO - Step completed. Time: 96300.0. Meters: 112
+2026-01-16 18:07:57,329 - leak_detection - INFO - Step completed. Time: 96600.0. Meters: 112
+2026-01-16 18:07:57,651 - leak_detection - INFO - Step completed. Time: 96900.0. Meters: 112
+2026-01-16 18:07:57,967 - leak_detection - INFO - Step completed. Time: 97200.0. Meters: 112
+2026-01-16 18:07:58,283 - leak_detection - INFO - Step completed. Time: 97500.0. Meters: 112
+2026-01-16 18:07:58,609 - leak_detection - INFO - Step completed. Time: 97800.0. Meters: 112
+2026-01-16 18:07:58,930 - leak_detection - INFO - Step completed. Time: 98100.0. Meters: 112
+2026-01-16 18:07:59,242 - leak_detection - INFO - Step completed. Time: 98400.0. Meters: 112
+2026-01-16 18:07:59,569 - leak_detection - INFO - Step completed. Time: 98700.0. Meters: 112
+2026-01-16 18:07:59,915 - leak_detection - INFO - Step completed. Time: 99000.0. Meters: 112
+2026-01-16 18:08:00,246 - leak_detection - INFO - Step completed. Time: 99300.0. Meters: 112
+2026-01-16 18:08:00,560 - leak_detection - INFO - Step completed. Time: 99600.0. Meters: 112
+2026-01-16 18:08:00,869 - leak_detection - INFO - Step completed. Time: 99900.0. Meters: 112
+2026-01-16 18:08:01,181 - leak_detection - INFO - Step completed. Time: 100200.0. Meters: 112
+2026-01-16 18:08:01,489 - leak_detection - INFO - Step completed. Time: 100500.0. Meters: 112
+2026-01-16 18:08:01,801 - leak_detection - INFO - Step completed. Time: 100800.0. Meters: 112
+2026-01-16 18:08:02,120 - leak_detection - INFO - Step completed. Time: 101100.0. Meters: 112
+2026-01-16 18:08:02,442 - leak_detection - INFO - Step completed. Time: 101400.0. Meters: 112
+2026-01-16 18:08:02,767 - leak_detection - INFO - Step completed. Time: 101700.0. Meters: 112
+2026-01-16 18:08:03,146 - leak_detection - INFO - Step completed. Time: 102000.0. Meters: 112
+2026-01-16 18:08:03,461 - leak_detection - INFO - Step completed. Time: 102300.0. Meters: 112
+2026-01-16 18:08:03,771 - leak_detection - INFO - Step completed. Time: 102600.0. Meters: 112
+2026-01-16 18:08:04,091 - leak_detection - INFO - Step completed. Time: 102900.0. Meters: 112
+2026-01-16 18:08:04,409 - leak_detection - INFO - Step completed. Time: 103200.0. Meters: 112
+2026-01-16 18:08:04,726 - leak_detection - INFO - Step completed. Time: 103500.0. Meters: 112
+2026-01-16 18:08:05,042 - leak_detection - INFO - Step completed. Time: 103800.0. Meters: 112
+2026-01-16 18:08:05,354 - leak_detection - INFO - Step completed. Time: 104100.0. Meters: 112
+2026-01-16 18:08:05,683 - leak_detection - INFO - Step completed. Time: 104400.0. Meters: 112
+2026-01-16 18:08:06,025 - leak_detection - INFO - Step completed. Time: 104700.0. Meters: 112
+2026-01-16 18:08:06,342 - leak_detection - INFO - Step completed. Time: 105000.0. Meters: 112
+2026-01-16 18:08:06,658 - leak_detection - INFO - Step completed. Time: 105300.0. Meters: 112
+2026-01-16 18:08:06,979 - leak_detection - INFO - Step completed. Time: 105600.0. Meters: 112
+2026-01-16 18:08:07,289 - leak_detection - INFO - Step completed. Time: 105900.0. Meters: 112
+2026-01-16 18:08:07,597 - leak_detection - INFO - Step completed. Time: 106200.0. Meters: 112
+2026-01-16 18:08:07,908 - leak_detection - INFO - Step completed. Time: 106500.0. Meters: 112
+2026-01-16 18:08:08,224 - leak_detection - INFO - Step completed. Time: 106800.0. Meters: 112
+2026-01-16 18:08:08,545 - leak_detection - INFO - Step completed. Time: 107100.0. Meters: 112
+2026-01-16 18:08:08,862 - leak_detection - INFO - Step completed. Time: 107400.0. Meters: 112
+2026-01-16 18:08:09,186 - leak_detection - INFO - Step completed. Time: 107700.0. Meters: 112
+2026-01-16 18:08:09,507 - leak_detection - INFO - Step completed. Time: 108000.0. Meters: 112
+2026-01-16 18:08:09,818 - leak_detection - INFO - Step completed. Time: 108300.0. Meters: 112
+2026-01-16 18:08:10,134 - leak_detection - INFO - Step completed. Time: 108600.0. Meters: 112
+2026-01-16 18:08:10,453 - leak_detection - INFO - Step completed. Time: 108900.0. Meters: 112
+2026-01-16 18:08:10,765 - leak_detection - INFO - Step completed. Time: 109200.0. Meters: 112
+2026-01-16 18:08:11,113 - leak_detection - INFO - Step completed. Time: 109500.0. Meters: 112
+2026-01-16 18:08:11,429 - leak_detection - INFO - Step completed. Time: 109800.0. Meters: 112
+2026-01-16 18:08:11,740 - leak_detection - INFO - Step completed. Time: 110100.0. Meters: 112
+2026-01-16 18:08:12,052 - leak_detection - INFO - Step completed. Time: 110400.0. Meters: 112
+2026-01-16 18:08:12,361 - leak_detection - INFO - Step completed. Time: 110700.0. Meters: 112
+2026-01-16 18:08:12,684 - leak_detection - INFO - Step completed. Time: 111000.0. Meters: 112
+2026-01-16 18:08:12,995 - leak_detection - INFO - Step completed. Time: 111300.0. Meters: 112
+2026-01-16 18:08:13,317 - leak_detection - INFO - Step completed. Time: 111600.0. Meters: 112
+2026-01-16 18:08:13,637 - leak_detection - INFO - Step completed. Time: 111900.0. Meters: 112
+2026-01-16 18:08:13,962 - leak_detection - INFO - Step completed. Time: 112200.0. Meters: 112
+2026-01-16 18:08:14,291 - leak_detection - INFO - Step completed. Time: 112500.0. Meters: 112
+2026-01-16 18:08:14,611 - leak_detection - INFO - Step completed. Time: 112800.0. Meters: 112
+2026-01-16 18:08:14,929 - leak_detection - INFO - Step completed. Time: 113100.0. Meters: 112
+2026-01-16 18:08:15,248 - leak_detection - INFO - Step completed. Time: 113400.0. Meters: 112
+2026-01-16 18:08:15,555 - leak_detection - INFO - Step completed. Time: 113700.0. Meters: 112
+2026-01-16 18:08:15,888 - leak_detection - INFO - Step completed. Time: 114000.0. Meters: 112
+2026-01-16 18:08:16,208 - leak_detection - INFO - Step completed. Time: 114300.0. Meters: 112
+2026-01-16 18:08:16,522 - leak_detection - INFO - Step completed. Time: 114600.0. Meters: 112
+2026-01-16 18:08:16,847 - leak_detection - INFO - Step completed. Time: 114900.0. Meters: 112
+2026-01-16 18:08:17,171 - leak_detection - INFO - Step completed. Time: 115200.0. Meters: 112
+2026-01-16 18:08:17,487 - leak_detection - INFO - Step completed. Time: 115500.0. Meters: 112
+2026-01-16 18:08:17,811 - leak_detection - INFO - Step completed. Time: 115800.0. Meters: 112
+2026-01-16 18:08:18,143 - leak_detection - INFO - Step completed. Time: 116100.0. Meters: 112
+2026-01-16 18:08:18,470 - leak_detection - INFO - Step completed. Time: 116400.0. Meters: 112
+2026-01-16 18:08:18,808 - leak_detection - INFO - Step completed. Time: 116700.0. Meters: 112
+2026-01-16 18:08:19,145 - leak_detection - INFO - Step completed. Time: 117000.0. Meters: 112
+2026-01-16 18:08:19,493 - leak_detection - INFO - Step completed. Time: 117300.0. Meters: 112
+2026-01-16 18:08:19,821 - leak_detection - INFO - Step completed. Time: 117600.0. Meters: 112
+2026-01-16 18:08:20,162 - leak_detection - INFO - Step completed. Time: 117900.0. Meters: 112
+2026-01-16 18:08:20,481 - leak_detection - INFO - Step completed. Time: 118200.0. Meters: 112
+2026-01-16 18:08:20,792 - leak_detection - INFO - Step completed. Time: 118500.0. Meters: 112
+2026-01-16 18:08:21,105 - leak_detection - INFO - Step completed. Time: 118800.0. Meters: 112
+2026-01-16 18:08:21,412 - leak_detection - INFO - Step completed. Time: 119100.0. Meters: 112
+2026-01-16 18:08:21,726 - leak_detection - INFO - Step completed. Time: 119400.0. Meters: 112
+2026-01-16 18:08:22,117 - leak_detection - INFO - Step completed. Time: 119700.0. Meters: 112
+2026-01-16 18:08:22,437 - leak_detection - INFO - Step completed. Time: 120000.0. Meters: 112
+2026-01-16 18:08:22,746 - leak_detection - INFO - Step completed. Time: 120300.0. Meters: 112
+2026-01-16 18:08:23,061 - leak_detection - INFO - Step completed. Time: 120600.0. Meters: 112
+2026-01-16 18:08:23,385 - leak_detection - INFO - Step completed. Time: 120900.0. Meters: 112
+2026-01-16 18:08:23,698 - leak_detection - INFO - Step completed. Time: 121200.0. Meters: 112
+2026-01-16 18:08:24,028 - leak_detection - INFO - Step completed. Time: 121500.0. Meters: 112
+2026-01-16 18:08:24,344 - leak_detection - INFO - Step completed. Time: 121800.0. Meters: 112
+2026-01-16 18:08:24,659 - leak_detection - INFO - Step completed. Time: 122100.0. Meters: 112
+2026-01-16 18:08:24,977 - leak_detection - INFO - Step completed. Time: 122400.0. Meters: 112
+2026-01-16 18:08:25,300 - leak_detection - INFO - Step completed. Time: 122700.0. Meters: 112
+2026-01-16 18:08:25,624 - leak_detection - INFO - Step completed. Time: 123000.0. Meters: 112
+2026-01-16 18:08:25,948 - leak_detection - INFO - Step completed. Time: 123300.0. Meters: 112
+2026-01-16 18:08:26,269 - leak_detection - INFO - Step completed. Time: 123600.0. Meters: 112
+2026-01-16 18:08:26,583 - leak_detection - INFO - Step completed. Time: 123900.0. Meters: 112
+2026-01-16 18:08:26,906 - leak_detection - INFO - Step completed. Time: 124200.0. Meters: 112
+2026-01-16 18:08:27,215 - leak_detection - INFO - Step completed. Time: 124500.0. Meters: 112
+2026-01-16 18:08:27,532 - leak_detection - INFO - Step completed. Time: 124800.0. Meters: 112
+2026-01-16 18:08:27,854 - leak_detection - INFO - Step completed. Time: 125100.0. Meters: 112
+2026-01-16 18:08:28,170 - leak_detection - INFO - Step completed. Time: 125400.0. Meters: 112
+2026-01-16 18:08:28,489 - leak_detection - INFO - Step completed. Time: 125700.0. Meters: 112
+2026-01-16 18:08:28,798 - leak_detection - INFO - Step completed. Time: 126000.0. Meters: 112
+2026-01-16 18:08:29,113 - leak_detection - INFO - Step completed. Time: 126300.0. Meters: 112
+2026-01-16 18:08:29,435 - leak_detection - INFO - Step completed. Time: 126600.0. Meters: 112
+2026-01-16 18:08:29,748 - leak_detection - INFO - Step completed. Time: 126900.0. Meters: 112
+2026-01-16 18:08:30,078 - leak_detection - INFO - Step completed. Time: 127200.0. Meters: 112
+2026-01-16 18:08:30,409 - leak_detection - INFO - Step completed. Time: 127500.0. Meters: 112
+2026-01-16 18:08:30,727 - leak_detection - INFO - Step completed. Time: 127800.0. Meters: 112
+2026-01-16 18:08:31,048 - leak_detection - INFO - Step completed. Time: 128100.0. Meters: 112
+2026-01-16 18:08:31,361 - leak_detection - INFO - Step completed. Time: 128400.0. Meters: 112
+2026-01-16 18:08:31,676 - leak_detection - INFO - Step completed. Time: 128700.0. Meters: 112
+2026-01-16 18:08:31,997 - leak_detection - INFO - Step completed. Time: 129000.0. Meters: 112
+2026-01-16 18:08:32,308 - leak_detection - INFO - Step completed. Time: 129300.0. Meters: 112
+2026-01-16 18:08:32,638 - leak_detection - INFO - Step completed. Time: 129600.0. Meters: 112
+2026-01-16 18:08:32,957 - leak_detection - INFO - Step completed. Time: 129900.0. Meters: 112
+2026-01-16 18:08:33,284 - leak_detection - INFO - Step completed. Time: 130200.0. Meters: 112
+2026-01-16 18:08:33,588 - leak_detection - INFO - Step completed. Time: 130500.0. Meters: 112
+2026-01-16 18:08:33,897 - leak_detection - INFO - Step completed. Time: 130800.0. Meters: 112
+2026-01-16 18:08:34,236 - leak_detection - INFO - Step completed. Time: 131100.0. Meters: 112
+2026-01-16 18:08:34,555 - leak_detection - INFO - Step completed. Time: 131400.0. Meters: 112
+2026-01-16 18:08:34,863 - leak_detection - INFO - Step completed. Time: 131700.0. Meters: 112
+2026-01-16 18:08:35,179 - leak_detection - INFO - Step completed. Time: 132000.0. Meters: 112
+2026-01-16 18:08:35,498 - leak_detection - INFO - Step completed. Time: 132300.0. Meters: 112
+2026-01-16 18:08:35,822 - leak_detection - INFO - Step completed. Time: 132600.0. Meters: 112
+2026-01-16 18:08:36,147 - leak_detection - INFO - Step completed. Time: 132900.0. Meters: 112
+2026-01-16 18:08:36,463 - leak_detection - INFO - Step completed. Time: 133200.0. Meters: 112
+2026-01-16 18:08:36,781 - leak_detection - INFO - Step completed. Time: 133500.0. Meters: 112
+2026-01-16 18:08:37,162 - leak_detection - INFO - Step completed. Time: 133800.0. Meters: 112
+2026-01-16 18:08:37,477 - leak_detection - INFO - Step completed. Time: 134100.0. Meters: 112
+2026-01-16 18:08:37,799 - leak_detection - INFO - Step completed. Time: 134400.0. Meters: 112
+2026-01-16 18:08:38,129 - leak_detection - INFO - Step completed. Time: 134700.0. Meters: 112
+2026-01-16 18:08:38,451 - leak_detection - INFO - Step completed. Time: 135000.0. Meters: 112
+2026-01-16 18:08:38,775 - leak_detection - INFO - Step completed. Time: 135300.0. Meters: 112
+2026-01-16 18:08:39,087 - leak_detection - INFO - Step completed. Time: 135600.0. Meters: 112
+2026-01-16 18:08:39,412 - leak_detection - INFO - Step completed. Time: 135900.0. Meters: 112
+2026-01-16 18:08:39,726 - leak_detection - INFO - Step completed. Time: 136200.0. Meters: 112
+2026-01-16 18:08:40,045 - leak_detection - INFO - Step completed. Time: 136500.0. Meters: 112
+2026-01-16 18:08:40,358 - leak_detection - INFO - Step completed. Time: 136800.0. Meters: 112
+2026-01-16 18:08:40,689 - leak_detection - INFO - Step completed. Time: 137100.0. Meters: 112
+2026-01-16 18:08:41,012 - leak_detection - INFO - Step completed. Time: 137400.0. Meters: 112
+2026-01-16 18:08:41,329 - leak_detection - INFO - Step completed. Time: 137700.0. Meters: 112
+2026-01-16 18:08:41,647 - leak_detection - INFO - Step completed. Time: 138000.0. Meters: 112
+2026-01-16 18:08:41,967 - leak_detection - INFO - Step completed. Time: 138300.0. Meters: 112
+2026-01-16 18:08:42,274 - leak_detection - INFO - Step completed. Time: 138600.0. Meters: 112
+2026-01-16 18:08:42,590 - leak_detection - INFO - Step completed. Time: 138900.0. Meters: 112
+2026-01-16 18:08:42,910 - leak_detection - INFO - Step completed. Time: 139200.0. Meters: 112
+2026-01-16 18:08:43,234 - leak_detection - INFO - Step completed. Time: 139500.0. Meters: 112
+2026-01-16 18:08:43,611 - leak_detection - INFO - Step completed. Time: 139800.0. Meters: 112
+2026-01-16 18:08:43,921 - leak_detection - INFO - Step completed. Time: 140100.0. Meters: 112
+2026-01-16 18:08:44,234 - leak_detection - INFO - Step completed. Time: 140400.0. Meters: 112
+2026-01-16 18:08:44,557 - leak_detection - INFO - Step completed. Time: 140700.0. Meters: 112
+2026-01-16 18:08:44,888 - leak_detection - INFO - Step completed. Time: 141000.0. Meters: 112
+2026-01-16 18:08:45,209 - leak_detection - INFO - Step completed. Time: 141300.0. Meters: 112
+2026-01-16 18:08:45,529 - leak_detection - INFO - Step completed. Time: 141600.0. Meters: 112
+2026-01-16 18:08:45,865 - leak_detection - INFO - Step completed. Time: 141900.0. Meters: 112
+2026-01-16 18:08:46,178 - leak_detection - INFO - Step completed. Time: 142200.0. Meters: 112
+2026-01-16 18:08:46,490 - leak_detection - INFO - Step completed. Time: 142500.0. Meters: 112
+2026-01-16 18:08:46,818 - leak_detection - INFO - Step completed. Time: 142800.0. Meters: 112
+2026-01-16 18:08:47,128 - leak_detection - INFO - Step completed. Time: 143100.0. Meters: 112
+2026-01-16 18:08:47,449 - leak_detection - INFO - Step completed. Time: 143400.0. Meters: 112
+2026-01-16 18:08:47,761 - leak_detection - INFO - Step completed. Time: 143700.0. Meters: 112
+2026-01-16 18:08:48,076 - leak_detection - INFO - Step completed. Time: 144000.0. Meters: 112
+2026-01-16 18:08:48,393 - leak_detection - INFO - Step completed. Time: 144300.0. Meters: 112
+2026-01-16 18:08:48,712 - leak_detection - INFO - Step completed. Time: 144600.0. Meters: 112
+2026-01-16 18:08:49,017 - leak_detection - INFO - Step completed. Time: 144900.0. Meters: 112
+2026-01-16 18:08:49,333 - leak_detection - INFO - Step completed. Time: 145200.0. Meters: 112
+2026-01-16 18:08:49,725 - leak_detection - INFO - Step completed. Time: 145500.0. Meters: 112
+2026-01-16 18:08:50,040 - leak_detection - INFO - Step completed. Time: 145800.0. Meters: 112
+2026-01-16 18:08:50,349 - leak_detection - INFO - Step completed. Time: 146100.0. Meters: 112
+2026-01-16 18:08:50,674 - leak_detection - INFO - Step completed. Time: 146400.0. Meters: 112
+2026-01-16 18:08:51,006 - leak_detection - INFO - Step completed. Time: 146700.0. Meters: 112
+2026-01-16 18:08:51,326 - leak_detection - INFO - Step completed. Time: 147000.0. Meters: 112
+2026-01-16 18:08:51,650 - leak_detection - INFO - Step completed. Time: 147300.0. Meters: 112
+2026-01-16 18:08:51,969 - leak_detection - INFO - Step completed. Time: 147600.0. Meters: 112
+2026-01-16 18:08:52,274 - leak_detection - INFO - Step completed. Time: 147900.0. Meters: 112
+2026-01-16 18:08:52,601 - leak_detection - INFO - Step completed. Time: 148200.0. Meters: 112
+2026-01-16 18:08:52,926 - leak_detection - INFO - Step completed. Time: 148500.0. Meters: 112
+2026-01-16 18:08:53,250 - leak_detection - INFO - Step completed. Time: 148800.0. Meters: 112
+2026-01-16 18:08:53,561 - leak_detection - INFO - Step completed. Time: 149100.0. Meters: 112
+2026-01-16 18:08:53,879 - leak_detection - INFO - Step completed. Time: 149400.0. Meters: 112
+2026-01-16 18:08:54,216 - leak_detection - INFO - Step completed. Time: 149700.0. Meters: 112
+2026-01-16 18:08:54,546 - leak_detection - INFO - Step completed. Time: 150000.0. Meters: 112
+2026-01-16 18:08:54,865 - leak_detection - INFO - Step completed. Time: 150300.0. Meters: 112
+2026-01-16 18:08:55,176 - leak_detection - INFO - Step completed. Time: 150600.0. Meters: 112
+2026-01-16 18:08:55,483 - leak_detection - INFO - Step completed. Time: 150900.0. Meters: 112
+2026-01-16 18:08:55,796 - leak_detection - INFO - Step completed. Time: 151200.0. Meters: 112
+2026-01-16 18:08:56,129 - leak_detection - INFO - Step completed. Time: 151500.0. Meters: 112
+2026-01-16 18:08:56,461 - leak_detection - INFO - Step completed. Time: 151800.0. Meters: 112
+2026-01-16 18:08:56,773 - leak_detection - INFO - Step completed. Time: 152100.0. Meters: 112
+2026-01-16 18:08:57,086 - leak_detection - INFO - Step completed. Time: 152400.0. Meters: 112
+2026-01-16 18:08:57,405 - leak_detection - INFO - Step completed. Time: 152700.0. Meters: 112
+2026-01-16 18:08:57,726 - leak_detection - INFO - Step completed. Time: 153000.0. Meters: 112
+2026-01-16 18:08:58,045 - leak_detection - INFO - Step completed. Time: 153300.0. Meters: 112
+2026-01-16 18:08:58,351 - leak_detection - INFO - Step completed. Time: 153600.0. Meters: 112
+2026-01-16 18:08:58,688 - leak_detection - INFO - Step completed. Time: 153900.0. Meters: 112
+2026-01-16 18:08:59,008 - leak_detection - INFO - Step completed. Time: 154200.0. Meters: 112
+2026-01-16 18:08:59,329 - leak_detection - INFO - Step completed. Time: 154500.0. Meters: 112
+2026-01-16 18:08:59,650 - leak_detection - INFO - Step completed. Time: 154800.0. Meters: 112
+2026-01-16 18:08:59,966 - leak_detection - INFO - Step completed. Time: 155100.0. Meters: 112
+2026-01-16 18:09:00,291 - leak_detection - INFO - Step completed. Time: 155400.0. Meters: 112
+2026-01-16 18:09:00,603 - leak_detection - INFO - Step completed. Time: 155700.0. Meters: 112
+2026-01-16 18:09:00,910 - leak_detection - INFO - Step completed. Time: 156000.0. Meters: 112
+2026-01-16 18:09:01,221 - leak_detection - INFO - Step completed. Time: 156300.0. Meters: 112
+2026-01-16 18:09:01,530 - leak_detection - INFO - Step completed. Time: 156600.0. Meters: 112
+2026-01-16 18:09:01,843 - leak_detection - INFO - Step completed. Time: 156900.0. Meters: 112
+2026-01-16 18:09:02,154 - leak_detection - INFO - Step completed. Time: 157200.0. Meters: 112
+2026-01-16 18:09:02,468 - leak_detection - INFO - Step completed. Time: 157500.0. Meters: 112
+2026-01-16 18:09:02,789 - leak_detection - INFO - Step completed. Time: 157800.0. Meters: 112
+2026-01-16 18:09:03,102 - leak_detection - INFO - Step completed. Time: 158100.0. Meters: 112
+2026-01-16 18:09:03,407 - leak_detection - INFO - Step completed. Time: 158400.0. Meters: 112
+2026-01-16 18:09:03,720 - leak_detection - INFO - Step completed. Time: 158700.0. Meters: 112
+2026-01-16 18:09:04,054 - leak_detection - INFO - Step completed. Time: 159000.0. Meters: 112
+2026-01-16 18:09:04,372 - leak_detection - INFO - Step completed. Time: 159300.0. Meters: 112
+2026-01-16 18:09:04,693 - leak_detection - INFO - Step completed. Time: 159600.0. Meters: 112
+2026-01-16 18:09:05,016 - leak_detection - INFO - Step completed. Time: 159900.0. Meters: 112
+2026-01-16 18:09:05,336 - leak_detection - INFO - Step completed. Time: 160200.0. Meters: 112
+2026-01-16 18:09:05,736 - leak_detection - INFO - Step completed. Time: 160500.0. Meters: 112
+2026-01-16 18:09:06,050 - leak_detection - INFO - Step completed. Time: 160800.0. Meters: 112
+2026-01-16 18:09:06,366 - leak_detection - INFO - Step completed. Time: 161100.0. Meters: 112
+2026-01-16 18:09:06,696 - leak_detection - INFO - Step completed. Time: 161400.0. Meters: 112
+2026-01-16 18:09:07,010 - leak_detection - INFO - Step completed. Time: 161700.0. Meters: 112
+2026-01-16 18:09:07,323 - leak_detection - INFO - Step completed. Time: 162000.0. Meters: 112
+2026-01-16 18:09:07,654 - leak_detection - INFO - Step completed. Time: 162300.0. Meters: 112
+2026-01-16 18:09:07,974 - leak_detection - INFO - Step completed. Time: 162600.0. Meters: 112
+2026-01-16 18:09:08,295 - leak_detection - INFO - Step completed. Time: 162900.0. Meters: 112
+2026-01-16 18:09:08,605 - leak_detection - INFO - Step completed. Time: 163200.0. Meters: 112
+2026-01-16 18:09:08,924 - leak_detection - INFO - Step completed. Time: 163500.0. Meters: 112
+2026-01-16 18:09:09,241 - leak_detection - INFO - Step completed. Time: 163800.0. Meters: 112
+2026-01-16 18:09:09,551 - leak_detection - INFO - Step completed. Time: 164100.0. Meters: 112
+2026-01-16 18:09:09,860 - leak_detection - INFO - Step completed. Time: 164400.0. Meters: 112
+2026-01-16 18:09:10,171 - leak_detection - INFO - Step completed. Time: 164700.0. Meters: 112
+2026-01-16 18:09:10,480 - leak_detection - INFO - Step completed. Time: 165000.0. Meters: 112
+2026-01-16 18:09:10,798 - leak_detection - INFO - Step completed. Time: 165300.0. Meters: 112
+2026-01-16 18:09:11,126 - leak_detection - INFO - Step completed. Time: 165600.0. Meters: 112
+2026-01-16 18:09:11,450 - leak_detection - INFO - Step completed. Time: 165900.0. Meters: 112
+2026-01-16 18:09:11,832 - leak_detection - INFO - Step completed. Time: 166200.0. Meters: 112
+2026-01-16 18:09:12,170 - leak_detection - INFO - Step completed. Time: 166500.0. Meters: 112
+2026-01-16 18:09:12,485 - leak_detection - INFO - Step completed. Time: 166800.0. Meters: 112
+2026-01-16 18:09:12,792 - leak_detection - INFO - Step completed. Time: 167100.0. Meters: 112
+2026-01-16 18:09:13,112 - leak_detection - INFO - Step completed. Time: 167400.0. Meters: 112
+2026-01-16 18:09:13,483 - leak_detection - INFO - Step completed. Time: 167700.0. Meters: 112
+2026-01-16 18:09:13,806 - leak_detection - INFO - Step completed. Time: 168000.0. Meters: 112
+2026-01-16 18:09:14,126 - leak_detection - INFO - Step completed. Time: 168300.0. Meters: 112
+2026-01-16 18:09:14,437 - leak_detection - INFO - Step completed. Time: 168600.0. Meters: 112
+2026-01-16 18:09:14,752 - leak_detection - INFO - Step completed. Time: 168900.0. Meters: 112
+2026-01-16 18:09:15,073 - leak_detection - INFO - Step completed. Time: 169200.0. Meters: 112
+2026-01-16 18:09:15,380 - leak_detection - INFO - Step completed. Time: 169500.0. Meters: 112
+2026-01-16 18:09:15,701 - leak_detection - INFO - Step completed. Time: 169800.0. Meters: 112
+2026-01-16 18:09:16,019 - leak_detection - INFO - Step completed. Time: 170100.0. Meters: 112
+2026-01-16 18:09:16,334 - leak_detection - INFO - Step completed. Time: 170400.0. Meters: 112
+2026-01-16 18:09:16,666 - leak_detection - INFO - Step completed. Time: 170700.0. Meters: 112
+2026-01-16 18:09:16,988 - leak_detection - INFO - Step completed. Time: 171000.0. Meters: 112
+2026-01-16 18:09:17,316 - leak_detection - INFO - Step completed. Time: 171300.0. Meters: 112
+2026-01-16 18:09:17,650 - leak_detection - INFO - Step completed. Time: 171600.0. Meters: 112
+2026-01-16 18:09:17,962 - leak_detection - INFO - Step completed. Time: 171900.0. Meters: 112
+2026-01-16 18:09:18,285 - leak_detection - INFO - Step completed. Time: 172200.0. Meters: 112
+2026-01-16 18:09:18,608 - leak_detection - INFO - Step completed. Time: 172500.0. Meters: 112
+2026-01-16 18:09:18,927 - leak_detection - INFO - Step completed. Time: 172800.0. Meters: 112
+2026-01-16 18:09:19,248 - leak_detection - INFO - Step completed. Time: 173100.0. Meters: 112
+2026-01-16 18:09:19,572 - leak_detection - INFO - Step completed. Time: 173400.0. Meters: 112
+2026-01-16 18:09:19,881 - leak_detection - INFO - Step completed. Time: 173700.0. Meters: 112
+2026-01-16 18:09:20,223 - leak_detection - INFO - Step completed. Time: 174000.0. Meters: 112
+2026-01-16 18:09:20,547 - leak_detection - INFO - Step completed. Time: 174300.0. Meters: 112
+2026-01-16 18:09:20,877 - leak_detection - INFO - Step completed. Time: 174600.0. Meters: 112
+2026-01-16 18:09:21,215 - leak_detection - INFO - Step completed. Time: 174900.0. Meters: 112
+2026-01-16 18:09:21,541 - leak_detection - INFO - Step completed. Time: 175200.0. Meters: 112
+2026-01-16 18:09:21,883 - leak_detection - INFO - Step completed. Time: 175500.0. Meters: 112
+2026-01-16 18:09:22,221 - leak_detection - INFO - Step completed. Time: 175800.0. Meters: 112
+2026-01-16 18:09:22,544 - leak_detection - INFO - Step completed. Time: 176100.0. Meters: 112
+2026-01-16 18:09:22,871 - leak_detection - INFO - Step completed. Time: 176400.0. Meters: 112
+2026-01-16 18:09:23,183 - leak_detection - INFO - Step completed. Time: 176700.0. Meters: 112
+2026-01-16 18:09:23,499 - leak_detection - INFO - Step completed. Time: 177000.0. Meters: 112
+2026-01-16 18:09:23,831 - leak_detection - INFO - Step completed. Time: 177300.0. Meters: 112
+2026-01-16 18:09:24,145 - leak_detection - INFO - Step completed. Time: 177600.0. Meters: 112
+2026-01-16 18:09:24,454 - leak_detection - INFO - Step completed. Time: 177900.0. Meters: 112
+2026-01-16 18:09:24,770 - leak_detection - INFO - Step completed. Time: 178200.0. Meters: 112
+2026-01-16 18:09:25,095 - leak_detection - INFO - Step completed. Time: 178500.0. Meters: 112
+2026-01-16 18:09:25,418 - leak_detection - INFO - Step completed. Time: 178800.0. Meters: 112
+2026-01-16 18:09:25,736 - leak_detection - INFO - Step completed. Time: 179100.0. Meters: 112
+2026-01-16 18:09:26,053 - leak_detection - INFO - Step completed. Time: 179400.0. Meters: 112
+2026-01-16 18:09:26,362 - leak_detection - INFO - Step completed. Time: 179700.0. Meters: 112
+2026-01-16 18:09:26,680 - leak_detection - INFO - Step completed. Time: 180000.0. Meters: 112
+2026-01-16 18:09:27,001 - leak_detection - INFO - Step completed. Time: 180300.0. Meters: 112
+2026-01-16 18:09:27,326 - leak_detection - INFO - Step completed. Time: 180600.0. Meters: 112
+2026-01-16 18:09:27,642 - leak_detection - INFO - Step completed. Time: 180900.0. Meters: 112
+2026-01-16 18:09:27,965 - leak_detection - INFO - Step completed. Time: 181200.0. Meters: 112
+2026-01-16 18:09:28,289 - leak_detection - INFO - Step completed. Time: 181500.0. Meters: 112
+2026-01-16 18:09:28,610 - leak_detection - INFO - Step completed. Time: 181800.0. Meters: 112
+2026-01-16 18:09:28,925 - leak_detection - INFO - Step completed. Time: 182100.0. Meters: 112
+2026-01-16 18:09:29,247 - leak_detection - INFO - Step completed. Time: 182400.0. Meters: 112
+2026-01-16 18:09:29,557 - leak_detection - INFO - Step completed. Time: 182700.0. Meters: 112
+2026-01-16 18:09:29,873 - leak_detection - INFO - Step completed. Time: 183000.0. Meters: 112
+2026-01-16 18:09:30,207 - leak_detection - INFO - Step completed. Time: 183300.0. Meters: 112
+2026-01-16 18:09:30,523 - leak_detection - INFO - Step completed. Time: 183600.0. Meters: 112
+2026-01-16 18:09:30,854 - leak_detection - INFO - Step completed. Time: 183900.0. Meters: 112
+2026-01-16 18:09:31,172 - leak_detection - INFO - Step completed. Time: 184200.0. Meters: 112
+2026-01-16 18:09:31,490 - leak_detection - INFO - Step completed. Time: 184500.0. Meters: 112
+2026-01-16 18:09:31,813 - leak_detection - INFO - Step completed. Time: 184800.0. Meters: 112
+2026-01-16 18:09:32,138 - leak_detection - INFO - Step completed. Time: 185100.0. Meters: 112
+2026-01-16 18:09:32,460 - leak_detection - INFO - Step completed. Time: 185400.0. Meters: 112
+2026-01-16 18:09:32,849 - leak_detection - INFO - Step completed. Time: 185700.0. Meters: 112
+2026-01-16 18:09:33,164 - leak_detection - INFO - Step completed. Time: 186000.0. Meters: 112
+2026-01-16 18:09:33,484 - leak_detection - INFO - Step completed. Time: 186300.0. Meters: 112
+2026-01-16 18:09:33,796 - leak_detection - INFO - Step completed. Time: 186600.0. Meters: 112
+2026-01-16 18:09:34,111 - leak_detection - INFO - Step completed. Time: 186900.0. Meters: 112
+2026-01-16 18:09:34,439 - leak_detection - INFO - Step completed. Time: 187200.0. Meters: 112
+2026-01-16 18:09:34,758 - leak_detection - INFO - Step completed. Time: 187500.0. Meters: 112
+2026-01-16 18:09:35,073 - leak_detection - INFO - Step completed. Time: 187800.0. Meters: 112
+2026-01-16 18:09:35,405 - leak_detection - INFO - Step completed. Time: 188100.0. Meters: 112
+2026-01-16 18:09:35,722 - leak_detection - INFO - Step completed. Time: 188400.0. Meters: 112
+2026-01-16 18:09:36,050 - leak_detection - INFO - Step completed. Time: 188700.0. Meters: 112
+2026-01-16 18:09:36,397 - leak_detection - INFO - Step completed. Time: 189000.0. Meters: 112
+2026-01-16 18:09:36,717 - leak_detection - INFO - Step completed. Time: 189300.0. Meters: 112
+2026-01-16 18:09:37,043 - leak_detection - INFO - Step completed. Time: 189600.0. Meters: 112
+2026-01-16 18:09:37,367 - leak_detection - INFO - Step completed. Time: 189900.0. Meters: 112
+2026-01-16 18:09:37,696 - leak_detection - INFO - Step completed. Time: 190200.0. Meters: 112
+2026-01-16 18:09:38,017 - leak_detection - INFO - Step completed. Time: 190500.0. Meters: 112
+2026-01-16 18:09:38,331 - leak_detection - INFO - Step completed. Time: 190800.0. Meters: 112
+2026-01-16 18:09:38,663 - leak_detection - INFO - Step completed. Time: 191100.0. Meters: 112
+2026-01-16 18:09:38,976 - leak_detection - INFO - Step completed. Time: 191400.0. Meters: 112
+2026-01-16 18:09:39,290 - leak_detection - INFO - Step completed. Time: 191700.0. Meters: 112
+2026-01-16 18:09:39,611 - leak_detection - INFO - Step completed. Time: 192000.0. Meters: 112
+2026-01-16 18:09:39,924 - leak_detection - INFO - Step completed. Time: 192300.0. Meters: 112
+2026-01-16 18:09:40,237 - leak_detection - INFO - Step completed. Time: 192600.0. Meters: 112
+2026-01-16 18:09:40,561 - leak_detection - INFO - Step completed. Time: 192900.0. Meters: 112
+2026-01-16 18:09:40,893 - leak_detection - INFO - Step completed. Time: 193200.0. Meters: 112
+2026-01-16 18:09:41,295 - leak_detection - INFO - Step completed. Time: 193500.0. Meters: 112
+2026-01-16 18:09:41,616 - leak_detection - INFO - Step completed. Time: 193800.0. Meters: 112
+2026-01-16 18:09:41,940 - leak_detection - INFO - Step completed. Time: 194100.0. Meters: 112
+2026-01-16 18:09:42,253 - leak_detection - INFO - Step completed. Time: 194400.0. Meters: 112
+2026-01-16 18:09:42,575 - leak_detection - INFO - Step completed. Time: 194700.0. Meters: 112
+2026-01-16 18:09:42,889 - leak_detection - INFO - Step completed. Time: 195000.0. Meters: 112
+2026-01-16 18:09:43,213 - leak_detection - INFO - Step completed. Time: 195300.0. Meters: 112
+2026-01-16 18:09:43,540 - leak_detection - INFO - Step completed. Time: 195600.0. Meters: 112
+2026-01-16 18:09:43,864 - leak_detection - INFO - Step completed. Time: 195900.0. Meters: 112
+2026-01-16 18:09:44,197 - leak_detection - INFO - Step completed. Time: 196200.0. Meters: 112
+2026-01-16 18:09:44,521 - leak_detection - INFO - Step completed. Time: 196500.0. Meters: 112
+2026-01-16 18:09:44,841 - leak_detection - INFO - Step completed. Time: 196800.0. Meters: 112
+2026-01-16 18:09:45,163 - leak_detection - INFO - Step completed. Time: 197100.0. Meters: 112
+2026-01-16 18:09:45,478 - leak_detection - INFO - Step completed. Time: 197400.0. Meters: 112
+2026-01-16 18:09:45,810 - leak_detection - INFO - Step completed. Time: 197700.0. Meters: 112
+2026-01-16 18:09:46,157 - leak_detection - INFO - Step completed. Time: 198000.0. Meters: 112
+2026-01-16 18:09:46,470 - leak_detection - INFO - Step completed. Time: 198300.0. Meters: 112
+2026-01-16 18:09:46,791 - leak_detection - INFO - Step completed. Time: 198600.0. Meters: 112
+2026-01-16 18:09:47,109 - leak_detection - INFO - Step completed. Time: 198900.0. Meters: 112
+2026-01-16 18:09:47,430 - leak_detection - INFO - Step completed. Time: 199200.0. Meters: 112
+2026-01-16 18:09:47,743 - leak_detection - INFO - Step completed. Time: 199500.0. Meters: 112
+2026-01-16 18:09:48,067 - leak_detection - INFO - Step completed. Time: 199800.0. Meters: 112
+2026-01-16 18:09:48,379 - leak_detection - INFO - Step completed. Time: 200100.0. Meters: 112
+2026-01-16 18:09:48,707 - leak_detection - INFO - Step completed. Time: 200400.0. Meters: 112
+2026-01-16 18:09:49,027 - leak_detection - INFO - Step completed. Time: 200700.0. Meters: 112
+2026-01-16 18:09:49,350 - leak_detection - INFO - Step completed. Time: 201000.0. Meters: 112
+2026-01-16 18:09:49,709 - leak_detection - INFO - Step completed. Time: 201300.0. Meters: 112
+2026-01-16 18:09:50,024 - leak_detection - INFO - Step completed. Time: 201600.0. Meters: 112
+2026-01-16 18:09:50,349 - leak_detection - INFO - Step completed. Time: 201900.0. Meters: 112
+2026-01-16 18:09:50,680 - leak_detection - INFO - Step completed. Time: 202200.0. Meters: 112
+2026-01-16 18:09:50,996 - leak_detection - INFO - Step completed. Time: 202500.0. Meters: 112
+2026-01-16 18:09:51,309 - leak_detection - INFO - Step completed. Time: 202800.0. Meters: 112
+2026-01-16 18:09:51,643 - leak_detection - INFO - Step completed. Time: 203100.0. Meters: 112
+2026-01-16 18:09:51,962 - leak_detection - INFO - Step completed. Time: 203400.0. Meters: 112
+2026-01-16 18:09:52,285 - leak_detection - INFO - Step completed. Time: 203700.0. Meters: 112
+2026-01-16 18:09:52,600 - leak_detection - INFO - Step completed. Time: 204000.0. Meters: 112
+2026-01-16 18:09:52,922 - leak_detection - INFO - Step completed. Time: 204300.0. Meters: 112
+2026-01-16 18:09:53,236 - leak_detection - INFO - Step completed. Time: 204600.0. Meters: 112
+2026-01-16 18:09:53,560 - leak_detection - INFO - Step completed. Time: 204900.0. Meters: 112
+2026-01-16 18:09:53,883 - leak_detection - INFO - Step completed. Time: 205200.0. Meters: 112
+2026-01-16 18:09:54,202 - leak_detection - INFO - Step completed. Time: 205500.0. Meters: 112
+2026-01-16 18:09:54,518 - leak_detection - INFO - Step completed. Time: 205800.0. Meters: 112
+2026-01-16 18:09:54,842 - leak_detection - INFO - Step completed. Time: 206100.0. Meters: 112
+2026-01-16 18:09:55,167 - leak_detection - INFO - Step completed. Time: 206400.0. Meters: 112
+2026-01-16 18:09:55,478 - leak_detection - INFO - Step completed. Time: 206700.0. Meters: 112
+2026-01-16 18:09:55,807 - leak_detection - INFO - Step completed. Time: 207000.0. Meters: 112
+2026-01-16 18:09:56,133 - leak_detection - INFO - Step completed. Time: 207300.0. Meters: 112
+2026-01-16 18:09:56,460 - leak_detection - INFO - Step completed. Time: 207600.0. Meters: 112
+2026-01-16 18:09:56,789 - leak_detection - INFO - Step completed. Time: 207900.0. Meters: 112
+2026-01-16 18:09:57,120 - leak_detection - INFO - Step completed. Time: 208200.0. Meters: 112
+2026-01-16 18:09:57,440 - leak_detection - INFO - Step completed. Time: 208500.0. Meters: 112
+2026-01-16 18:09:57,781 - leak_detection - INFO - Step completed. Time: 208800.0. Meters: 112
+2026-01-16 18:09:58,111 - leak_detection - INFO - Step completed. Time: 209100.0. Meters: 112
+2026-01-16 18:09:58,434 - leak_detection - INFO - Step completed. Time: 209400.0. Meters: 112
+2026-01-16 18:09:58,752 - leak_detection - INFO - Step completed. Time: 209700.0. Meters: 112
+2026-01-16 18:09:59,081 - leak_detection - INFO - Step completed. Time: 210000.0. Meters: 112
+2026-01-16 18:09:59,403 - leak_detection - INFO - Step completed. Time: 210300.0. Meters: 112
+2026-01-16 18:09:59,718 - leak_detection - INFO - Step completed. Time: 210600.0. Meters: 112
+2026-01-16 18:10:00,059 - leak_detection - INFO - Step completed. Time: 210900.0. Meters: 112
+2026-01-16 18:10:00,387 - leak_detection - INFO - Step completed. Time: 211200.0. Meters: 112
+2026-01-16 18:10:00,706 - leak_detection - INFO - Step completed. Time: 211500.0. Meters: 112
+2026-01-16 18:10:01,019 - leak_detection - INFO - Step completed. Time: 211800.0. Meters: 112
+2026-01-16 18:10:01,342 - leak_detection - INFO - Step completed. Time: 212100.0. Meters: 112
+2026-01-16 18:10:01,659 - leak_detection - INFO - Step completed. Time: 212400.0. Meters: 112
+2026-01-16 18:10:01,985 - leak_detection - INFO - Step completed. Time: 212700.0. Meters: 112
+2026-01-16 18:10:02,309 - leak_detection - INFO - Step completed. Time: 213000.0. Meters: 112
+2026-01-16 18:10:02,634 - leak_detection - INFO - Step completed. Time: 213300.0. Meters: 112
+2026-01-16 18:10:02,958 - leak_detection - INFO - Step completed. Time: 213600.0. Meters: 112
+2026-01-16 18:10:03,302 - leak_detection - INFO - Step completed. Time: 213900.0. Meters: 112
+2026-01-16 18:10:03,622 - leak_detection - INFO - Step completed. Time: 214200.0. Meters: 112
+2026-01-16 18:10:03,937 - leak_detection - INFO - Step completed. Time: 214500.0. Meters: 112
+2026-01-16 18:10:04,287 - leak_detection - INFO - Step completed. Time: 214800.0. Meters: 112
+2026-01-16 18:10:04,598 - leak_detection - INFO - Step completed. Time: 215100.0. Meters: 112
+2026-01-16 18:10:04,928 - leak_detection - INFO - Step completed. Time: 215400.0. Meters: 112
+2026-01-16 18:10:05,252 - leak_detection - INFO - Step completed. Time: 215700.0. Meters: 112
+2026-01-16 18:10:05,561 - leak_detection - INFO - Step completed. Time: 216000.0. Meters: 112
+2026-01-16 18:10:05,893 - leak_detection - INFO - Step completed. Time: 216300.0. Meters: 112
+2026-01-16 18:10:06,209 - leak_detection - INFO - Step completed. Time: 216600.0. Meters: 112
+2026-01-16 18:10:06,521 - leak_detection - INFO - Step completed. Time: 216900.0. Meters: 112
+2026-01-16 18:10:06,901 - leak_detection - INFO - Step completed. Time: 217200.0. Meters: 112
+2026-01-16 18:10:07,225 - leak_detection - INFO - Step completed. Time: 217500.0. Meters: 112
+2026-01-16 18:10:07,544 - leak_detection - INFO - Step completed. Time: 217800.0. Meters: 112
+2026-01-16 18:10:07,856 - leak_detection - INFO - Step completed. Time: 218100.0. Meters: 112
+2026-01-16 18:10:08,167 - leak_detection - INFO - Step completed. Time: 218400.0. Meters: 112
+2026-01-16 18:10:08,480 - leak_detection - INFO - Step completed. Time: 218700.0. Meters: 112
+2026-01-16 18:10:08,804 - leak_detection - INFO - Step completed. Time: 219000.0. Meters: 112
+2026-01-16 18:10:09,110 - leak_detection - INFO - Step completed. Time: 219300.0. Meters: 112
+2026-01-16 18:10:09,420 - leak_detection - INFO - Step completed. Time: 219600.0. Meters: 112
+2026-01-16 18:10:09,738 - leak_detection - INFO - Step completed. Time: 219900.0. Meters: 112
+2026-01-16 18:10:10,058 - leak_detection - INFO - Step completed. Time: 220200.0. Meters: 112
+2026-01-16 18:10:10,369 - leak_detection - INFO - Step completed. Time: 220500.0. Meters: 112
+2026-01-16 18:10:10,770 - leak_detection - INFO - Step completed. Time: 220800.0. Meters: 112
+2026-01-16 18:10:11,086 - leak_detection - INFO - Step completed. Time: 221100.0. Meters: 112
+2026-01-16 18:10:11,426 - leak_detection - INFO - Step completed. Time: 221400.0. Meters: 112
+2026-01-16 18:10:11,736 - leak_detection - INFO - Step completed. Time: 221700.0. Meters: 112
+2026-01-16 18:10:12,050 - leak_detection - INFO - Step completed. Time: 222000.0. Meters: 112
+2026-01-16 18:10:12,371 - leak_detection - INFO - Step completed. Time: 222300.0. Meters: 112
+2026-01-16 18:10:12,687 - leak_detection - INFO - Step completed. Time: 222600.0. Meters: 112
+2026-01-16 18:10:13,015 - leak_detection - INFO - Step completed. Time: 222900.0. Meters: 112
+2026-01-16 18:10:13,347 - leak_detection - INFO - Step completed. Time: 223200.0. Meters: 112
+2026-01-16 18:10:13,667 - leak_detection - INFO - Step completed. Time: 223500.0. Meters: 112
+2026-01-16 18:10:13,989 - leak_detection - INFO - Step completed. Time: 223800.0. Meters: 112
+2026-01-16 18:10:14,329 - leak_detection - INFO - Step completed. Time: 224100.0. Meters: 112
+2026-01-16 18:10:14,659 - leak_detection - INFO - Step completed. Time: 224400.0. Meters: 112
+2026-01-16 18:10:14,984 - leak_detection - INFO - Step completed. Time: 224700.0. Meters: 112
+2026-01-16 18:10:15,308 - leak_detection - INFO - Step completed. Time: 225000.0. Meters: 112
+2026-01-16 18:10:15,636 - leak_detection - INFO - Step completed. Time: 225300.0. Meters: 112
+2026-01-16 18:10:15,974 - leak_detection - INFO - Step completed. Time: 225600.0. Meters: 112
+2026-01-16 18:10:16,295 - leak_detection - INFO - Step completed. Time: 225900.0. Meters: 112
+2026-01-16 18:10:16,610 - leak_detection - INFO - Step completed. Time: 226200.0. Meters: 112
+2026-01-16 18:10:16,936 - leak_detection - INFO - Step completed. Time: 226500.0. Meters: 112
+2026-01-16 18:10:17,267 - leak_detection - INFO - Step completed. Time: 226800.0. Meters: 112
+2026-01-16 18:10:17,580 - leak_detection - INFO - Step completed. Time: 227100.0. Meters: 112
+2026-01-16 18:10:17,896 - leak_detection - INFO - Step completed. Time: 227400.0. Meters: 112
+2026-01-16 18:10:18,218 - leak_detection - INFO - Step completed. Time: 227700.0. Meters: 112
+2026-01-16 18:10:18,527 - leak_detection - INFO - Step completed. Time: 228000.0. Meters: 112
+2026-01-16 18:10:18,844 - leak_detection - INFO - Step completed. Time: 228300.0. Meters: 112
+2026-01-16 18:10:19,167 - leak_detection - INFO - Step completed. Time: 228600.0. Meters: 112
+2026-01-16 18:10:19,503 - leak_detection - INFO - Step completed. Time: 228900.0. Meters: 112
+2026-01-16 18:10:19,820 - leak_detection - INFO - Step completed. Time: 229200.0. Meters: 112
+2026-01-16 18:10:20,141 - leak_detection - INFO - Step completed. Time: 229500.0. Meters: 112
+2026-01-16 18:10:20,452 - leak_detection - INFO - Step completed. Time: 229800.0. Meters: 112
+2026-01-16 18:10:20,765 - leak_detection - INFO - Step completed. Time: 230100.0. Meters: 112
+2026-01-16 18:10:21,089 - leak_detection - INFO - Step completed. Time: 230400.0. Meters: 112
+2026-01-16 18:10:21,394 - leak_detection - INFO - Step completed. Time: 230700.0. Meters: 112
+2026-01-16 18:10:21,705 - leak_detection - INFO - Step completed. Time: 231000.0. Meters: 112
+2026-01-16 18:10:22,017 - leak_detection - INFO - Step completed. Time: 231300.0. Meters: 112
+2026-01-16 18:10:22,328 - leak_detection - INFO - Step completed. Time: 231600.0. Meters: 112
+2026-01-16 18:10:22,648 - leak_detection - INFO - Step completed. Time: 231900.0. Meters: 112
+2026-01-16 18:10:22,975 - leak_detection - INFO - Step completed. Time: 232200.0. Meters: 112
+2026-01-16 18:10:23,317 - leak_detection - INFO - Step completed. Time: 232500.0. Meters: 112
+2026-01-16 18:10:23,661 - leak_detection - INFO - Step completed. Time: 232800.0. Meters: 112
+2026-01-16 18:10:23,990 - leak_detection - INFO - Step completed. Time: 233100.0. Meters: 112
+2026-01-16 18:10:24,332 - leak_detection - INFO - Step completed. Time: 233400.0. Meters: 112
+2026-01-16 18:10:24,674 - leak_detection - INFO - Step completed. Time: 233700.0. Meters: 112
+2026-01-16 18:10:25,008 - leak_detection - INFO - Step completed. Time: 234000.0. Meters: 112
+2026-01-16 18:10:25,333 - leak_detection - INFO - Step completed. Time: 234300.0. Meters: 112
+2026-01-16 18:10:25,651 - leak_detection - INFO - Step completed. Time: 234600.0. Meters: 112
+2026-01-16 18:10:25,984 - leak_detection - INFO - Step completed. Time: 234900.0. Meters: 112
+2026-01-16 18:10:26,308 - leak_detection - INFO - Step completed. Time: 235200.0. Meters: 112
+2026-01-16 18:10:26,640 - leak_detection - INFO - Step completed. Time: 235500.0. Meters: 112
+2026-01-16 18:10:26,952 - leak_detection - INFO - Step completed. Time: 235800.0. Meters: 112
+2026-01-16 18:10:27,330 - leak_detection - INFO - Step completed. Time: 236100.0. Meters: 112
+2026-01-16 18:10:27,667 - leak_detection - INFO - Step completed. Time: 236400.0. Meters: 112
+2026-01-16 18:10:27,993 - leak_detection - INFO - Step completed. Time: 236700.0. Meters: 112
+2026-01-16 18:10:28,314 - leak_detection - INFO - Step completed. Time: 237000.0. Meters: 112
+2026-01-16 18:10:28,631 - leak_detection - INFO - Step completed. Time: 237300.0. Meters: 112
+2026-01-16 18:10:28,953 - leak_detection - INFO - Step completed. Time: 237600.0. Meters: 112
+2026-01-16 18:10:29,276 - leak_detection - INFO - Step completed. Time: 237900.0. Meters: 112
+2026-01-16 18:10:29,603 - leak_detection - INFO - Step completed. Time: 238200.0. Meters: 112
+2026-01-16 18:10:29,929 - leak_detection - INFO - Step completed. Time: 238500.0. Meters: 112
+2026-01-16 18:10:30,241 - leak_detection - INFO - Step completed. Time: 238800.0. Meters: 112
+2026-01-16 18:10:30,630 - leak_detection - INFO - Step completed. Time: 239100.0. Meters: 112
+2026-01-16 18:10:30,955 - leak_detection - INFO - Step completed. Time: 239400.0. Meters: 112
+2026-01-16 18:10:31,277 - leak_detection - INFO - Step completed. Time: 239700.0. Meters: 112
+2026-01-16 18:10:31,586 - leak_detection - INFO - Step completed. Time: 240000.0. Meters: 112
+2026-01-16 18:10:31,901 - leak_detection - INFO - Step completed. Time: 240300.0. Meters: 112
+2026-01-16 18:10:32,229 - leak_detection - INFO - Step completed. Time: 240600.0. Meters: 112
+2026-01-16 18:10:32,547 - leak_detection - INFO - Step completed. Time: 240900.0. Meters: 112
+2026-01-16 18:10:32,885 - leak_detection - INFO - Step completed. Time: 241200.0. Meters: 112
+2026-01-16 18:10:33,201 - leak_detection - INFO - Step completed. Time: 241500.0. Meters: 112
+2026-01-16 18:10:33,523 - leak_detection - INFO - Step completed. Time: 241800.0. Meters: 112
+2026-01-16 18:10:33,839 - leak_detection - INFO - Step completed. Time: 242100.0. Meters: 112
+2026-01-16 18:10:34,160 - leak_detection - INFO - Step completed. Time: 242400.0. Meters: 112
+2026-01-16 18:10:34,472 - leak_detection - INFO - Step completed. Time: 242700.0. Meters: 112
+2026-01-16 18:10:34,787 - leak_detection - INFO - Step completed. Time: 243000.0. Meters: 112
+2026-01-16 18:10:35,113 - leak_detection - INFO - Step completed. Time: 243300.0. Meters: 112
+2026-01-16 18:10:35,437 - leak_detection - INFO - Step completed. Time: 243600.0. Meters: 112
+2026-01-16 18:10:35,765 - leak_detection - INFO - Step completed. Time: 243900.0. Meters: 112
+2026-01-16 18:10:36,090 - leak_detection - INFO - Step completed. Time: 244200.0. Meters: 112
+2026-01-16 18:10:36,419 - leak_detection - INFO - Step completed. Time: 244500.0. Meters: 112
+2026-01-16 18:10:36,744 - leak_detection - INFO - Step completed. Time: 244800.0. Meters: 112
+2026-01-16 18:10:37,065 - leak_detection - INFO - Step completed. Time: 245100.0. Meters: 112
+2026-01-16 18:10:37,387 - leak_detection - INFO - Step completed. Time: 245400.0. Meters: 112
+2026-01-16 18:10:37,708 - leak_detection - INFO - Step completed. Time: 245700.0. Meters: 112
+2026-01-16 18:10:38,024 - leak_detection - INFO - Step completed. Time: 246000.0. Meters: 112
+2026-01-16 18:10:38,334 - leak_detection - INFO - Step completed. Time: 246300.0. Meters: 112
+2026-01-16 18:10:38,653 - leak_detection - INFO - Step completed. Time: 246600.0. Meters: 112
+2026-01-16 18:10:38,975 - leak_detection - INFO - Step completed. Time: 246900.0. Meters: 112
+2026-01-16 18:10:39,297 - leak_detection - INFO - Step completed. Time: 247200.0. Meters: 112
+2026-01-16 18:10:39,607 - leak_detection - INFO - Step completed. Time: 247500.0. Meters: 112
+2026-01-16 18:10:39,918 - leak_detection - INFO - Step completed. Time: 247800.0. Meters: 112
+2026-01-16 18:10:40,229 - leak_detection - INFO - Step completed. Time: 248100.0. Meters: 112
+2026-01-16 18:10:40,544 - leak_detection - INFO - Step completed. Time: 248400.0. Meters: 112
+2026-01-16 18:10:40,874 - leak_detection - INFO - Step completed. Time: 248700.0. Meters: 112
+2026-01-16 18:10:41,189 - leak_detection - INFO - Step completed. Time: 249000.0. Meters: 112
+2026-01-16 18:10:41,505 - leak_detection - INFO - Step completed. Time: 249300.0. Meters: 112
+2026-01-16 18:10:41,830 - leak_detection - INFO - Step completed. Time: 249600.0. Meters: 112
+2026-01-16 18:10:42,156 - leak_detection - INFO - Step completed. Time: 249900.0. Meters: 112
+2026-01-16 18:10:42,476 - leak_detection - INFO - Step completed. Time: 250200.0. Meters: 112
+2026-01-16 18:10:42,797 - leak_detection - INFO - Step completed. Time: 250500.0. Meters: 112
+2026-01-16 18:10:43,124 - leak_detection - INFO - Step completed. Time: 250800.0. Meters: 112
+2026-01-16 18:10:43,439 - leak_detection - INFO - Step completed. Time: 251100.0. Meters: 112
+2026-01-16 18:10:43,750 - leak_detection - INFO - Step completed. Time: 251400.0. Meters: 112
+2026-01-16 18:10:44,061 - leak_detection - INFO - Step completed. Time: 251700.0. Meters: 112
+2026-01-16 18:10:44,386 - leak_detection - INFO - Step completed. Time: 252000.0. Meters: 112
+2026-01-16 18:10:44,706 - leak_detection - INFO - Step completed. Time: 252300.0. Meters: 112
+2026-01-16 18:10:45,021 - leak_detection - INFO - Step completed. Time: 252600.0. Meters: 112
+2026-01-16 18:10:45,332 - leak_detection - INFO - Step completed. Time: 252900.0. Meters: 112
+2026-01-16 18:10:45,660 - leak_detection - INFO - Step completed. Time: 253200.0. Meters: 112
+2026-01-16 18:10:45,989 - leak_detection - INFO - Step completed. Time: 253500.0. Meters: 112
+2026-01-16 18:10:46,324 - leak_detection - INFO - Step completed. Time: 253800.0. Meters: 112
+2026-01-16 18:10:46,640 - leak_detection - INFO - Step completed. Time: 254100.0. Meters: 112
+2026-01-16 18:10:46,969 - leak_detection - INFO - Step completed. Time: 254400.0. Meters: 112
+2026-01-16 18:10:47,292 - leak_detection - INFO - Step completed. Time: 254700.0. Meters: 112
+2026-01-16 18:10:47,614 - leak_detection - INFO - Step completed. Time: 255000.0. Meters: 112
+2026-01-16 18:10:47,933 - leak_detection - INFO - Step completed. Time: 255300.0. Meters: 112
+2026-01-16 18:10:48,247 - leak_detection - INFO - Step completed. Time: 255600.0. Meters: 112
+2026-01-16 18:10:48,574 - leak_detection - INFO - Step completed. Time: 255900.0. Meters: 112
+2026-01-16 18:10:48,897 - leak_detection - INFO - Step completed. Time: 256200.0. Meters: 112
+2026-01-16 18:10:49,219 - leak_detection - INFO - Step completed. Time: 256500.0. Meters: 112
+2026-01-16 18:10:49,626 - leak_detection - INFO - Step completed. Time: 256800.0. Meters: 112
+2026-01-16 18:10:49,939 - leak_detection - INFO - Step completed. Time: 257100.0. Meters: 112
+2026-01-16 18:10:50,268 - leak_detection - INFO - Step completed. Time: 257400.0. Meters: 112
+2026-01-16 18:10:50,590 - leak_detection - INFO - Step completed. Time: 257700.0. Meters: 112
+2026-01-16 18:10:50,900 - leak_detection - INFO - Step completed. Time: 258000.0. Meters: 112
+2026-01-16 18:10:51,215 - leak_detection - INFO - Step completed. Time: 258300.0. Meters: 112
+2026-01-16 18:10:51,638 - leak_detection - INFO - Step completed. Time: 258600.0. Meters: 112
+2026-01-16 18:10:51,957 - leak_detection - INFO - Step completed. Time: 258900.0. Meters: 112
+2026-01-16 18:10:52,281 - leak_detection - INFO - Step completed. Time: 259200.0. Meters: 112
+2026-01-16 18:10:52,591 - leak_detection - INFO - Step completed. Time: 259500.0. Meters: 112
+2026-01-16 18:10:52,901 - leak_detection - INFO - Step completed. Time: 259800.0. Meters: 112
+2026-01-16 18:10:53,213 - leak_detection - INFO - Step completed. Time: 260100.0. Meters: 112
+2026-01-16 18:10:53,535 - leak_detection - INFO - Step completed. Time: 260400.0. Meters: 112
+2026-01-16 18:10:53,848 - leak_detection - INFO - Step completed. Time: 260700.0. Meters: 112
+2026-01-16 18:10:54,157 - leak_detection - INFO - Step completed. Time: 261000.0. Meters: 112
+2026-01-16 18:10:54,467 - leak_detection - INFO - Step completed. Time: 261300.0. Meters: 112
+2026-01-16 18:10:54,774 - leak_detection - INFO - Step completed. Time: 261600.0. Meters: 112
+2026-01-16 18:10:55,089 - leak_detection - INFO - Step completed. Time: 261900.0. Meters: 112
+2026-01-16 18:10:55,417 - leak_detection - INFO - Step completed. Time: 262200.0. Meters: 112
+2026-01-16 18:10:55,741 - leak_detection - INFO - Step completed. Time: 262500.0. Meters: 112
+2026-01-16 18:10:56,065 - leak_detection - INFO - Step completed. Time: 262800.0. Meters: 112
+2026-01-16 18:10:56,384 - leak_detection - INFO - Step completed. Time: 263100.0. Meters: 112
+2026-01-16 18:10:56,704 - leak_detection - INFO - Step completed. Time: 263400.0. Meters: 112
+2026-01-16 18:10:57,022 - leak_detection - INFO - Step completed. Time: 263700.0. Meters: 112
+2026-01-16 18:10:57,333 - leak_detection - INFO - Step completed. Time: 264000.0. Meters: 112
+2026-01-16 18:10:57,662 - leak_detection - INFO - Step completed. Time: 264300.0. Meters: 112
+2026-01-16 18:10:57,988 - leak_detection - INFO - Step completed. Time: 264600.0. Meters: 112
+2026-01-16 18:10:58,313 - leak_detection - INFO - Step completed. Time: 264900.0. Meters: 112
+2026-01-16 18:10:58,645 - leak_detection - INFO - Step completed. Time: 265200.0. Meters: 112
+2026-01-16 18:10:58,961 - leak_detection - INFO - Step completed. Time: 265500.0. Meters: 112
+2026-01-16 18:10:59,271 - leak_detection - INFO - Step completed. Time: 265800.0. Meters: 112
+2026-01-16 18:10:59,585 - leak_detection - INFO - Step completed. Time: 266100.0. Meters: 112
+2026-01-16 18:10:59,909 - leak_detection - INFO - Step completed. Time: 266400.0. Meters: 112
+2026-01-16 18:11:00,221 - leak_detection - INFO - Step completed. Time: 266700.0. Meters: 112
+2026-01-16 18:11:00,546 - leak_detection - INFO - Step completed. Time: 267000.0. Meters: 112
+2026-01-16 18:11:00,888 - leak_detection - INFO - Step completed. Time: 267300.0. Meters: 112
+2026-01-16 18:11:01,225 - leak_detection - INFO - Step completed. Time: 267600.0. Meters: 112
+2026-01-16 18:11:01,538 - leak_detection - INFO - Step completed. Time: 267900.0. Meters: 112
+2026-01-16 18:11:01,870 - leak_detection - INFO - Step completed. Time: 268200.0. Meters: 112
+2026-01-16 18:11:02,189 - leak_detection - INFO - Step completed. Time: 268500.0. Meters: 112
+2026-01-16 18:11:02,515 - leak_detection - INFO - Step completed. Time: 268800.0. Meters: 112
+2026-01-16 18:11:02,842 - leak_detection - INFO - Step completed. Time: 269100.0. Meters: 112
+2026-01-16 18:11:03,183 - leak_detection - INFO - Step completed. Time: 269400.0. Meters: 112
+2026-01-16 18:11:03,510 - leak_detection - INFO - Step completed. Time: 269700.0. Meters: 112
+2026-01-16 18:11:03,847 - leak_detection - INFO - Step completed. Time: 270000.0. Meters: 112
+2026-01-16 18:11:04,158 - leak_detection - INFO - Step completed. Time: 270300.0. Meters: 112
+2026-01-16 18:11:04,494 - leak_detection - INFO - Step completed. Time: 270600.0. Meters: 112
+2026-01-16 18:11:04,804 - leak_detection - INFO - Step completed. Time: 270900.0. Meters: 112
+2026-01-16 18:11:05,114 - leak_detection - INFO - Step completed. Time: 271200.0. Meters: 112
+2026-01-16 18:11:05,436 - leak_detection - INFO - Step completed. Time: 271500.0. Meters: 112
+2026-01-16 18:11:05,752 - leak_detection - INFO - Step completed. Time: 271800.0. Meters: 112
+2026-01-16 18:11:06,066 - leak_detection - INFO - Step completed. Time: 272100.0. Meters: 112
+2026-01-16 18:11:06,389 - leak_detection - INFO - Step completed. Time: 272400.0. Meters: 112
+2026-01-16 18:11:06,702 - leak_detection - INFO - Step completed. Time: 272700.0. Meters: 112
+2026-01-16 18:11:07,039 - leak_detection - INFO - Step completed. Time: 273000.0. Meters: 112
+2026-01-16 18:11:07,348 - leak_detection - INFO - Step completed. Time: 273300.0. Meters: 112
+2026-01-16 18:11:07,666 - leak_detection - INFO - Step completed. Time: 273600.0. Meters: 112
+2026-01-16 18:11:07,990 - leak_detection - INFO - Step completed. Time: 273900.0. Meters: 112
+2026-01-16 18:11:08,321 - leak_detection - INFO - Step completed. Time: 274200.0. Meters: 112
+2026-01-16 18:11:08,641 - leak_detection - INFO - Step completed. Time: 274500.0. Meters: 112
+2026-01-16 18:11:09,034 - leak_detection - INFO - Step completed. Time: 274800.0. Meters: 112
+2026-01-16 18:11:09,352 - leak_detection - INFO - Step completed. Time: 275100.0. Meters: 112
+2026-01-16 18:11:09,665 - leak_detection - INFO - Step completed. Time: 275400.0. Meters: 112
+2026-01-16 18:11:09,985 - leak_detection - INFO - Step completed. Time: 275700.0. Meters: 112
+2026-01-16 18:11:10,297 - leak_detection - INFO - Step completed. Time: 276000.0. Meters: 112
+2026-01-16 18:11:10,603 - leak_detection - INFO - Step completed. Time: 276300.0. Meters: 112
+2026-01-16 18:11:10,926 - leak_detection - INFO - Step completed. Time: 276600.0. Meters: 112
+2026-01-16 18:11:11,247 - leak_detection - INFO - Step completed. Time: 276900.0. Meters: 112
+2026-01-16 18:11:11,569 - leak_detection - INFO - Step completed. Time: 277200.0. Meters: 112
+2026-01-16 18:11:11,880 - leak_detection - INFO - Step completed. Time: 277500.0. Meters: 112
+2026-01-16 18:11:12,193 - leak_detection - INFO - Step completed. Time: 277800.0. Meters: 112
+2026-01-16 18:11:12,519 - leak_detection - INFO - Step completed. Time: 278100.0. Meters: 112
+2026-01-16 18:11:12,847 - leak_detection - INFO - Step completed. Time: 278400.0. Meters: 112
+2026-01-16 18:11:13,166 - leak_detection - INFO - Step completed. Time: 278700.0. Meters: 112
+2026-01-16 18:11:13,474 - leak_detection - INFO - Step completed. Time: 279000.0. Meters: 112
+2026-01-16 18:11:13,789 - leak_detection - INFO - Step completed. Time: 279300.0. Meters: 112
+2026-01-16 18:11:14,115 - leak_detection - INFO - Step completed. Time: 279600.0. Meters: 112
+2026-01-16 18:11:14,436 - leak_detection - INFO - Step completed. Time: 279900.0. Meters: 112
+2026-01-16 18:11:14,832 - leak_detection - INFO - Step completed. Time: 280200.0. Meters: 112
+2026-01-16 18:11:15,154 - leak_detection - INFO - Step completed. Time: 280500.0. Meters: 112
+2026-01-16 18:11:15,478 - leak_detection - INFO - Step completed. Time: 280800.0. Meters: 112
+2026-01-16 18:11:15,804 - leak_detection - INFO - Step completed. Time: 281100.0. Meters: 112
+2026-01-16 18:11:16,136 - leak_detection - INFO - Step completed. Time: 281400.0. Meters: 112
+2026-01-16 18:11:16,462 - leak_detection - INFO - Step completed. Time: 281700.0. Meters: 112
+2026-01-16 18:11:16,793 - leak_detection - INFO - Step completed. Time: 282000.0. Meters: 112
+2026-01-16 18:11:17,111 - leak_detection - INFO - Step completed. Time: 282300.0. Meters: 112
+2026-01-16 18:11:17,436 - leak_detection - INFO - Step completed. Time: 282600.0. Meters: 112
+2026-01-16 18:11:17,761 - leak_detection - INFO - Step completed. Time: 282900.0. Meters: 112
+2026-01-16 18:11:18,083 - leak_detection - INFO - Step completed. Time: 283200.0. Meters: 112
+2026-01-16 18:11:18,461 - leak_detection - INFO - Step completed. Time: 283500.0. Meters: 112
+2026-01-16 18:11:18,786 - leak_detection - INFO - Step completed. Time: 283800.0. Meters: 112
+2026-01-16 18:11:19,107 - leak_detection - INFO - Step completed. Time: 284100.0. Meters: 112
+2026-01-16 18:11:19,459 - leak_detection - INFO - Step completed. Time: 284400.0. Meters: 112
+2026-01-16 18:11:19,773 - leak_detection - INFO - Step completed. Time: 284700.0. Meters: 112
+2026-01-16 18:11:20,078 - leak_detection - INFO - Step completed. Time: 285000.0. Meters: 112
+2026-01-16 18:11:20,396 - leak_detection - INFO - Step completed. Time: 285300.0. Meters: 112
+2026-01-16 18:11:20,728 - leak_detection - INFO - Step completed. Time: 285600.0. Meters: 112
+2026-01-16 18:11:21,060 - leak_detection - INFO - Step completed. Time: 285900.0. Meters: 112
+2026-01-16 18:11:21,384 - leak_detection - INFO - Step completed. Time: 286200.0. Meters: 112
+2026-01-16 18:11:21,702 - leak_detection - INFO - Step completed. Time: 286500.0. Meters: 112
+2026-01-16 18:11:22,028 - leak_detection - INFO - Step completed. Time: 286800.0. Meters: 112
+2026-01-16 18:11:22,356 - leak_detection - INFO - Step completed. Time: 287100.0. Meters: 112
+2026-01-16 18:11:22,681 - leak_detection - INFO - Step completed. Time: 287400.0. Meters: 112
+2026-01-16 18:11:22,997 - leak_detection - INFO - Step completed. Time: 287700.0. Meters: 112
+2026-01-16 18:11:23,327 - leak_detection - INFO - Step completed. Time: 288000.0. Meters: 112
+2026-01-16 18:11:23,660 - leak_detection - INFO - Step completed. Time: 288300.0. Meters: 112
+2026-01-16 18:11:23,979 - leak_detection - INFO - Step completed. Time: 288600.0. Meters: 112
+2026-01-16 18:11:24,322 - leak_detection - INFO - Step completed. Time: 288900.0. Meters: 112
+2026-01-16 18:11:24,657 - leak_detection - INFO - Step completed. Time: 289200.0. Meters: 112
+2026-01-16 18:11:24,979 - leak_detection - INFO - Step completed. Time: 289500.0. Meters: 112
+2026-01-16 18:11:25,316 - leak_detection - INFO - Step completed. Time: 289800.0. Meters: 112
+2026-01-16 18:11:25,734 - leak_detection - INFO - Step completed. Time: 290100.0. Meters: 112
+2026-01-16 18:11:26,069 - leak_detection - INFO - Step completed. Time: 290400.0. Meters: 112
+2026-01-16 18:11:26,401 - leak_detection - INFO - Step completed. Time: 290700.0. Meters: 112
+2026-01-16 18:11:26,729 - leak_detection - INFO - Step completed. Time: 291000.0. Meters: 112
+2026-01-16 18:11:27,058 - leak_detection - INFO - Step completed. Time: 291300.0. Meters: 112
+2026-01-16 18:11:27,394 - leak_detection - INFO - Step completed. Time: 291600.0. Meters: 112
+2026-01-16 18:11:27,704 - leak_detection - INFO - Step completed. Time: 291900.0. Meters: 112
+2026-01-16 18:11:28,019 - leak_detection - INFO - Step completed. Time: 292200.0. Meters: 112
+2026-01-16 18:11:28,341 - leak_detection - INFO - Step completed. Time: 292500.0. Meters: 112
+2026-01-16 18:11:28,659 - leak_detection - INFO - Step completed. Time: 292800.0. Meters: 112
+2026-01-16 18:11:28,982 - leak_detection - INFO - Step completed. Time: 293100.0. Meters: 112
+2026-01-16 18:11:29,301 - leak_detection - INFO - Step completed. Time: 293400.0. Meters: 112
+2026-01-16 18:11:29,622 - leak_detection - INFO - Step completed. Time: 293700.0. Meters: 112
+2026-01-16 18:11:29,940 - leak_detection - INFO - Step completed. Time: 294000.0. Meters: 112
+2026-01-16 18:11:30,267 - leak_detection - INFO - Step completed. Time: 294300.0. Meters: 112
+2026-01-16 18:11:30,588 - leak_detection - INFO - Step completed. Time: 294600.0. Meters: 112
+2026-01-16 18:11:30,903 - leak_detection - INFO - Step completed. Time: 294900.0. Meters: 112
+2026-01-16 18:11:31,225 - leak_detection - INFO - Step completed. Time: 295200.0. Meters: 112
+2026-01-16 18:11:31,534 - leak_detection - INFO - Step completed. Time: 295500.0. Meters: 112
+2026-01-16 18:11:31,912 - leak_detection - INFO - Step completed. Time: 295800.0. Meters: 112
+2026-01-16 18:11:32,233 - leak_detection - INFO - Step completed. Time: 296100.0. Meters: 112
+2026-01-16 18:11:32,556 - leak_detection - INFO - Step completed. Time: 296400.0. Meters: 112
+2026-01-16 18:11:32,875 - leak_detection - INFO - Step completed. Time: 296700.0. Meters: 112
+2026-01-16 18:11:33,203 - leak_detection - INFO - Step completed. Time: 297000.0. Meters: 112
+2026-01-16 18:11:33,517 - leak_detection - INFO - Step completed. Time: 297300.0. Meters: 112
+2026-01-16 18:11:33,856 - leak_detection - INFO - Step completed. Time: 297600.0. Meters: 112
+2026-01-16 18:11:34,171 - leak_detection - INFO - Step completed. Time: 297900.0. Meters: 112
+2026-01-16 18:11:34,487 - leak_detection - INFO - Step completed. Time: 298200.0. Meters: 112
+2026-01-16 18:11:34,803 - leak_detection - INFO - Step completed. Time: 298500.0. Meters: 112
+2026-01-16 18:11:35,116 - leak_detection - INFO - Step completed. Time: 298800.0. Meters: 112
+2026-01-16 18:11:35,430 - leak_detection - INFO - Step completed. Time: 299100.0. Meters: 112
+2026-01-16 18:11:35,824 - leak_detection - INFO - Step completed. Time: 299400.0. Meters: 112
+2026-01-16 18:11:36,145 - leak_detection - INFO - Step completed. Time: 299700.0. Meters: 112
+2026-01-16 18:11:36,469 - leak_detection - INFO - Step completed. Time: 300000.0. Meters: 112
+2026-01-16 18:11:36,792 - leak_detection - INFO - Step completed. Time: 300300.0. Meters: 112
+2026-01-16 18:11:37,137 - leak_detection - INFO - Step completed. Time: 300600.0. Meters: 112
+2026-01-16 18:11:37,456 - leak_detection - INFO - Step completed. Time: 300900.0. Meters: 112
+2026-01-16 18:11:37,830 - leak_detection - INFO - Step completed. Time: 301200.0. Meters: 112
+2026-01-16 18:11:38,161 - leak_detection - INFO - Step completed. Time: 301500.0. Meters: 112
+2026-01-16 18:11:38,478 - leak_detection - INFO - Step completed. Time: 301800.0. Meters: 112
+2026-01-16 18:11:38,794 - leak_detection - INFO - Step completed. Time: 302100.0. Meters: 112
+2026-01-16 18:11:39,119 - leak_detection - INFO - Step completed. Time: 302400.0. Meters: 112
+2026-01-16 18:11:39,475 - leak_detection - INFO - Step completed. Time: 302700.0. Meters: 112
+2026-01-16 18:11:39,799 - leak_detection - INFO - Step completed. Time: 303000.0. Meters: 112
+2026-01-16 18:11:40,127 - leak_detection - INFO - Step completed. Time: 303300.0. Meters: 112
+2026-01-16 18:11:40,471 - leak_detection - INFO - Step completed. Time: 303600.0. Meters: 112
+2026-01-16 18:11:40,799 - leak_detection - INFO - Step completed. Time: 303900.0. Meters: 112
+2026-01-16 18:11:41,128 - leak_detection - INFO - Step completed. Time: 304200.0. Meters: 112
+2026-01-16 18:11:41,445 - leak_detection - INFO - Step completed. Time: 304500.0. Meters: 112
+2026-01-16 18:11:41,758 - leak_detection - INFO - Step completed. Time: 304800.0. Meters: 112
+2026-01-16 18:11:42,092 - leak_detection - INFO - Step completed. Time: 305100.0. Meters: 112
+2026-01-16 18:11:42,423 - leak_detection - INFO - Step completed. Time: 305400.0. Meters: 112
+2026-01-16 18:11:42,746 - leak_detection - INFO - Step completed. Time: 305700.0. Meters: 112
+2026-01-16 18:11:43,058 - leak_detection - INFO - Step completed. Time: 306000.0. Meters: 112
+2026-01-16 18:11:43,462 - leak_detection - INFO - Step completed. Time: 306300.0. Meters: 112
+2026-01-16 18:11:43,785 - leak_detection - INFO - Step completed. Time: 306600.0. Meters: 112
+2026-01-16 18:11:44,097 - leak_detection - INFO - Step completed. Time: 306900.0. Meters: 112
+2026-01-16 18:11:44,427 - leak_detection - INFO - Step completed. Time: 307200.0. Meters: 112
+2026-01-16 18:11:44,748 - leak_detection - INFO - Step completed. Time: 307500.0. Meters: 112
+2026-01-16 18:11:45,061 - leak_detection - INFO - Step completed. Time: 307800.0. Meters: 112
+2026-01-16 18:11:45,462 - leak_detection - INFO - Step completed. Time: 308100.0. Meters: 112
+2026-01-16 18:11:45,789 - leak_detection - INFO - Step completed. Time: 308400.0. Meters: 112
+2026-01-16 18:11:46,128 - leak_detection - INFO - Step completed. Time: 308700.0. Meters: 112
+2026-01-16 18:11:46,439 - leak_detection - INFO - Step completed. Time: 309000.0. Meters: 112
+2026-01-16 18:11:46,768 - leak_detection - INFO - Step completed. Time: 309300.0. Meters: 112
+2026-01-16 18:11:47,099 - leak_detection - INFO - Step completed. Time: 309600.0. Meters: 112
+2026-01-16 18:11:47,417 - leak_detection - INFO - Step completed. Time: 309900.0. Meters: 112
+2026-01-16 18:11:47,751 - leak_detection - INFO - Step completed. Time: 310200.0. Meters: 112
+2026-01-16 18:11:48,068 - leak_detection - INFO - Step completed. Time: 310500.0. Meters: 112
+2026-01-16 18:11:48,391 - leak_detection - INFO - Step completed. Time: 310800.0. Meters: 112
+2026-01-16 18:11:48,711 - leak_detection - INFO - Step completed. Time: 311100.0. Meters: 112
+2026-01-16 18:11:49,027 - leak_detection - INFO - Step completed. Time: 311400.0. Meters: 112
+2026-01-16 18:11:49,342 - leak_detection - INFO - Step completed. Time: 311700.0. Meters: 112
+2026-01-16 18:11:49,727 - leak_detection - INFO - Step completed. Time: 312000.0. Meters: 112
+2026-01-16 18:11:50,035 - leak_detection - INFO - Step completed. Time: 312300.0. Meters: 112
+2026-01-16 18:11:50,354 - leak_detection - INFO - Step completed. Time: 312600.0. Meters: 112
+2026-01-16 18:11:50,680 - leak_detection - INFO - Step completed. Time: 312900.0. Meters: 112
+2026-01-16 18:11:51,004 - leak_detection - INFO - Step completed. Time: 313200.0. Meters: 112
+2026-01-16 18:11:51,324 - leak_detection - INFO - Step completed. Time: 313500.0. Meters: 112
+2026-01-16 18:11:51,657 - leak_detection - INFO - Step completed. Time: 313800.0. Meters: 112
+2026-01-16 18:11:51,976 - leak_detection - INFO - Step completed. Time: 314100.0. Meters: 112
+2026-01-16 18:11:52,283 - leak_detection - INFO - Step completed. Time: 314400.0. Meters: 112
+2026-01-16 18:11:52,598 - leak_detection - INFO - Step completed. Time: 314700.0. Meters: 112
+2026-01-16 18:11:52,920 - leak_detection - INFO - Step completed. Time: 315000.0. Meters: 112
+2026-01-16 18:11:53,260 - leak_detection - INFO - Step completed. Time: 315300.0. Meters: 112
+2026-01-16 18:11:53,581 - leak_detection - INFO - Step completed. Time: 315600.0. Meters: 112
+2026-01-16 18:11:53,899 - leak_detection - INFO - Step completed. Time: 315900.0. Meters: 112
+2026-01-16 18:11:54,208 - leak_detection - INFO - Step completed. Time: 316200.0. Meters: 112
+2026-01-16 18:11:54,524 - leak_detection - INFO - Step completed. Time: 316500.0. Meters: 112
+2026-01-16 18:11:54,845 - leak_detection - INFO - Step completed. Time: 316800.0. Meters: 112
+2026-01-16 18:11:55,169 - leak_detection - INFO - Step completed. Time: 317100.0. Meters: 112
+2026-01-16 18:11:55,488 - leak_detection - INFO - Step completed. Time: 317400.0. Meters: 112
+2026-01-16 18:11:55,803 - leak_detection - INFO - Step completed. Time: 317700.0. Meters: 112
+2026-01-16 18:11:56,115 - leak_detection - INFO - Step completed. Time: 318000.0. Meters: 112
+2026-01-16 18:11:56,442 - leak_detection - INFO - Step completed. Time: 318300.0. Meters: 112
+2026-01-16 18:11:56,770 - leak_detection - INFO - Step completed. Time: 318600.0. Meters: 112
+2026-01-16 18:11:57,094 - leak_detection - INFO - Step completed. Time: 318900.0. Meters: 112
+2026-01-16 18:11:57,422 - leak_detection - INFO - Step completed. Time: 319200.0. Meters: 112
+2026-01-16 18:11:57,747 - leak_detection - INFO - Step completed. Time: 319500.0. Meters: 112
+2026-01-16 18:11:58,073 - leak_detection - INFO - Step completed. Time: 319800.0. Meters: 112
+2026-01-16 18:11:58,432 - leak_detection - INFO - Step completed. Time: 320100.0. Meters: 112
+2026-01-16 18:11:58,840 - leak_detection - INFO - Step completed. Time: 320400.0. Meters: 112
+2026-01-16 18:11:59,158 - leak_detection - INFO - Step completed. Time: 320700.0. Meters: 112
+2026-01-16 18:11:59,489 - leak_detection - INFO - Step completed. Time: 321000.0. Meters: 112
+2026-01-16 18:11:59,809 - leak_detection - INFO - Step completed. Time: 321300.0. Meters: 112
+2026-01-16 18:12:00,137 - leak_detection - INFO - Step completed. Time: 321600.0. Meters: 112
+2026-01-16 18:12:00,526 - leak_detection - INFO - Step completed. Time: 321900.0. Meters: 112
+2026-01-16 18:12:00,851 - leak_detection - INFO - Step completed. Time: 322200.0. Meters: 112
+2026-01-16 18:12:01,173 - leak_detection - INFO - Step completed. Time: 322500.0. Meters: 112
+2026-01-16 18:12:01,495 - leak_detection - INFO - Step completed. Time: 322800.0. Meters: 112
+2026-01-16 18:12:01,811 - leak_detection - INFO - Step completed. Time: 323100.0. Meters: 112
+2026-01-16 18:12:02,137 - leak_detection - INFO - Step completed. Time: 323400.0. Meters: 112
+2026-01-16 18:12:02,458 - leak_detection - INFO - Step completed. Time: 323700.0. Meters: 112
+2026-01-16 18:12:02,775 - leak_detection - INFO - Step completed. Time: 324000.0. Meters: 112
+2026-01-16 18:12:03,099 - leak_detection - INFO - Step completed. Time: 324300.0. Meters: 112
+2026-01-16 18:12:03,423 - leak_detection - INFO - Step completed. Time: 324600.0. Meters: 112
+2026-01-16 18:12:03,742 - leak_detection - INFO - Step completed. Time: 324900.0. Meters: 112
+2026-01-16 18:12:04,061 - leak_detection - INFO - Step completed. Time: 325200.0. Meters: 112
+2026-01-16 18:12:04,402 - leak_detection - INFO - Step completed. Time: 325500.0. Meters: 112
+2026-01-16 18:12:04,725 - leak_detection - INFO - Step completed. Time: 325800.0. Meters: 112
+2026-01-16 18:12:05,049 - leak_detection - INFO - Step completed. Time: 326100.0. Meters: 112
+2026-01-16 18:12:05,373 - leak_detection - INFO - Step completed. Time: 326400.0. Meters: 112
+2026-01-16 18:12:05,755 - leak_detection - INFO - Step completed. Time: 326700.0. Meters: 112
+2026-01-16 18:12:06,095 - leak_detection - INFO - Step completed. Time: 327000.0. Meters: 112
+2026-01-16 18:12:06,444 - leak_detection - INFO - Step completed. Time: 327300.0. Meters: 112
+2026-01-16 18:12:06,767 - leak_detection - INFO - Step completed. Time: 327600.0. Meters: 112
+2026-01-16 18:12:07,089 - leak_detection - INFO - Step completed. Time: 327900.0. Meters: 112
+2026-01-16 18:12:07,409 - leak_detection - INFO - Step completed. Time: 328200.0. Meters: 112
+2026-01-16 18:12:07,726 - leak_detection - INFO - Step completed. Time: 328500.0. Meters: 112
+2026-01-16 18:12:08,066 - leak_detection - INFO - Step completed. Time: 328800.0. Meters: 112
+2026-01-16 18:12:08,393 - leak_detection - INFO - Step completed. Time: 329100.0. Meters: 112
+2026-01-16 18:12:08,717 - leak_detection - INFO - Step completed. Time: 329400.0. Meters: 112
+2026-01-16 18:12:09,038 - leak_detection - INFO - Step completed. Time: 329700.0. Meters: 112
+2026-01-16 18:12:09,364 - leak_detection - INFO - Step completed. Time: 330000.0. Meters: 112
+2026-01-16 18:12:09,690 - leak_detection - INFO - Step completed. Time: 330300.0. Meters: 112
+2026-01-16 18:12:10,007 - leak_detection - INFO - Step completed. Time: 330600.0. Meters: 112
+2026-01-16 18:12:10,327 - leak_detection - INFO - Step completed. Time: 330900.0. Meters: 112
+2026-01-16 18:12:10,645 - leak_detection - INFO - Step completed. Time: 331200.0. Meters: 112
+2026-01-16 18:12:10,975 - leak_detection - INFO - Step completed. Time: 331500.0. Meters: 112
+2026-01-16 18:12:11,291 - leak_detection - INFO - Step completed. Time: 331800.0. Meters: 112
+2026-01-16 18:12:11,621 - leak_detection - INFO - Step completed. Time: 332100.0. Meters: 112
+2026-01-16 18:12:11,946 - leak_detection - INFO - Step completed. Time: 332400.0. Meters: 112
+2026-01-16 18:12:12,271 - leak_detection - INFO - Step completed. Time: 332700.0. Meters: 112
+2026-01-16 18:12:12,593 - leak_detection - INFO - Step completed. Time: 333000.0. Meters: 112
+2026-01-16 18:12:12,923 - leak_detection - INFO - Step completed. Time: 333300.0. Meters: 112
+2026-01-16 18:12:13,248 - leak_detection - INFO - Step completed. Time: 333600.0. Meters: 112
+2026-01-16 18:12:13,566 - leak_detection - INFO - Step completed. Time: 333900.0. Meters: 112
+2026-01-16 18:12:13,876 - leak_detection - INFO - Step completed. Time: 334200.0. Meters: 112
+2026-01-16 18:12:14,189 - leak_detection - INFO - Step completed. Time: 334500.0. Meters: 112
+2026-01-16 18:12:14,515 - leak_detection - INFO - Step completed. Time: 334800.0. Meters: 112
+2026-01-16 18:12:14,821 - leak_detection - INFO - Step completed. Time: 335100.0. Meters: 112
+2026-01-16 18:12:15,132 - leak_detection - INFO - Step completed. Time: 335400.0. Meters: 112
+2026-01-16 18:12:15,444 - leak_detection - INFO - Step completed. Time: 335700.0. Meters: 112
+2026-01-16 18:12:15,753 - leak_detection - INFO - Step completed. Time: 336000.0. Meters: 112
+2026-01-16 18:12:16,084 - leak_detection - INFO - Step completed. Time: 336300.0. Meters: 112
+2026-01-16 18:12:16,393 - leak_detection - INFO - Step completed. Time: 336600.0. Meters: 112
+2026-01-16 18:12:16,703 - leak_detection - INFO - Step completed. Time: 336900.0. Meters: 112
+2026-01-16 18:12:17,016 - leak_detection - INFO - Step completed. Time: 337200.0. Meters: 112
+2026-01-16 18:12:17,338 - leak_detection - INFO - Step completed. Time: 337500.0. Meters: 112
+2026-01-16 18:12:17,656 - leak_detection - INFO - Step completed. Time: 337800.0. Meters: 112
+2026-01-16 18:12:17,971 - leak_detection - INFO - Step completed. Time: 338100.0. Meters: 112
+2026-01-16 18:12:18,283 - leak_detection - INFO - Step completed. Time: 338400.0. Meters: 112
+2026-01-16 18:12:18,591 - leak_detection - INFO - Step completed. Time: 338700.0. Meters: 112
+2026-01-16 18:12:18,901 - leak_detection - INFO - Step completed. Time: 339000.0. Meters: 112
+2026-01-16 18:12:19,212 - leak_detection - INFO - Step completed. Time: 339300.0. Meters: 112
+2026-01-16 18:12:19,527 - leak_detection - INFO - Step completed. Time: 339600.0. Meters: 112
+2026-01-16 18:12:19,895 - leak_detection - INFO - Step completed. Time: 339900.0. Meters: 112
+2026-01-16 18:12:20,210 - leak_detection - INFO - Step completed. Time: 340200.0. Meters: 112
+2026-01-16 18:12:20,532 - leak_detection - INFO - Step completed. Time: 340500.0. Meters: 112
+2026-01-16 18:12:20,850 - leak_detection - INFO - Step completed. Time: 340800.0. Meters: 112
+2026-01-16 18:12:21,237 - leak_detection - INFO - Step completed. Time: 341100.0. Meters: 112
+2026-01-16 18:12:21,554 - leak_detection - INFO - Step completed. Time: 341400.0. Meters: 112
+2026-01-16 18:12:21,865 - leak_detection - INFO - Step completed. Time: 341700.0. Meters: 112
+2026-01-16 18:12:22,178 - leak_detection - INFO - Step completed. Time: 342000.0. Meters: 112
+2026-01-16 18:12:22,497 - leak_detection - INFO - Step completed. Time: 342300.0. Meters: 112
+2026-01-16 18:12:22,813 - leak_detection - INFO - Step completed. Time: 342600.0. Meters: 112
+2026-01-16 18:12:23,128 - leak_detection - INFO - Step completed. Time: 342900.0. Meters: 112
+2026-01-16 18:12:23,457 - leak_detection - INFO - Step completed. Time: 343200.0. Meters: 112
+2026-01-16 18:12:23,775 - leak_detection - INFO - Step completed. Time: 343500.0. Meters: 112
+2026-01-16 18:12:24,092 - leak_detection - INFO - Step completed. Time: 343800.0. Meters: 112
+2026-01-16 18:12:24,422 - leak_detection - INFO - Step completed. Time: 344100.0. Meters: 112
+2026-01-16 18:12:24,739 - leak_detection - INFO - Step completed. Time: 344400.0. Meters: 112
+2026-01-16 18:12:25,074 - leak_detection - INFO - Step completed. Time: 344700.0. Meters: 112
+2026-01-16 18:12:25,392 - leak_detection - INFO - Step completed. Time: 345000.0. Meters: 112
+2026-01-16 18:12:25,723 - leak_detection - INFO - Step completed. Time: 345300.0. Meters: 112
+2026-01-16 18:12:26,057 - leak_detection - INFO - Step completed. Time: 345600.0. Meters: 112
+2026-01-16 18:12:26,389 - leak_detection - INFO - Step completed. Time: 345900.0. Meters: 112
+2026-01-16 18:12:26,708 - leak_detection - INFO - Step completed. Time: 346200.0. Meters: 112
+2026-01-16 18:12:27,033 - leak_detection - INFO - Step completed. Time: 346500.0. Meters: 112
+2026-01-16 18:12:27,361 - leak_detection - INFO - Step completed. Time: 346800.0. Meters: 112
+2026-01-16 18:12:27,710 - leak_detection - INFO - Step completed. Time: 347100.0. Meters: 112
+2026-01-16 18:12:28,040 - leak_detection - INFO - Step completed. Time: 347400.0. Meters: 112
+2026-01-16 18:12:28,381 - leak_detection - INFO - Step completed. Time: 347700.0. Meters: 112
+2026-01-16 18:12:28,725 - leak_detection - INFO - Step completed. Time: 348000.0. Meters: 112
+2026-01-16 18:12:29,061 - leak_detection - INFO - Step completed. Time: 348300.0. Meters: 112
+2026-01-16 18:12:29,406 - leak_detection - INFO - Step completed. Time: 348600.0. Meters: 112
+2026-01-16 18:12:29,801 - leak_detection - INFO - Step completed. Time: 348900.0. Meters: 112
+2026-01-16 18:12:30,117 - leak_detection - INFO - Step completed. Time: 349200.0. Meters: 112
+2026-01-16 18:12:30,450 - leak_detection - INFO - Step completed. Time: 349500.0. Meters: 112
+2026-01-16 18:12:30,764 - leak_detection - INFO - Step completed. Time: 349800.0. Meters: 112
+2026-01-16 18:12:31,078 - leak_detection - INFO - Step completed. Time: 350100.0. Meters: 112
+2026-01-16 18:12:31,406 - leak_detection - INFO - Step completed. Time: 350400.0. Meters: 112
+2026-01-16 18:12:31,727 - leak_detection - INFO - Step completed. Time: 350700.0. Meters: 112
+2026-01-16 18:12:32,105 - leak_detection - INFO - Step completed. Time: 351000.0. Meters: 112
+2026-01-16 18:12:32,426 - leak_detection - INFO - Step completed. Time: 351300.0. Meters: 112
+2026-01-16 18:12:32,756 - leak_detection - INFO - Step completed. Time: 351600.0. Meters: 112
+2026-01-16 18:12:33,077 - leak_detection - INFO - Step completed. Time: 351900.0. Meters: 112
+2026-01-16 18:12:33,413 - leak_detection - INFO - Step completed. Time: 352200.0. Meters: 112
+2026-01-16 18:12:33,798 - leak_detection - INFO - Step completed. Time: 352500.0. Meters: 112
+2026-01-16 18:12:34,118 - leak_detection - INFO - Step completed. Time: 352800.0. Meters: 112
+2026-01-16 18:12:34,453 - leak_detection - INFO - Step completed. Time: 353100.0. Meters: 112
+2026-01-16 18:12:34,779 - leak_detection - INFO - Step completed. Time: 353400.0. Meters: 112
+2026-01-16 18:12:35,102 - leak_detection - INFO - Step completed. Time: 353700.0. Meters: 112
+2026-01-16 18:12:35,466 - leak_detection - INFO - Step completed. Time: 354000.0. Meters: 112
+2026-01-16 18:12:35,797 - leak_detection - INFO - Step completed. Time: 354300.0. Meters: 112
+2026-01-16 18:12:36,123 - leak_detection - INFO - Step completed. Time: 354600.0. Meters: 112
+2026-01-16 18:12:36,441 - leak_detection - INFO - Step completed. Time: 354900.0. Meters: 112
+2026-01-16 18:12:36,759 - leak_detection - INFO - Step completed. Time: 355200.0. Meters: 112
+2026-01-16 18:12:37,154 - leak_detection - INFO - Step completed. Time: 355500.0. Meters: 112
+2026-01-16 18:12:37,491 - leak_detection - INFO - Step completed. Time: 355800.0. Meters: 112
+2026-01-16 18:12:37,829 - leak_detection - INFO - Step completed. Time: 356100.0. Meters: 112
+2026-01-16 18:12:38,161 - leak_detection - INFO - Step completed. Time: 356400.0. Meters: 112
+2026-01-16 18:12:38,483 - leak_detection - INFO - Step completed. Time: 356700.0. Meters: 112
+2026-01-16 18:12:38,878 - leak_detection - INFO - Step completed. Time: 357000.0. Meters: 112
+2026-01-16 18:12:39,206 - leak_detection - INFO - Step completed. Time: 357300.0. Meters: 112
+2026-01-16 18:12:39,538 - leak_detection - INFO - Step completed. Time: 357600.0. Meters: 112
+2026-01-16 18:12:39,859 - leak_detection - INFO - Step completed. Time: 357900.0. Meters: 112
+2026-01-16 18:12:40,181 - leak_detection - INFO - Step completed. Time: 358200.0. Meters: 112
+2026-01-16 18:12:40,516 - leak_detection - INFO - Step completed. Time: 358500.0. Meters: 112
+2026-01-16 18:12:40,838 - leak_detection - INFO - Step completed. Time: 358800.0. Meters: 112
+2026-01-16 18:12:41,170 - leak_detection - INFO - Step completed. Time: 359100.0. Meters: 112
+2026-01-16 18:12:41,508 - leak_detection - INFO - Step completed. Time: 359400.0. Meters: 112
+2026-01-16 18:12:41,859 - leak_detection - INFO - Step completed. Time: 359700.0. Meters: 112
+2026-01-16 18:12:42,188 - leak_detection - INFO - Step completed. Time: 360000.0. Meters: 112
+2026-01-16 18:12:42,519 - leak_detection - INFO - Step completed. Time: 360300.0. Meters: 112
+2026-01-16 18:12:42,849 - leak_detection - INFO - Step completed. Time: 360600.0. Meters: 112
+2026-01-16 18:12:43,181 - leak_detection - INFO - Step completed. Time: 360900.0. Meters: 112
+2026-01-16 18:12:43,499 - leak_detection - INFO - Step completed. Time: 361200.0. Meters: 112
+2026-01-16 18:12:43,825 - leak_detection - INFO - Step completed. Time: 361500.0. Meters: 112
+2026-01-16 18:12:44,190 - leak_detection - INFO - Step completed. Time: 361800.0. Meters: 112
+2026-01-16 18:12:44,508 - leak_detection - INFO - Step completed. Time: 362100.0. Meters: 112
+2026-01-16 18:12:44,844 - leak_detection - INFO - Step completed. Time: 362400.0. Meters: 112
+2026-01-16 18:12:45,167 - leak_detection - INFO - Step completed. Time: 362700.0. Meters: 112
+2026-01-16 18:12:45,483 - leak_detection - INFO - Step completed. Time: 363000.0. Meters: 112
+2026-01-16 18:12:45,818 - leak_detection - INFO - Step completed. Time: 363300.0. Meters: 112
+2026-01-16 18:12:46,142 - leak_detection - INFO - Step completed. Time: 363600.0. Meters: 112
+2026-01-16 18:12:46,461 - leak_detection - INFO - Step completed. Time: 363900.0. Meters: 112
+2026-01-16 18:12:46,788 - leak_detection - INFO - Step completed. Time: 364200.0. Meters: 112
+2026-01-16 18:12:47,112 - leak_detection - INFO - Step completed. Time: 364500.0. Meters: 112
+2026-01-16 18:12:47,437 - leak_detection - INFO - Step completed. Time: 364800.0. Meters: 112
+2026-01-16 18:12:47,765 - leak_detection - INFO - Step completed. Time: 365100.0. Meters: 112
+2026-01-16 18:12:48,088 - leak_detection - INFO - Step completed. Time: 365400.0. Meters: 112
+2026-01-16 18:12:48,414 - leak_detection - INFO - Step completed. Time: 365700.0. Meters: 112
+2026-01-16 18:12:48,775 - leak_detection - INFO - Step completed. Time: 366000.0. Meters: 112
+2026-01-16 18:12:49,102 - leak_detection - INFO - Step completed. Time: 366300.0. Meters: 112
+2026-01-16 18:12:49,426 - leak_detection - INFO - Step completed. Time: 366600.0. Meters: 112
+2026-01-16 18:12:49,766 - leak_detection - INFO - Step completed. Time: 366900.0. Meters: 112
+2026-01-16 18:12:50,088 - leak_detection - INFO - Step completed. Time: 367200.0. Meters: 112
+2026-01-16 18:12:50,402 - leak_detection - INFO - Step completed. Time: 367500.0. Meters: 112
+2026-01-16 18:12:50,728 - leak_detection - INFO - Step completed. Time: 367800.0. Meters: 112
+2026-01-16 18:12:51,049 - leak_detection - INFO - Step completed. Time: 368100.0. Meters: 112
+2026-01-16 18:12:51,357 - leak_detection - INFO - Step completed. Time: 368400.0. Meters: 112
+2026-01-16 18:12:51,673 - leak_detection - INFO - Step completed. Time: 368700.0. Meters: 112
+2026-01-16 18:12:51,999 - leak_detection - INFO - Step completed. Time: 369000.0. Meters: 112
+2026-01-16 18:12:52,321 - leak_detection - INFO - Step completed. Time: 369300.0. Meters: 112
+2026-01-16 18:12:52,637 - leak_detection - INFO - Step completed. Time: 369600.0. Meters: 112
+2026-01-16 18:12:52,964 - leak_detection - INFO - Step completed. Time: 369900.0. Meters: 112
+2026-01-16 18:12:53,282 - leak_detection - INFO - Step completed. Time: 370200.0. Meters: 112
+2026-01-16 18:12:53,593 - leak_detection - INFO - Step completed. Time: 370500.0. Meters: 112
+2026-01-16 18:12:53,906 - leak_detection - INFO - Step completed. Time: 370800.0. Meters: 112
+2026-01-16 18:12:54,232 - leak_detection - INFO - Step completed. Time: 371100.0. Meters: 112
+2026-01-16 18:12:54,554 - leak_detection - INFO - Step completed. Time: 371400.0. Meters: 112
+2026-01-16 18:12:54,877 - leak_detection - INFO - Step completed. Time: 371700.0. Meters: 112
+2026-01-16 18:12:55,190 - leak_detection - INFO - Step completed. Time: 372000.0. Meters: 112
+2026-01-16 18:12:55,499 - leak_detection - INFO - Step completed. Time: 372300.0. Meters: 112
+2026-01-16 18:12:55,816 - leak_detection - INFO - Step completed. Time: 372600.0. Meters: 112
+2026-01-16 18:12:56,138 - leak_detection - INFO - Step completed. Time: 372900.0. Meters: 112
+2026-01-16 18:12:56,462 - leak_detection - INFO - Step completed. Time: 373200.0. Meters: 112
+2026-01-16 18:12:56,791 - leak_detection - INFO - Step completed. Time: 373500.0. Meters: 112
+2026-01-16 18:12:57,117 - leak_detection - INFO - Step completed. Time: 373800.0. Meters: 112
+2026-01-16 18:12:57,435 - leak_detection - INFO - Step completed. Time: 374100.0. Meters: 112
+2026-01-16 18:12:57,747 - leak_detection - INFO - Step completed. Time: 374400.0. Meters: 112
+2026-01-16 18:12:58,061 - leak_detection - INFO - Step completed. Time: 374700.0. Meters: 112
+2026-01-16 18:12:58,392 - leak_detection - INFO - Step completed. Time: 375000.0. Meters: 112
+2026-01-16 18:12:58,706 - leak_detection - INFO - Step completed. Time: 375300.0. Meters: 112
+2026-01-16 18:12:59,022 - leak_detection - INFO - Step completed. Time: 375600.0. Meters: 112
+2026-01-16 18:12:59,343 - leak_detection - INFO - Step completed. Time: 375900.0. Meters: 112
+2026-01-16 18:12:59,659 - leak_detection - INFO - Step completed. Time: 376200.0. Meters: 112
+2026-01-16 18:12:59,989 - leak_detection - INFO - Step completed. Time: 376500.0. Meters: 112
+2026-01-16 18:13:00,309 - leak_detection - INFO - Step completed. Time: 376800.0. Meters: 112
+2026-01-16 18:13:00,638 - leak_detection - INFO - Step completed. Time: 377100.0. Meters: 112
+2026-01-16 18:13:00,959 - leak_detection - INFO - Step completed. Time: 377400.0. Meters: 112
+2026-01-16 18:13:01,288 - leak_detection - INFO - Step completed. Time: 377700.0. Meters: 112
+2026-01-16 18:13:01,606 - leak_detection - INFO - Step completed. Time: 378000.0. Meters: 112
+2026-01-16 18:13:01,967 - leak_detection - INFO - Step completed. Time: 378300.0. Meters: 112
+2026-01-16 18:13:02,294 - leak_detection - INFO - Step completed. Time: 378600.0. Meters: 112
+2026-01-16 18:13:02,613 - leak_detection - INFO - Step completed. Time: 378900.0. Meters: 112
+2026-01-16 18:13:02,922 - leak_detection - INFO - Step completed. Time: 379200.0. Meters: 112
+2026-01-16 18:13:03,237 - leak_detection - INFO - Step completed. Time: 379500.0. Meters: 112
+2026-01-16 18:13:03,557 - leak_detection - INFO - Step completed. Time: 379800.0. Meters: 112
+2026-01-16 18:13:03,867 - leak_detection - INFO - Step completed. Time: 380100.0. Meters: 112
+2026-01-16 18:13:04,193 - leak_detection - INFO - Step completed. Time: 380400.0. Meters: 112
+2026-01-16 18:13:04,504 - leak_detection - INFO - Step completed. Time: 380700.0. Meters: 112
+2026-01-16 18:13:04,824 - leak_detection - INFO - Step completed. Time: 381000.0. Meters: 112
+2026-01-16 18:13:05,142 - leak_detection - INFO - Step completed. Time: 381300.0. Meters: 112
+2026-01-16 18:13:05,461 - leak_detection - INFO - Step completed. Time: 381600.0. Meters: 112
+2026-01-16 18:13:05,775 - leak_detection - INFO - Step completed. Time: 381900.0. Meters: 112
+2026-01-16 18:13:06,089 - leak_detection - INFO - Step completed. Time: 382200.0. Meters: 112
+2026-01-16 18:13:06,409 - leak_detection - INFO - Step completed. Time: 382500.0. Meters: 112
+2026-01-16 18:13:06,725 - leak_detection - INFO - Step completed. Time: 382800.0. Meters: 112
+2026-01-16 18:13:07,047 - leak_detection - INFO - Step completed. Time: 383100.0. Meters: 112
+2026-01-16 18:13:07,358 - leak_detection - INFO - Step completed. Time: 383400.0. Meters: 112
+2026-01-16 18:13:07,685 - leak_detection - INFO - Step completed. Time: 383700.0. Meters: 112
+2026-01-16 18:13:07,993 - leak_detection - INFO - Step completed. Time: 384000.0. Meters: 112
+2026-01-16 18:13:08,302 - leak_detection - INFO - Step completed. Time: 384300.0. Meters: 112
+2026-01-16 18:13:08,616 - leak_detection - INFO - Step completed. Time: 384600.0. Meters: 112
+2026-01-16 18:13:08,952 - leak_detection - INFO - Step completed. Time: 384900.0. Meters: 112
+2026-01-16 18:13:09,304 - leak_detection - INFO - Step completed. Time: 385200.0. Meters: 112
+2026-01-16 18:13:09,630 - leak_detection - INFO - Step completed. Time: 385500.0. Meters: 112
+2026-01-16 18:13:09,963 - leak_detection - INFO - Step completed. Time: 385800.0. Meters: 112
+2026-01-16 18:13:10,319 - leak_detection - INFO - Step completed. Time: 386100.0. Meters: 112
+2026-01-16 18:13:10,641 - leak_detection - INFO - Step completed. Time: 386400.0. Meters: 112
+2026-01-16 18:13:10,958 - leak_detection - INFO - Step completed. Time: 386700.0. Meters: 112
+2026-01-16 18:13:11,268 - leak_detection - INFO - Step completed. Time: 387000.0. Meters: 112
+2026-01-16 18:13:11,582 - leak_detection - INFO - Step completed. Time: 387300.0. Meters: 112
+2026-01-16 18:13:11,916 - leak_detection - INFO - Step completed. Time: 387600.0. Meters: 112
+2026-01-16 18:13:12,227 - leak_detection - INFO - Step completed. Time: 387900.0. Meters: 112
+2026-01-16 18:13:12,546 - leak_detection - INFO - Step completed. Time: 388200.0. Meters: 112
+2026-01-16 18:13:12,866 - leak_detection - INFO - Step completed. Time: 388500.0. Meters: 112
+2026-01-16 18:13:13,175 - leak_detection - INFO - Step completed. Time: 388800.0. Meters: 112
+2026-01-16 18:13:13,491 - leak_detection - INFO - Step completed. Time: 389100.0. Meters: 112
+2026-01-16 18:13:13,825 - leak_detection - INFO - Step completed. Time: 389400.0. Meters: 112
+2026-01-16 18:13:14,262 - leak_detection - INFO - Step completed. Time: 389700.0. Meters: 112
+2026-01-16 18:13:14,630 - leak_detection - INFO - Step completed. Time: 390000.0. Meters: 112
+2026-01-16 18:13:14,942 - leak_detection - INFO - Step completed. Time: 390300.0. Meters: 112
+2026-01-16 18:13:15,273 - leak_detection - INFO - Step completed. Time: 390600.0. Meters: 112
+2026-01-16 18:13:15,592 - leak_detection - INFO - Step completed. Time: 390900.0. Meters: 112
+2026-01-16 18:13:15,921 - leak_detection - INFO - Step completed. Time: 391200.0. Meters: 112
+2026-01-16 18:13:16,240 - leak_detection - INFO - Step completed. Time: 391500.0. Meters: 112
+2026-01-16 18:13:16,562 - leak_detection - INFO - Step completed. Time: 391800.0. Meters: 112
+2026-01-16 18:13:16,884 - leak_detection - INFO - Step completed. Time: 392100.0. Meters: 112
+2026-01-16 18:13:17,198 - leak_detection - INFO - Step completed. Time: 392400.0. Meters: 112
+2026-01-16 18:13:17,521 - leak_detection - INFO - Step completed. Time: 392700.0. Meters: 112
+2026-01-16 18:13:17,850 - leak_detection - INFO - Step completed. Time: 393000.0. Meters: 112
